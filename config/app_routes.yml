@@ -1,0 +1,5 @@
+/:
+  group:
+    home:
+      method: get
+      controller: '\App\Controllers\HomeController:index'
