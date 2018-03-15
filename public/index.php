@@ -1,5 +1,5 @@
 <?php
 
-require_once('../config/bootstrap.php');
+require_once('../bootstrap.php');
 
 $app->run();

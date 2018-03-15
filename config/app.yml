@@ -1,7 +1,7 @@
 app:
   name: 'Redator'
   debug: true
-  path: '../src/App/'
+  path: 'src/App/'
   containers:
     - App\Containers\DatabaseContainer
-  routes: '../src/App/routes.php'
+  routes: 'src/App/routes.php'

@@ -11,9 +11,12 @@ class DatabaseContainer
     public function register(Container $container, array $config)
     {
         $container['em'] = function ($c) use ($config) {
-            $config = Setup::createAnnotationMetadataConfiguration(
-                $config['app']['path'] . 'Entities',
-                $config['app']['debug']
+            $setup = Setup::createAnnotationMetadataConfiguration(
+                [$config['app']['path'] . 'Entities'],
+                $config['app']['debug'],
+                null,
+                null,
+                false
             );
 
             return EntityManager::create([
@@ -22,8 +25,8 @@ class DatabaseContainer
                 'password' => $config['database']['password'],
                 'host'     => $config['database']['host'],
                 'port'     => $config['database']['port'],
-                'dbname'   => $config['database']['database'] 
-            ], $config);
+                'dbname'   => $config['database']['dbname'] 
+            ], $setup);
         };
     }
 }

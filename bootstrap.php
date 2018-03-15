@@ -1,14 +1,14 @@
 <?php
 
-require_once('../vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 use Symfony\Component\Yaml\Yaml;
 use App\Application;
 use Dotenv\Dotenv;
 
-(new Dotenv('../'))->load();
+(new Dotenv(__DIR__))->load();
 
-$appConfig = Yaml::parseFile(__DIR__ . '/app.yml');
+$appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
 $appConfig['database'] = [
     'driver'   => getenv('DB_DRIVER'),
     'user'     => getenv('DB_USER'),
