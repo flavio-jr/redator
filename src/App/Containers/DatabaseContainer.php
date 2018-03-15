@@ -11,6 +11,8 @@ class DatabaseContainer
     public function register(Container $container, array $config)
     {
         $container['em'] = function ($c) use ($config) {
+            \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
             $setup = Setup::createAnnotationMetadataConfiguration(
                 [$config['app']['path'] . 'Entities'],
                 $config['app']['debug'],
