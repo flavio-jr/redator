@@ -9,13 +9,10 @@ use Dotenv\Dotenv;
 $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
 
 $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
-var_dump($_ENV['DEBUG']);
-var_dump(getenv('DEBUG'));
 
-exit(1);
-if (is_null($_ENV['DEBUG']) || getenv('DEBUG')) {
-    // $dotenv = new Dotenv(__DIR__);
-    // $dotenv->load();
+if (is_null($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
+    $dotenv = new Dotenv(__DIR__);
+    $dotenv->load();
 }
 
 $appConfig['database'] = [
