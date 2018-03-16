@@ -14,8 +14,8 @@ var_dump(getenv('DEBUG'));
 
 exit(1);
 if (is_null($_ENV['DEBUG']) || getenv('DEBUG')) {
-    $dotenv = new Dotenv(__DIR__);
-    $dotenv->load();
+    // $dotenv = new Dotenv(__DIR__);
+    // $dotenv->load();
 }
 
 $appConfig['database'] = [
