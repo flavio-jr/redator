@@ -6,9 +6,12 @@ use Symfony\Component\Yaml\Yaml;
 use App\Application;
 use Dotenv\Dotenv;
 
-(new Dotenv(__DIR__))->load();
-
 $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
+
+if ($appConfig['app']['debug']) {
+    (new Dotenv(__DIR__))->load();
+}
+
 $appConfig['database'] = [
     'driver'   => getenv('DB_DRIVER'),
     'user'     => getenv('DB_USER'),
