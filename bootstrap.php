@@ -8,8 +8,11 @@ use Dotenv\Dotenv;
 
 $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
 
-if ($appConfig['app']['debug']) {
-    (new Dotenv(__DIR__))->load();
+$appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
+
+if (is_null($_ENV['DEBUG']) || getenv('DEBUG')) {
+    $dotenv = new Dotenv(__DIR__);
+    $dotenv->load();
 }
 
 $appConfig['database'] = [
