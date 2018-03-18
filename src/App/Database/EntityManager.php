@@ -21,6 +21,8 @@ class EntityManager implements ModelManagerInterface
 
     public function build(array $config)
     {
+        \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
         $setup = Setup::createAnnotationMetadataConfiguration(
             [$config['app']['path'] . 'Entities'],
             $config['app']['debug'],
@@ -37,5 +39,10 @@ class EntityManager implements ModelManagerInterface
             'port'     => $config['database']['port'],
             'dbname'   => $config['database']['dbname'] 
         ], $setup);
+    }
+
+    public function getEntityManager(): DoctrineEntityManager
+    {
+        return $this->entityManager;
     }
 }
