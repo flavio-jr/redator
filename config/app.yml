@@ -5,3 +5,4 @@ app:
   containers:
     - App\Containers\DatabaseContainer
   routes: 'src/App/routes.php'
+  orm: 'doctrine'

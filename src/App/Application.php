@@ -35,6 +35,8 @@ class Application
 
         $this->buildContainer($container);
 
+        $this->buildDatabase($container, $this->config['app']['orm']);
+
         return $app;
     }
 
@@ -47,5 +49,10 @@ class Application
 
             $appContainer->register($container, $this->config);
         }
+    }
+
+    private function buildDatabase(Container $container, string $orm)
+    {
+        $container['orm'] = $container->get($orm);
     }
 }
