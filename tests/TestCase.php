@@ -7,15 +7,24 @@ use Slim\Http\Environment;
 use Slim\Http\Request;
 use App\Application;
 use Symfony\Component\Yaml\Yaml;
+use Dotenv\Dotenv;
 
 class TestCase extends PHPUnit
 {
     protected static $application;
+    protected static $config;
 
     public static function setUpBeforeClass()
     {
-        $config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
-        self::$application = (new Application($config))->make();
+        putenv('APP_ENV=TEST');
+
+        (new Dotenv(dirname(__DIR__)))->load();
+
+        self::$config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
+        self::$config['db_path'] = __DIR__ . '/database/test.sqlite';
+        self::$config['test_driver'] = getenv('DB_TEST_DRIVER');
+        
+        self::$application = (new Application(self::$config))->make();
     }
 
     private function makeRequest($url, $method, array $data = [], $queryString = '')
