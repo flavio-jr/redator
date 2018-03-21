@@ -11,7 +11,17 @@ class EntityManager implements ModelManagerInterface
 
     public function __construct(array $config)
     {
+        if (getenv('APP_ENV') === 'TEST') {
+            $this->buildForTestEnvironment($config);
+            return;
+        }
+        
         $this->build($config);
+    }
+
+    public function getEntityManager(): DoctrineEntityManager
+    {
+        return $this->entityManager;
     }
 
     public function getModel(string $model)
@@ -41,8 +51,21 @@ class EntityManager implements ModelManagerInterface
         ], $setup);
     }
 
-    public function getEntityManager(): DoctrineEntityManager
+    private function buildForTestEnvironment(array $config)
     {
-        return $this->entityManager;
+        \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
+        $setup = Setup::createAnnotationMetadataConfiguration(
+            [$config['app']['path'] . 'Entities'],
+            $config['app']['debug'],
+            null,
+            null,
+            false
+        );
+
+        $this->entityManager = DoctrineEntityManager::create([
+            'driver' => $config['test_driver'],
+            'path'   => $config['db_path']
+        ], $setup);
     }
 }
