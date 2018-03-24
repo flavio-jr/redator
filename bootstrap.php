@@ -7,6 +7,7 @@ use App\Application;
 use Dotenv\Dotenv;
 
 $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
+$appConfig['app']['path'] = __DIR__ . '/' . $appConfig['app']['path'];
 
 $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
 
