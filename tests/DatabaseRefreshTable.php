@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\EntityManager;
 
 trait DatabaseRefreshTable
 {
@@ -15,8 +16,23 @@ trait DatabaseRefreshTable
 
         $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
 
-        $this->schemaTool = new SchemaTool($em);
-        
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema($this->getMetaClass($em));
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
+
+        $schemaTool = new SchemaTool($em);
+
+        $schemaTool->dropSchema($this->getMetaClass($em));
+    }
+
+    private function getMetaClass(EntityManager $em)
+    {
         $entities = array_diff(scandir(self::$config['app']['path'] . '/Entities'), ['.', '..']);
         $entitiesNamespace = '\App\Entities\\';
 
@@ -26,15 +42,6 @@ trait DatabaseRefreshTable
             $metaClasses[] = $em->getClassMetadata($entitiesNamespace . explode('.', $entity)[0]);
         }
 
-        $this->metaClasses = $metaClasses;
-
-        $this->schemaTool->createSchema($metaClasses);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->schemaTool->dropSchema($this->metaClasses);
+        return $metaClasses;
     }
 }
