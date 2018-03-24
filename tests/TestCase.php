@@ -27,6 +27,24 @@ class TestCase extends PHPUnit
         self::$application = (new Application(self::$config))->make();
     }
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (method_exists($this, 'setUpDatabase')) {
+            $this->setUpDatabase();
+        }
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        if (method_exists($this, 'dropDatabase')) {
+            $this->dropDatabase();
+        }
+    }
+
     private function makeRequest($url, $method, array $data = [], $queryString = '')
     {
         $env = Environment::mock([
@@ -61,5 +79,16 @@ class TestCase extends PHPUnit
     protected function delete($route)
     {
         return $this->makeRequest($route, 'DELETE');
+    }
+
+    protected function assertDatabaseHave($entity)
+    {
+        $register = self::$application
+            ->getContainer()
+            ->get('doctrine')
+            ->getEntityManager()
+            ->find(get_class($entity), $entity->getId());
+
+        $this->assertNotNull($register);
     }
 }

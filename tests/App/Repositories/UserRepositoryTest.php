@@ -14,14 +14,18 @@ class UserRepositoryTest extends TestCase
 
     public function setUp()
     {
+        parent::setUp();
+
         $this->userRepository = self::$application->getContainer()->get('UserRepository');
-        $this->userDump = self::$application->getContainer()->get('App\Dumps\UserDump');
+        $this->userDump = self::$application->getContainer()->get('App\Dumps\UserDump');    
     }
 
     public function testCreateUser()
     {
-        $user = $this->userDump->make();
+        $userData = $this->userDump->make();
 
-        $this->assertTrue(true);
+        $user = $this->userRepository->create($userData->toArray());
+
+        $this->assertDatabaseHave($user);
     }
 }

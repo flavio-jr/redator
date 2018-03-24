@@ -7,23 +7,16 @@ use Doctrine\ORM\EntityManager;
 
 trait DatabaseRefreshTable
 {
-    private $schemaTool;
-    private $metaClasses;
-
-    public function setUp()
+    public function setUpDatabase()
     {
-        parent::setUp();
-
         $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema($this->getMetaClass($em));
     }
 
-    public function tearDown()
+    public function dropDatabase()
     {
-        parent::tearDown();
-
         $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
 
         $schemaTool = new SchemaTool($em);

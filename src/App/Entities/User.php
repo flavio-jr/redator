@@ -35,6 +35,11 @@ class User
      */
     private $password;
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function setUsername(string $username): void
     {
         $this->username = $username;
@@ -63,5 +68,21 @@ class User
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function toArray()
+    {
+        return [
+            'username' => $this->getUsername(),
+            'name'     => $this->getName(),
+            'password' => $this->getPassword()
+        ];
+    }
+
+    public function fromArray(array $data)
+    {
+        $this->setUsername($data['username']);
+        $this->setName($data['name']);
+        $this->setPassword($data['password']);
     }
 }
