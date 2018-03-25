@@ -4,6 +4,7 @@ namespace App\Database;
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager as DoctrineEntityManager;
+use Doctrine\DBAL\Types\Type;
 
 class EntityManager implements ModelManagerInterface
 {
@@ -31,7 +32,9 @@ class EntityManager implements ModelManagerInterface
 
     public function build(array $config)
     {
-        \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        if (!Type::hasType('uuid')) {
+            Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        }
 
         $setup = Setup::createAnnotationMetadataConfiguration(
             [$config['app']['path'] . 'Entities'],
@@ -53,7 +56,9 @@ class EntityManager implements ModelManagerInterface
 
     private function buildForTestEnvironment(array $config)
     {
-        \Doctrine\DBAL\Types\Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        if (!Type::hasType('uuid')) {
+            Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        }
 
         $setup = Setup::createAnnotationMetadataConfiguration(
             [$config['app']['path'] . 'Entities'],

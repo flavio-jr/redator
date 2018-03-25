@@ -9,7 +9,7 @@ trait DatabaseRefreshTable
 {
     public function setUpDatabase()
     {
-        $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
+        $em = $this->container->get($this->config['app']['orm'])->getEntityManager();
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema($this->getMetaClass($em));
@@ -17,7 +17,7 @@ trait DatabaseRefreshTable
 
     public function dropDatabase()
     {
-        $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
+        $em = $this->container->get($this->config['app']['orm'])->getEntityManager();
 
         $schemaTool = new SchemaTool($em);
 
@@ -26,7 +26,7 @@ trait DatabaseRefreshTable
 
     private function getMetaClass(EntityManager $em)
     {
-        $entities = array_diff(scandir(self::$config['app']['path'] . '/Entities'), ['.', '..']);
+        $entities = array_diff(scandir($this->config['app']['path'] . '/Entities'), ['.', '..']);
         $entitiesNamespace = '\App\Entities\\';
 
         $metaClasses = array();

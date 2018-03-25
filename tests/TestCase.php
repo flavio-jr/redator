@@ -11,25 +11,29 @@ use Dotenv\Dotenv;
 
 class TestCase extends PHPUnit
 {
-    protected static $application;
-    protected static $config;
+    protected $application;
+    protected $config;
+    protected $container;
 
-    public static function setUpBeforeClass()
+    public function createApplication()
     {
         putenv('APP_ENV=TEST');
 
         (new Dotenv(dirname(__DIR__)))->load();
 
-        self::$config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
-        self::$config['db_path'] = __DIR__ . '/database/test.sqlite';
-        self::$config['test_driver'] = getenv('DB_TEST_DRIVER');
+        $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
+        $this->config['db_path'] = __DIR__ . '/database/test.sqlite';
+        $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
         
-        self::$application = (new Application(self::$config))->make();
+        $this->application = (new Application($this->config))->make();
+        $this->container = $this->application->getContainer();
     }
 
     public function setUp()
     {
         parent::setUp();
+
+        $this->createApplication();
 
         if (method_exists($this, 'setUpDatabase')) {
             $this->setUpDatabase();
@@ -56,9 +60,9 @@ class TestCase extends PHPUnit
 
         $request = Request::createFromEnvironment($env)->withParsedBody($data);
 
-        self::$application->getContainer()['request'] = $request;
+        $this->application->getContainer()['request'] = $request;
 
-        return self::$application->run(true);
+        return $this->application->run(true);
     }
 
     protected function get($route, $queryString = '')
@@ -83,7 +87,7 @@ class TestCase extends PHPUnit
 
     protected function assertDatabaseHave($entity)
     {
-        $register = self::$application
+        $register = $this->application
             ->getContainer()
             ->get('doctrine')
             ->getEntityManager()

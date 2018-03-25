@@ -16,8 +16,8 @@ class UserRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->userRepository = self::$application->getContainer()->get('UserRepository');
-        $this->userDump = self::$application->getContainer()->get('App\Dumps\UserDump');    
+        $this->userRepository = $this->container->get('UserRepository');
+        $this->userDump = $this->container->get('App\Dumps\UserDump');    
     }
 
     public function testCreateUser()
