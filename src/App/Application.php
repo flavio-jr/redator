@@ -14,6 +14,8 @@ class Application
      */
     private $config;
 
+    public const PREFIX = '/app';
+
     public function __construct(array $config)
     {
         $this->config = $config;
@@ -29,9 +31,9 @@ class Application
 
         $app = new App($slimConfig);
 
-        $routes = require_once($this->config['app']['routes']);
-
         $container = $app->getContainer();
+
+        require $this->config['app']['routes'];
 
         $this->buildContainer($container);
 

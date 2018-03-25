@@ -7,5 +7,6 @@ app:
     - App\Containers\RepositoriesContainer
     - App\Containers\DumpsContainer
     - App\Containers\ServicesContainer
+    - App\Containers\ControllersContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'
