@@ -16,7 +16,8 @@
         "vlucas/phpdotenv": "^2.4",
         "ramsey/uuid-doctrine": "^1.4",
         "phpunit/phpunit": "^7.0",
-        "fzaninotto/faker": "^1.7"
+        "fzaninotto/faker": "^1.7",
+        "lcobucci/jwt": "^3.2"
     },
     "autoload": {
         "psr-4": {
