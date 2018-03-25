@@ -27,4 +27,21 @@ class UserRepository
 
         return $user;
     }
+
+    public function getUserByCredentials(string $username, string $password)
+    {
+        $users = $this->repository->findBy(['username' => $username]);
+
+        if (!count($users)) {
+            return null;
+        }
+
+        $user = $users[0];
+        
+        if (password_verify($password, $user->getPassword())) {
+            return $user;
+        }
+
+        return null;
+    }
 }

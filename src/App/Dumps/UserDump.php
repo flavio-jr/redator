@@ -18,20 +18,20 @@ class UserDump implements DumpInterface
         $this->persister = $persister;
     }
 
-    public function make()
+    public function make(array $override = [])
     {
         $user = new User();
 
-        $user->setUsername($this->faker->userName);
-        $user->setName($this->faker->name);
-        $user->setPassword($this->faker->password);
+        $user->setUsername($override['username'] ?? $this->faker->userName);
+        $user->setName($override['name'] ?? $this->faker->name);
+        $user->setPassword($override['password'] ?? $this->faker->password);
 
         return $user;
     }
 
-    public function create()
+    public function create(array $override = [])
     {
-        $user = $this->make();
+        $user = $this->make($override);
 
         $this->persister->persist($user);
 

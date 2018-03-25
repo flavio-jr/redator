@@ -28,4 +28,34 @@ class UserRepositoryTest extends TestCase
 
         $this->assertDatabaseHave($user);
     }
+
+    public function testGetUserByCredentials()
+    {
+        $user = $this->userDump->create(['password' => '123']);
+
+        $userHopingToBeAuthenticated = $this->userRepository
+            ->getUserByCredentials($user->getUsername(), '123');
+
+        $this->assertNotNull($userHopingToBeAuthenticated);
+    }
+
+    public function testShouldReturnNullWithWrongPassword()
+    {
+        $user = $this->userDump->create(['password' => '123']);
+
+        $userGivingWrongPassword = $this->userRepository
+            ->getUserByCredentials($user->getUsername(), '1234');
+
+        $this->assertNull($userGivingWrongPassword);
+    }
+
+    public function testShouldReturnNullWithWrongUsername()
+    {
+        $user = $this->userDump->create(['username' => 'vader', 'password' => '123']);
+
+        $userGivingWrongUsername = $this->userRepository
+            ->getUserByCredentials('anakin', '123');
+
+        $this->assertNull($userGivingWrongUsername);
+    }
 }

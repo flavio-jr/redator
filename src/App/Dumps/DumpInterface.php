@@ -9,7 +9,7 @@ interface DumpInterface
 {
     public function __construct(Generator $faker, Persister $persister);
 
-    public function make();
+    public function make(array $override = []);
 
-    public function create();
+    public function create(array $override = []);
 }
