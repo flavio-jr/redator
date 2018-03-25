@@ -33,11 +33,11 @@ class Application
 
         $container = $app->getContainer();
 
-        require $this->config['app']['routes'];
-
         $this->buildContainer($container);
 
         $this->buildDatabase($container, $this->config['app']['orm']);
+
+        require $this->config['app']['routes'];
 
         return $app;
     }
