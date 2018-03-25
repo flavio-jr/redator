@@ -44,4 +44,9 @@ class UserRepository
 
         return null;
     }
+
+    public function find(string $id)
+    {
+        return $this->repository->find($id);
+    }
 }

@@ -12,8 +12,6 @@ class UserSession
 {
     const EXPIRATION_TIME = 3600;
 
-    private $userId;
-
     public function createNewToken(User $user): string
     {
         $builder = new Builder();
@@ -31,11 +29,6 @@ class UserSession
             ->getToken();
         
         return (string) $token;
-    }
-
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     public function isValidToken(string $token): bool

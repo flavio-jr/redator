@@ -10,5 +10,5 @@ $app->group('/app', function () {
             return $response->write('You opened the gate');
         });
         
-    })->add(new LoggedUser($this->getContainer()->get('UserSession')));
+    })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));
 });
