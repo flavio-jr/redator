@@ -16,7 +16,7 @@ class UserSession
         $token = $builder
             ->setIssuer('')
             ->setAudience('')
-            ->setId(uniqid())
+            ->setId(spl_object_hash($user))
             ->setIssuedAt(time())
             ->setNotBefore(time())
             ->setExpiration(time() + self::EXPIRATION_TIME)
