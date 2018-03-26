@@ -12,7 +12,7 @@ class UserSession
 {
     const EXPIRATION_TIME = 3600;
 
-    public function createNewToken(User $user): string
+    public function createNewToken(string $id): string
     {
         $builder = new Builder();
 
@@ -21,11 +21,11 @@ class UserSession
         $token = $builder
             ->setIssuer('')
             ->setAudience('')
-            ->setId($user->getId(), true)
+            ->setId($id, true)
             ->setIssuedAt(time())
             ->setNotBefore(time())
             ->setExpiration(time() + self::EXPIRATION_TIME)
-            ->sign($signer, (string) $user->getId())
+            ->sign($signer, $id)
             ->getToken();
         
         return (string) $token;

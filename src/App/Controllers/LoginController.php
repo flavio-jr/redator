@@ -31,7 +31,7 @@ final class LoginController
             return $response->write(json_encode(['message' => 'Invalid user']))->withStatus(403);    
         }
 
-        $token = $this->userSessionService->createNewToken($user);
+        $token = $this->userSessionService->createNewToken($user->getId());
 
         return $response->write(json_encode(['token' => $token]))->withStatus(200);
     }

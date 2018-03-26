@@ -25,7 +25,7 @@ class PlayerTest extends TestCase
     {
         $user = $this->container->get('App\Dumps\UserDump')->create();
 
-        $jwt = $this->userSession->createNewToken($user);
+        $jwt = $this->userSession->createNewToken($user->getId());
 
         $this->player->setPlayerFromToken($jwt);
 

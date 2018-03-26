@@ -31,7 +31,7 @@ class UserAuthenticationTest extends TestCase
 
         $user = $this->userRepository->getUserByCredentials($username, $password);
 
-        $token = $this->userSession->createNewToken($user);
+        $token = $this->userSession->createNewToken($user->getId());
 
         $this->assertNotNull($token);
     }
