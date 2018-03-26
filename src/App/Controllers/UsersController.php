@@ -34,4 +34,23 @@ final class UsersController
             return $response->write('An exception ocurred')->withStatus(500);
         }
     }
+
+    public function update(Request $request, Response $response, array $args)
+    {
+        try {
+            $data = $request->getParsedBody();
+
+            $this->userRepository->update($args['user_id'], $data);
+
+            return $response->write('User data sucessfully updated')->withStatus(200);
+        } catch (UniqueFieldException $e) {
+            return $response->write('Username already taken')->withStatus(412);
+        } catch (\Exception $e) {
+            if (getenv('APP_ENV') === 'DEV') {
+                return $response->write($e->getMessage())->withStatus(500);
+            }
+
+            return $response->write('An exception ocurred')->withStatus(500);
+        }
+    }
 }

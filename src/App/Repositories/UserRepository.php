@@ -64,15 +64,32 @@ class UserRepository
             throw new EntityNotFoundException('App\Entities\User');
         }
 
-        if ($this->repository->findOneBy(['username' => $data['username']])) {
-            throw new UniqueFieldException('username');
-        }
+        if (isset($data['username'])) {
+            $qb = $this->repository
+                ->createQueryBuilder('u')
+                ->andWhere('u.username <> :currentUsername')
+                ->setParameter('currentUsername', $user->getUsername())
+                ->andWhere('u.username = :newUsername')
+                ->setParameter('newUsername', $data['username'])
+                ->getQuery();
 
-        $user->setName($data['name']);
-        $user->setUsername($data['username']);
+            $userNameExists = $qb->setMaxResults(1)->getOneOrNullResult();
+
+            if ($userNameExists) {
+                throw new UniqueFieldException('username');    
+            }
+        } 
+
+        $user->setName($data['name'] ?? $user->getName());
+        $user->setUsername($data['username'] ?? $user->getUsername());
 
         $this->persister->persist($user);
 
         return $user;
+    }
+
+    private function findByUsername(string $username)
+    {
+        return $this->findOneBy(['username' => $username]);
     }
 }
