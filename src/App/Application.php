@@ -14,6 +14,8 @@ class Application
      */
     private $config;
 
+    public const PREFIX = '/app';
+
     public function __construct(array $config)
     {
         $this->config = $config;
@@ -29,11 +31,13 @@ class Application
 
         $app = new App($slimConfig);
 
-        $routes = require_once($this->config['app']['routes']);
-
         $container = $app->getContainer();
 
         $this->buildContainer($container);
+
+        $this->buildDatabase($container, $this->config['app']['orm']);
+
+        require $this->config['app']['routes'];
 
         return $app;
     }
@@ -47,5 +51,10 @@ class Application
 
             $appContainer->register($container, $this->config);
         }
+    }
+
+    private function buildDatabase(Container $container, string $orm)
+    {
+        $container['orm'] = $container->get($orm);
     }
 }
