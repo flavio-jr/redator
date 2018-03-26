@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use App\Services\Persister;
 use App\Entities\User;
+use App\Exceptions\UniqueFieldException;
 
 class UserRepository
 {
@@ -20,6 +21,10 @@ class UserRepository
 
     public function create(array $data)
     {
+        if ($this->repository->findOneBy(['username' => $data['username']])) {
+            throw new UniqueFieldException('username');
+        }
+
         $user = new User();
         $user->fromArray($data);
 
@@ -48,5 +53,10 @@ class UserRepository
     public function find(string $id)
     {
         return $this->repository->find($id);
+    }
+
+    public function findBy(array $where)
+    {
+        return $this->repository->findBy($where);
     }
 }

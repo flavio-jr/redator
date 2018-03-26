@@ -12,7 +12,7 @@ class UserRegistration
     public function __invoke(Request $request, Response $response, $next)
     {
         try {
-            $rules = V::key('username', V::stringType()->length(10, 60))
+            $rules = V::key('username', V::stringType()->length(2, 60))
                 ->key('name', V::notOptional()->length(2, 100))
                 ->key('password', V::notOptional());
 

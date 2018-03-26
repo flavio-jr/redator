@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Repositories\UserRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Exceptions\UniqueFieldException;
 
 final class UsersController
 {
@@ -23,6 +24,8 @@ final class UsersController
             $this->userRepository->create($data);
 
             return $response->write('User sucessfully created')->withStatus(200);
+        } catch (UniqueFieldException $e) {
+            return $response->write('Username already taken')->withStatus(412);
         } catch (\Exception $e) {
             if (getenv('APP_ENV') === 'DEV') {
                 return $response->write($e->getMessage())->withStatus(500);
