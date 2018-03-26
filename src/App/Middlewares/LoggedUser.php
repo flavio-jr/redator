@@ -22,6 +22,10 @@ final class LoggedUser
 
     public function __invoke(Request $request, Response $response, $next)
     {
+        if (getenv('APP_ENV') === 'TEST') {
+            return $next($request, $response);
+        }
+
         $jwt = $request->getHeader('Authorization');
 
         if (!count($jwt)) {
