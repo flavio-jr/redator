@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use App\Services\Persister;
 use App\Entities\User;
 use App\Exceptions\UniqueFieldException;
+use App\Exceptions\EntityNotFoundException;
 
 class UserRepository
 {
@@ -50,13 +51,28 @@ class UserRepository
         return null;
     }
 
-    public function find(string $id)
+    public function find(string $id): User
     {
         return $this->repository->find($id);
     }
 
-    public function findBy(array $where)
+    public function update(string $id, array $data): User
     {
-        return $this->repository->findBy($where);
+        $user = $this->find($id);
+
+        if (!$user) {
+            throw new EntityNotFoundException('App\Entities\User');
+        }
+
+        if ($this->repository->findOneBy(['username' => $data['username']])) {
+            throw new UniqueFieldException('username');
+        }
+
+        $user->setName($data['name']);
+        $user->setUsername($data['username']);
+
+        $this->persister->persist($user);
+
+        return $user;
     }
 }

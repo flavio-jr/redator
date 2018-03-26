@@ -58,4 +58,16 @@ class UserRepositoryTest extends TestCase
 
         $this->assertNull($userGivingWrongUsername);
     }
+
+    public function testUpdateUser()
+    {
+        $user = $this->userDump->create();
+
+        $newUserName = strrev($user->getUserName());
+        $userUpdateData = $this->userDump->make(['username' => $newUserName])->toArray();
+
+        $userUpdated = $this->userRepository->update($user->getId(), $userUpdateData);
+
+        $this->assertEquals($userUpdated->getUsername(), $newUserName);
+    }
 }
