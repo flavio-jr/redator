@@ -92,4 +92,9 @@ class UserRepository
     {
         return $this->findOneBy(['username' => $username]);
     }
+
+    public function isUsernameAvailable(string $username)
+    {
+        return is_null($this->repository->findOneBy(['username' => $username]));
+    }
 }

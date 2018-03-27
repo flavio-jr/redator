@@ -70,4 +70,13 @@ class UserRepositoryTest extends TestCase
 
         $this->assertEquals($userUpdated->getUsername(), $newUserName);
     }
+
+    public function testCheckForUsernameAvailability()
+    {
+        $username = $this->userDump->make()->getUserName();
+
+        $isAvailable = $this->userRepository->isUsernameAvailable($username);
+
+        $this->assertTrue($isAvailable);
+    }
 }
