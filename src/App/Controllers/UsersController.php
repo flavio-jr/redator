@@ -53,4 +53,15 @@ final class UsersController
             return $response->write('An exception ocurred')->withStatus(500);
         }
     }
+
+    public function usernameAvailaibility(Request $request, Response $response, array $args)
+    {
+        $userNameAvailaibility = $this->userRepository->isUsernameAvailable($args['username']);
+
+        return $response
+            ->write(json_encode([
+                'available' => (int) $userNameAvailaibility
+            ]))
+            ->withStatus(200);
+    }
 }
