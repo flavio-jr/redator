@@ -20,6 +20,7 @@ $app->group('/app', function () {
 
         $this->group('/applications', function () {
             $this->post('', 'App\Controllers\ApplicationsController:store');
+            $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));

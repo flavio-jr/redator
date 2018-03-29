@@ -31,4 +31,25 @@ final class ApplicationsController
             return $response->write('An exception ocurred')->withStatus(500);
         }
     }
+
+    public function update(Request $request, Response $response, array $args)
+    {
+        try {
+            $data = $request->getParsedBody();
+
+            $updated = $this->applicationRepository->update($args['app_id'], $data);
+
+            if ($updated) {
+                return $response->write('Application successfully registered')->withStatus(200);
+            }
+
+            return $response->write('The app could not be updated')->withStatus(500);
+        } catch (\Exception $e) {
+            if (getenv('APP_ENV') === 'DEV') {
+                return $response->write($e->getMessage())->withStatus(500);
+            }
+
+            return $response->write('An exception ocurred')->withStatus(500);
+        }
+    }
 }

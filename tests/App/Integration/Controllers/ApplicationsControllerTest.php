@@ -30,4 +30,19 @@ class ApplicationsControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    public function testMustReturnHttpOkForUpdateApp()
+    {
+        $application = $this->applicationDump->create();
+
+        Player::setPlayer($application->getAppOwner());
+
+        $updateData = $this->applicationDump
+            ->make(['owner' => $application->getAppOwner()])
+            ->toArray();
+
+        $response = $this->put(Application::PREFIX . "/applications/{$application->getId()}", $updateData);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
 }
