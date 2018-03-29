@@ -53,4 +53,23 @@ class ApplicationRepository
 
         return $application;
     }
+
+    public function destroy(string $id): bool
+    {
+        $application = $this->repository->find($id);
+
+        if (!$application) {
+            throw new EntityNotFoundException('App\Entities\Application');
+        }
+
+        $loggedUser = Player::user();
+
+        if ($application->getAppOwner()->getId() !== $loggedUser->getId()) {
+            return false;
+        }
+
+        $this->persister->remove($application);
+
+        return true;
+    }
 }
