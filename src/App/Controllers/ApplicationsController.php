@@ -63,4 +63,15 @@ final class ApplicationsController
 
         return $response->write('Error trying to delete application')->withStatus(500);
     }
+
+    public function userApps(Request $request, Response $response)
+    {
+        $applications = $this->applicationRepository->getApplicationsByUser();
+
+        if ($applications) {
+            return $response->write(json_encode(['apps' => $applications]))->withStatus(200);
+        }
+
+        return $response->write('Failed to retrieve user apps')->withStatus(500);
+    }
 }
