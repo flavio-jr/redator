@@ -45,4 +45,15 @@ class ApplicationsControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    public function testMustReturnHttpOkForDestroyApp()
+    {
+        $application = $this->applicationDump->create();
+
+        Player::setPlayer($application->getAppOwner());
+
+        $response = $this->delete(Application::PREFIX . "/applications/{$application->getId()}");
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
 }

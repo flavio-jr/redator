@@ -21,6 +21,7 @@ $app->group('/app', function () {
         $this->group('/applications', function () {
             $this->post('', 'App\Controllers\ApplicationsController:store');
             $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
+            $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));

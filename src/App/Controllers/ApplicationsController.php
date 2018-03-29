@@ -52,4 +52,15 @@ final class ApplicationsController
             return $response->write('An exception ocurred')->withStatus(500);
         }
     }
+
+    public function destroy(Request $request, Response $response, array $args)
+    {
+        $deleted = $this->applicationRepository->destroy($args['app_id']);
+
+        if ($deleted) {
+            return $response->write('Application deleted with success')->withStatus(200);
+        }
+
+        return $response->write('Error trying to delete application')->withStatus(500);
+    }
 }
