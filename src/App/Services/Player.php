@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Lcobucci\JWT\Parser;
 use App\Repositories\UserRepository;
+use App\Entities\User;
 
 final class Player
 {
@@ -21,6 +22,11 @@ final class Player
         $token = (new Parser())->parse($jwt);
 
         self::$user = $this->userRepository->find($token->getHeader('jti'));
+    }
+
+    public static function setPlayer(User $user)
+    {
+        self::$user = $user;
     }
 
     public static function user()
