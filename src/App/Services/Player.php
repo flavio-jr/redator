@@ -29,6 +29,11 @@ final class Player
         self::$user = $user;
     }
 
+    public static function gameOver()
+    {
+        self::$user = null;
+    }
+
     public static function user()
     {
         return self::$user;

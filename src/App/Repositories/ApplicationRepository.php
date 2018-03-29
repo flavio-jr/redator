@@ -79,4 +79,19 @@ class ApplicationRepository
     {
         return Player::user()->getId() === $application->getAppOwner()->getId();
     }
+
+    public function getApplicationsByUser()
+    {
+        $user = Player::user();
+
+        if (!$user) {
+            return false;
+        }
+
+        $applications = $this->repository->findBy(['owner' => $user->getId()]);
+
+        return array_map(function ($app) {
+            return $app->toArray();
+        }, $applications);
+    }
 }

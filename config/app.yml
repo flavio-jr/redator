@@ -8,5 +8,6 @@ app:
     - App\Containers\DumpsContainer
     - App\Containers\ServicesContainer
     - App\Containers\ControllersContainer
+    - App\Containers\DumpsFactoriesContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'

@@ -12,6 +12,7 @@ class ApplicationRepositoryTest extends TestCase
 
     private $applicationRepository;
     private $applicationDump;
+    private $dumpFactory;
     private $userDump;
 
     public function setUp()
@@ -20,6 +21,7 @@ class ApplicationRepositoryTest extends TestCase
 
         $this->applicationRepository = $this->container->get('ApplicationRepository');
         $this->applicationDump = $this->container->get('App\Dumps\ApplicationDump');
+        $this->dumpFactory = $this->container->get('DumpFactory');
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
@@ -86,5 +88,31 @@ class ApplicationRepositoryTest extends TestCase
         $deleted = $this->applicationRepository->destroy($application->getId());
 
         $this->assertFalse($deleted);
+    }
+
+    public function testShouldReturnAllUserApps()
+    {
+        $user = $this->userDump->create();
+
+        $this->dumpFactory->produce($this->applicationDump, 5, ['owner' => $user]);
+
+        Player::setPlayer($user);
+
+        $userApplications = $this->applicationRepository->getApplicationsByUser();
+
+        $this->assertEquals(5, count($userApplications));
+    }
+
+    public function testShouldReturnFalseForNotLoggedUser()
+    {
+        $user = $this->userDump->create();
+
+        $this->dumpFactory->produce($this->applicationDump, 5, ['owner' => $user]);
+
+        Player::gameOver();
+
+        $notFoundApps = $this->applicationRepository->getApplicationsByUser();
+
+        $this->assertFalse($notFoundApps);
     }
 }
