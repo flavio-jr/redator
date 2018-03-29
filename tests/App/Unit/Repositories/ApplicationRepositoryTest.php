@@ -38,13 +38,31 @@ class ApplicationRepositoryTest extends TestCase
     {
         $application = $this->applicationDump->create();
 
+        Player::setPlayer($application->getAppOwner());
+
         $applicationData = $this->applicationDump
             ->make(['owner' => $application->getAppOwner()])
             ->toArray();
 
         $applicationUpdated = $this->applicationRepository->update($application->getId(), $applicationData);
 
-        $this->assertEquals($applicationUpdated->getName(), $applicationData['name']);
+        $this->assertTrue($applicationUpdated);
+    }
+
+    public function testUpdateApplicationThatDoesntBelongsToUser()
+    {
+        $application = $this->applicationDump->create();
+        $user = $this->userDump->create();
+
+        Player::setPlayer($user);
+
+        $applicationData = $this->applicationDump
+            ->make(['owner' => $application->getAppOwner()])
+            ->toArray();
+
+        $applicationUpdate = $this->applicationRepository->update($application->getId(), $applicationData);
+
+        $this->assertFalse($applicationUpdate);
     }
 
     public function testDestroyApplication()

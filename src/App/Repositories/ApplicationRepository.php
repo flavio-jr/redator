@@ -19,7 +19,7 @@ class ApplicationRepository
         $this->persister = $persister;
     }
 
-    public function create(array $data)
+    public function create(array $data): Application
     {
         $application = new Application();
 
@@ -32,12 +32,16 @@ class ApplicationRepository
         return $application;
     }
 
-    public function update(string $id, array $data)
+    public function update(string $id, array $data): bool
     {
         $application = $this->repository->find($id);
 
         if (!$application) {
             throw new EntityNotFoundException('App\Entities\Application');
+        }
+
+        if (!$this->appBelongsToUser($application)) {
+            return false;
         }
 
         $setterMap = Application::getSetterMap();
@@ -51,7 +55,7 @@ class ApplicationRepository
 
         $this->persister->persist($application);
 
-        return $application;
+        return true;
     }
 
     public function destroy(string $id): bool
@@ -62,14 +66,17 @@ class ApplicationRepository
             throw new EntityNotFoundException('App\Entities\Application');
         }
 
-        $loggedUser = Player::user();
-
-        if ($application->getAppOwner()->getId() !== $loggedUser->getId()) {
+        if (!$this->appBelongsToUser($application)) {
             return false;
         }
 
         $this->persister->remove($application);
 
         return true;
+    }
+
+    public function appBelongsToUser(Application $application)
+    {
+        return Player::user()->getId() === $application->getAppOwner()->getId();
     }
 }
