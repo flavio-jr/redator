@@ -5,12 +5,13 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
+use App\Database\EntityInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="users", uniqueConstraints={@UniqueConstraint(name="username", columns={"username"})})
  */
-class User
+class User implements EntityInterface
 {
     /**
      * @ORM\Id
@@ -35,7 +36,7 @@ class User
      */
     private $password;
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -70,7 +71,7 @@ class User
         return $this->password;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'username' => $this->getUsername(),
@@ -79,7 +80,7 @@ class User
         ];
     }
 
-    public function fromArray(array $data)
+    public function fromArray(array $data): void
     {
         $this->setUsername($data['username']);
         $this->setName($data['name']);

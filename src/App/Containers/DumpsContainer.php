@@ -5,6 +5,8 @@ namespace App\Containers;
 use Slim\Container;
 use Faker\Factory;
 use App\Services\Persister;
+use App\Dumps\UserDump;
+use App\Dumps\ApplicationDump;
 
 class DumpsContainer
 {
@@ -12,17 +14,16 @@ class DumpsContainer
 
     public function register(Container $container, array $config)
     {
-        $dumpsPath = $config['app']['path'] . 'Dumps/';
+        $container[self::DUMPS_NAMESPACE . 'UserDump'] = function ($c) {
+            return new UserDump(Factory::create(), $c->get('PersisterService'));
+        };
 
-        $files = array_diff(scandir($dumpsPath), ['.', '..']);
-
-        foreach ($files as $file)
-        {
-            $class = self::DUMPS_NAMESPACE . explode('.', $file)[0];
-
-            $container[$class] = function ($c) use ($class) {
-                return new $class(Factory::create(), new Persister($c['doctrine']->getEntityManager()));
-            };
-        }
+        $container[self::DUMPS_NAMESPACE . 'ApplicationDump'] = function ($c) {
+            return new ApplicationDump(
+                Factory::create(), 
+                $c->get('PersisterService'), 
+                $c->get(self::DUMPS_NAMESPACE . 'UserDump'
+            ));
+        };
     }
 }

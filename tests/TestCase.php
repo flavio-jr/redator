@@ -95,4 +95,15 @@ class TestCase extends PHPUnit
 
         $this->assertNotNull($register);
     }
+
+    protected function assertDatabaseDoenstHave(string $id, $entity)
+    {
+        $register = $this->application
+            ->getContainer()
+            ->get('doctrine')
+            ->getEntityManager()
+            ->find(get_class($entity), $id);
+
+        $this->assertNull($register);
+    }
 }
