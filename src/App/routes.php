@@ -17,6 +17,10 @@ $app->group('/app', function () {
             $this->put('/{user_id}', 'App\Controllers\UsersController:update');
             $this->get('/username-availaibility/{username}', 'App\Controllers\UsersController:usernameAvailaibility');
         });
+
+        $this->group('/applications', function () {
+            $this->post('', 'App\Controllers\ApplicationsController:store');
+        });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));
 });
