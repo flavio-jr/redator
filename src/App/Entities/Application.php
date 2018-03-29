@@ -50,9 +50,22 @@ class Application implements EntityInterface
      */
     private $owner;
 
+    private static $setterMap = [
+        'name'        => 'setName',
+        'description' => 'setDescription',
+        'url'         => 'setUrl',
+        'type'        => 'setType',
+        'owner'       => 'setAppOwner'
+    ];
+
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public static function getSetterMap()
+    {
+        return self::$setterMap;
     }
 
     public function setName(string $name): void
@@ -117,11 +130,11 @@ class Application implements EntityInterface
 
     public function fromArray(array $data): void
     {
-        $this->setName($data['name'] ?? '');
-        $this->setDescription($data['description'] ?? '');
-        $this->setUrl($data['url'] ?? '');
-        $this->setType($data['type'] ?? '');
-        $this->setAppOwner($data['owner'] ?? null);
+        $this->setName($data['name']);
+        $this->setDescription($data['description']);
+        $this->setUrl($data['url']);
+        $this->setType($data['type']);
+        $this->setAppOwner($data['owner']);
     }
 
     public function toArray(): array

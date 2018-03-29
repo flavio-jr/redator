@@ -32,4 +32,17 @@ class ApplicationRepositoryTest extends TestCase
 
         $this->assertDatabaseHave($application);
     }
+
+    public function testUpdateApplication()
+    {
+        $application = $this->applicationDump->create();
+
+        $applicationData = $this->applicationDump
+            ->make(['owner' => $application->getAppOwner()])
+            ->toArray();
+
+        $applicationUpdated = $this->applicationRepository->update($application->getId(), $applicationData);
+
+        $this->assertEquals($applicationUpdated->getName(), $applicationData['name']);
+    }
 }
