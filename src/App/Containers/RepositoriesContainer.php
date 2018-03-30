@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use App\Services\Persister;
 use App\Repositories\ApplicationRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\PublicationRepository;
 
 class RepositoriesContainer
 {
@@ -26,6 +27,12 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new CategoryRepository($em, $c->get('PersisterService'));
+        };
+
+        $container['PublicationRepository'] = function ($c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new PublicationRepository($em, $c->get('PersisterService'));
         };
     }
 }
