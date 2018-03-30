@@ -6,6 +6,7 @@ use Slim\Container;
 use App\Repositories\UserRepository;
 use App\Services\Persister;
 use App\Repositories\ApplicationRepository;
+use App\Repositories\CategoryRepository;
 
 class RepositoriesContainer
 {
@@ -19,6 +20,12 @@ class RepositoriesContainer
         $container['ApplicationRepository'] = function ($c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
             return new ApplicationRepository($em, new Persister($em));
+        };
+
+        $container['CategoryRepository'] = function ($c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new CategoryRepository($em, $c->get('PersisterService'));
         };
     }
 }

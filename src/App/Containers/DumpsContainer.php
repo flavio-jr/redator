@@ -7,6 +7,7 @@ use Faker\Factory;
 use App\Services\Persister;
 use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
+use App\Dumps\CategoryDump;
 
 class DumpsContainer
 {
@@ -24,6 +25,10 @@ class DumpsContainer
                 $c->get('PersisterService'), 
                 $c->get(self::DUMPS_NAMESPACE . 'UserDump'
             ));
+        };
+
+        $container[self::DUMPS_NAMESPACE . 'CategoryDump'] = function ($c) {
+            return new CategoryDump(Factory::create(), $c->get('PersisterService'));
         };
     }
 }
