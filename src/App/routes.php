@@ -27,6 +27,8 @@ $app->group('/app', function () {
 
         $this->group('/publications', function () {
             $this->post('', 'App\Controllers\PublicationsController:store');
+            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
+            $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));
