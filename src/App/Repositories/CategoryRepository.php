@@ -17,6 +17,11 @@ class CategoryRepository
         $this->persister = $persister;
     }
 
+    public function find(string $id): Category
+    {
+        return $this->repository->find($id);
+    }
+
     public function create(array $data): Category
     {
         $category = new Category();

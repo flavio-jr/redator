@@ -31,8 +31,18 @@ class RepositoriesContainer
 
         $container['PublicationRepository'] = function ($c) {
             $em = $c->get('doctrine')->getEntityManager();
+            $persisterService = $c->get('PersisterService');
+            $applicationRepository = $c->get('ApplicationRepository');
+            $categoryRepository = $c->get('CategoryRepository');
+            $htmlSanitizer = $c->get('HtmlSanitizer');
 
-            return new PublicationRepository($em, $c->get('PersisterService'));
+            return new PublicationRepository(
+                $em,
+                $persisterService,
+                $applicationRepository,
+                $categoryRepository,
+                $htmlSanitizer
+            );
         };
     }
 }

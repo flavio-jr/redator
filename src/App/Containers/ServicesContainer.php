@@ -6,6 +6,7 @@ use Slim\Container;
 use App\Services\UserSession;
 use App\Services\Player;
 use App\Services\Persister;
+use App\Services\HtmlSanitizer;
 
 class ServicesContainer
 {
@@ -21,6 +22,12 @@ class ServicesContainer
 
         $container['PersisterService'] = function ($c) {
             return new Persister($c->get('doctrine')->getEntityManager());
+        };
+
+        $container['HtmlSanitizer'] = function ($c) {
+            $htmlPurifyConfig = \HTMLPurifier_Config::createDefault();
+
+            return new HtmlSanitizer(new \HTMLPurifier($htmlPurifyConfig));
         };
     }
 }

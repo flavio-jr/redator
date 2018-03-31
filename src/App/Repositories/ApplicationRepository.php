@@ -19,6 +19,11 @@ class ApplicationRepository
         $this->persister = $persister;
     }
 
+    public function find(string $id): Application
+    {
+        return $this->repository->find($id);
+    }
+
     public function create(array $data): Application
     {
         $application = new Application();
