@@ -4,6 +4,7 @@ namespace Tests\App\Unit\Repositories;
 
 use Tests\TestCase;
 use Tests\DatabaseRefreshTable;
+use App\Services\Player;
 
 class PublicationRepositoryTest extends TestCase
 {
@@ -34,5 +35,21 @@ class PublicationRepositoryTest extends TestCase
         $publicationCreated = $this->publicationRepository->create($data);
 
         $this->assertDatabaseHave($publicationCreated);
+    }
+
+    public function testUpdatePublication()
+    {
+        $publication = $this->publicationDump->create();
+
+        $appOwner = $publication->getApplication()->getAppOwner();
+
+        Player::setPlayer($appOwner);
+
+        $newPublication = $this->publicationDump->make()->toArray();
+        $newPublication['category'] = $newPublication['category']->getId();
+
+        $publicationUpdated = $this->publicationRepository->update($publication->getId(), $newPublication);
+
+        $this->assertTrue($publicationUpdated);
     }
 }

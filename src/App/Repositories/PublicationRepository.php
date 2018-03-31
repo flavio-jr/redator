@@ -43,7 +43,7 @@ class PublicationRepository
         $category = $this->categoryRepository->find($data['category']);
 
         if (!$category) {
-            throw new EntityNotFoundException('App\Entities\Category ');
+            throw new EntityNotFoundException('App\Entities\Category');
         }
 
         $data['category'] = $category;
@@ -56,5 +56,48 @@ class PublicationRepository
         $this->persister->persist($publication);
 
         return $publication;
+    }
+
+    public function update(string $id, array $data)
+    {
+        $publication = $this->repository->find($id);
+
+        if (!$publication) {
+            return false;
+        }
+
+        if (!$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
+            return false;
+        }
+
+        $category = $publication->getCategory();
+
+        if (isset($data['category'])) {
+            $newCategory = $this->categoryRepository->find($data['category']);
+
+            $category = $newCategory ?? $category;
+        }
+
+        $data['category'] = $category;
+
+        if (isset($data['body'])) {
+            $data['body'] = $this->htmlSanitizer->sanitize($data['body']);
+        }
+
+        $setters = Publication::getSetterMap();
+
+        $allowedData = array_diff_key($data, [
+            'application' => false
+        ]);
+
+        foreach ($allowedData as $field => $value) {
+            $setter = $setters[$field];
+
+            $publication->{$setter}($value);
+        }
+
+        $this->persister->persist($publication);
+
+        return true;
     }
 }

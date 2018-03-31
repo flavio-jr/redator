@@ -49,9 +49,21 @@ class Publication implements EntityInterface
      */
     private $body;
 
+    private static $setterMap = [
+        'title'       => 'setTitle',
+        'description' => 'setDescription',
+        'category'    => 'setCategory',
+        'body'        => 'setBody'
+    ];
+
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public static function getSetterMap()
+    {
+        return self::$setterMap;
     }
 
     public function setTitle(string $title)
