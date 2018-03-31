@@ -30,7 +30,7 @@ class PublicationRepository
         $this->htmlSanitizer = $htmlSanitizer;
     }
 
-    public function create(array $data)
+    public function create(array $data): Publication
     {
         $application = $this->applicationRepository->find($data['application']);
 
@@ -58,7 +58,7 @@ class PublicationRepository
         return $publication;
     }
 
-    public function update(string $id, array $data)
+    public function update(string $id, array $data): bool
     {
         $publication = $this->repository->find($id);
 
@@ -97,6 +97,23 @@ class PublicationRepository
         }
 
         $this->persister->persist($publication);
+
+        return true;
+    }
+
+    public function destroy(string $id): bool
+    {
+        $publication = $this->repository->find($id);
+
+        if (!$publication) {
+            return false;
+        }
+
+        if (!$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
+            return false;
+        }
+
+        $this->persister->remove($publication);
 
         return true;
     }

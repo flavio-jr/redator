@@ -52,4 +52,17 @@ class PublicationRepositoryTest extends TestCase
 
         $this->assertTrue($publicationUpdated);
     }
+
+    public function testDestroyPublication()
+    {
+        $publication = $this->publicationDump->create();
+
+        $publicationOwner = $publication->getApplication()->getAppOwner();
+
+        Player::setPlayer($publicationOwner);
+
+        $publicationDeleted = $this->publicationRepository->destroy($publication->getId());
+
+        $this->assertTrue($publicationDeleted);
+    }
 }
