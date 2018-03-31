@@ -5,13 +5,30 @@ namespace Tests\App\Unit\Repositories;
 use Tests\TestCase;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
+use App\Repositories\PublicationRepository;
+use App\Dumps\PublicationDump;
+use App\Dumps\UserDump;
 
 class PublicationRepositoryTest extends TestCase
 {
     use DatabaseRefreshTable;
 
+    /**
+     * The repository for Publication entity
+     * @var PublicationRepository
+     */
     private $publicationRepository;
+
+    /**
+     * The dump of publication entity
+     * @var PublicationDump
+     */
     private $publicationDump;
+
+    /**
+     * The dump of user entity
+     * @var UserDump
+     */
     private $userDump;
 
     public function setUp()
@@ -94,5 +111,16 @@ class PublicationRepositoryTest extends TestCase
         $publicationDeleted = $this->publicationRepository->destroy($publication->getId());
 
         $this->assertFalse($publicationDeleted);   
+    }
+
+    public function testGetPublicationInfo()
+    {
+        $publication = $this->publicationDump->create();
+
+        Player::setPlayer($publication->getApplication()->getAppOwner());
+
+        $data = $this->publicationRepository->getPublication($publication->getId());
+
+        $this->assertNotEmpty($data);
     }
 }

@@ -11,9 +11,29 @@ use App\Entities\Publication;
 class PublicationRepository
 {
     private $repository;
+
+    /**
+     * The service for persisting entities
+     * @var Persister
+     */
     private $persister;
+
+    /**
+     * The repository for Application entity
+     * @var ApplicationRepository
+     */
     private $applicationRepository;
+    
+    /**
+     * The repository for Category entity
+     * @var CategoryRepository
+     */
     private $categoryRepository;
+
+    /**
+     * The service responsable for cleaning html input
+     * @var HtmlSanitizer
+     */
     private $htmlSanitizer;
 
     public function __construct(
@@ -28,6 +48,25 @@ class PublicationRepository
         $this->applicationRepository = $applicationRepository;
         $this->categoryRepository = $categoryRepository;
         $this->htmlSanitizer = $htmlSanitizer;
+    }
+
+    public function getPublication(string $id): array
+    {
+        $publication = $this->repository->find($id);
+
+        if (!$publication) {
+            return [];
+        }
+
+        if (!$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
+            return [];
+        }
+
+        $data = $publication->toArray();
+        $data['category'] = $publication->getCategory()->toArray();
+        $data['application'] = $publication->getApplication()->toArray();
+
+        return $data;
     }
 
     public function create(array $data): Publication
