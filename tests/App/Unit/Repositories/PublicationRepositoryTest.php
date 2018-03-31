@@ -12,6 +12,7 @@ class PublicationRepositoryTest extends TestCase
 
     private $publicationRepository;
     private $publicationDump;
+    private $userDump;
 
     public function setUp()
     {
@@ -19,6 +20,7 @@ class PublicationRepositoryTest extends TestCase
 
         $this->publicationRepository = $this->container->get('PublicationRepository');
         $this->publicationDump = $this->container->get('App\Dumps\PublicationDump');
+        $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
     public function testCreateNewPublication()
@@ -64,5 +66,33 @@ class PublicationRepositoryTest extends TestCase
         $publicationDeleted = $this->publicationRepository->destroy($publication->getId());
 
         $this->assertTrue($publicationDeleted);
+    }
+
+    public function testUpdatePublicationThatBelongsToOtherUser()
+    {
+        $publication = $this->publicationDump->create();
+        $otherUser = $this->userDump->create();
+
+        Player::setPlayer($otherUser);
+
+        $newPublication = $this->publicationDump->make()->toArray();
+        $newPublication['category'] = $newPublication['category']->getId();
+
+        $publicationUpdated = $this->publicationRepository->update($publication->getId(), $newPublication);
+
+        $this->assertFalse($publicationUpdated);
+    }
+
+    public function testDestroyPublicationThatBelongsToOtherUser()
+    {
+        $publication = $this->publicationDump->create();
+
+        $user = $this->userDump->create();
+
+        Player::setPlayer($user);
+
+        $publicationDeleted = $this->publicationRepository->destroy($publication->getId());
+
+        $this->assertFalse($publicationDeleted);   
     }
 }
