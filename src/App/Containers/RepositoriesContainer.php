@@ -10,6 +10,7 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\PublicationRepository;
 use App\Entities\User;
 use App\Entities\Application;
+use App\Entities\Category;
 
 class RepositoriesContainer
 {
@@ -30,8 +31,10 @@ class RepositoriesContainer
 
         $container['CategoryRepository'] = function ($c) {
             $em = $c->get('doctrine')->getEntityManager();
+            $persister = $c->get('PersisterService');
+            $category = new Category();
 
-            return new CategoryRepository($em, $c->get('PersisterService'));
+            return new CategoryRepository($category, $em, $persister);
         };
 
         $container['PublicationRepository'] = function ($c) {
