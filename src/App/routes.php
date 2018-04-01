@@ -24,6 +24,13 @@ $app->group('/app', function () {
             $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
             $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
+
+        $this->group('/publications', function () {
+            $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications');
+            $this->post('', 'App\Controllers\PublicationsController:store');
+            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
+            $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
+        });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));
 });

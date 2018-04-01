@@ -6,6 +6,7 @@ use Slim\Container;
 use App\Controllers\LoginController;
 use App\Controllers\UsersController;
 use App\Controllers\ApplicationsController;
+use App\Controllers\PublicationsController;
 
 class ControllersContainer
 {
@@ -21,6 +22,10 @@ class ControllersContainer
 
         $container['App\Controllers\ApplicationsController'] = function ($c) {
             return new ApplicationsController($c->get('ApplicationRepository'));
+        };
+
+        $container['App\Controllers\PublicationsController'] = function ($c) {
+            return new PublicationsController($c->get('PublicationRepository'), $c->get('App\Filters\PublicationFilter'));
         };
     }
 }
