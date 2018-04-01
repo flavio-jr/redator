@@ -69,6 +69,11 @@ class PublicationRepository
         return $data;
     }
 
+    public function createQueryBuilder(string $alias)
+    {
+        return $this->repository->createQueryBuilder($alias);
+    }
+
     public function create(array $data): Publication
     {
         $application = $this->applicationRepository->find($data['application']);
