@@ -98,7 +98,7 @@ final class ApplicationsController
     {
         $applications = $this->applicationRepository->getApplicationsByUser();
 
-        if ($applications) {
+        if (is_array($applications)) {
             return $response->write(json_encode(['apps' => $applications]))->withStatus(200);
         }
 

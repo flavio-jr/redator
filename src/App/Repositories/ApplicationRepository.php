@@ -154,6 +154,8 @@ class ApplicationRepository
         return array_map(function ($app) {
             $data = $app->toArray();
 
+            $data['id'] = $app->getId();
+
             $type = $data['type'];
             $data['type'] = [$type => ApplicationType::getApplicationTypes()[$type]];
 
