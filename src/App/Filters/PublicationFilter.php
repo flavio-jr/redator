@@ -6,7 +6,7 @@ use Slim\Http\Request;
 use Doctrine\ORM\QueryBuilder;
 use App\Repositories\PublicationRepository;
 
-class PublicationFilter
+class PublicationFilter implements FilterInterface
 {
     /**
      * The alias for the query builder
@@ -71,11 +71,9 @@ class PublicationFilter
     }
 
     /**
-     * Set the values to filter
-     * @param array $requestParameters
-     * @return self
+     * @inheritdoc
      */
-    public function setFilters(array $requestParameters)
+    public function setFilters(array $requestParameters): FilterInterface
     {
         $this->page = $requestParameters['page'] ?? 0;
         $this->category = $requestParameters['category'] ?? null;
@@ -124,6 +122,9 @@ class PublicationFilter
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function get(): array
     {
         return $this->publicationQueryBuilder
