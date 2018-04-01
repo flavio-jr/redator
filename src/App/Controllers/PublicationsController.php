@@ -38,7 +38,7 @@ final class PublicationsController
      */
     public function getPublications(Request $request, Response $response, array $args)
     {
-        $parameters = $request->getParsedBody();
+        $parameters = $request->getQueryParams();
         $parameters['application'] = $args['application_id'];
 
         $publications = $this->publicationFilter
@@ -46,6 +46,8 @@ final class PublicationsController
             ->filterByTitle()
             ->filterByCategory()
             ->filterByApplication()
+            ->filterByMinDate()
+            ->filterByMaxDate()
             ->get();
 
         return $response->write(json_encode(['publications' => $publications]))->withStatus(200);

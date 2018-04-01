@@ -19,7 +19,8 @@
         "fzaninotto/faker": "^1.7",
         "lcobucci/jwt": "^3.2",
         "respect/validation": "^1.1",
-        "ezyang/htmlpurifier": "dev-master"
+        "ezyang/htmlpurifier": "dev-master",
+        "nesbot/carbon": "^1.25"
     },
     "autoload": {
         "psr-4": {
