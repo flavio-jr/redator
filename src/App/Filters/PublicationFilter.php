@@ -111,11 +111,15 @@ class PublicationFilter
         return $this;
     }
 
+    /**
+     * Filter the publications by application
+     * @return self
+     */
     public function filterByApplication()
     {
         $this->publicationQueryBuilder
             ->andWhere(self::QB_APPLICATION_ALIAS . ".id = :application")
-            ->setParameter('application', "{$this->category}");
+            ->setParameter('application', "{$this->application}");
 
         return $this;
     }
