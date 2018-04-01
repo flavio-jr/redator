@@ -6,6 +6,13 @@ use App\Dumps\DumpInterface;
 
 class DumpFactory implements DumpFactoryInterface
 {
+    /**
+     * Create many dumps, without persisting them
+     * @method mock
+     * @param DumpInterface $dump
+     * @param int $amount
+     * @param array $override
+     */
     public function mock(DumpInterface $dump, int $amount, array $override = [])
     {
         $mocks = [];
@@ -17,6 +24,13 @@ class DumpFactory implements DumpFactoryInterface
         return $mocks;
     }
 
+    /**
+     * Create many dumps, persisting them
+     * @method produce
+     * @param DumpInterface $dump
+     * @param int $amount
+     * @param array $override
+     */
     public function produce(DumpInterface $dump, int $amount, array $override = [])
     {
         $mocks = [];
