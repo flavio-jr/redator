@@ -55,15 +55,6 @@ class ApplicationDump implements DumpInterface
         return $application;
     }
 
-    // public function getUser(array $override)
-    // {
-    //     if (isset($override['owner'])) {
-    //         return $override['owner'];
-    //     }
-
-    //     return $this->userDump->create();
-    // }
-
     /**
      * Creates a new Application, persisting it
      * @method create
