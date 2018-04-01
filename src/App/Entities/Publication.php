@@ -10,6 +10,7 @@ use Doctrine\ORM\Id\UuidGenerator as Uuid;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="publications")
  */
 class Publication implements EntityInterface
@@ -48,6 +49,11 @@ class Publication implements EntityInterface
      * @ORM\Column(type="text")
      */
     private $body;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
 
     private static $setterMap = [
         'title'       => 'setTitle',
@@ -134,5 +140,13 @@ class Publication implements EntityInterface
             'application' => $this->getApplication(),
             'body'        => $this->getBody()
         ];
+    }
+
+    /** 
+     * @ORM\PrePersist 
+     */
+    public function setTimestamp()
+    {
+        $this->createdAt = new \DateTime();
     }
 }
