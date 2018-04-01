@@ -10,8 +10,18 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 
 class UserSession
 {
+    /**
+     * Token expiration time
+     * @var int
+     */
     const EXPIRATION_TIME = 3600;
 
+    /**
+     * Creates an new token
+     * @method createNewToken
+     * @param string $id
+     * @return string
+     */
     public function createNewToken(string $id): string
     {
         $builder = new Builder();
@@ -31,6 +41,12 @@ class UserSession
         return (string) $token;
     }
 
+    /**
+     * Check is an given token is valid
+     * @method isValidToken
+     * @param string $token
+     * @return bool
+     */
     public function isValidToken(string $token): bool
     {
         $signer = new Sha256();
