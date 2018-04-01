@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Repositories\PublicationRepository;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use App\Filters\PublicationFilter;
 
 final class PublicationsController
 {
@@ -14,9 +15,33 @@ final class PublicationsController
      */
     private $publicationRepository;
 
-    public function __construct(PublicationRepository $publicationRepository)
-    {
+    /**
+     * The filter for publications
+     * @var PublicationFilter
+     */
+    private $publicationFilter;
+
+    public function __construct(
+        PublicationRepository $publicationRepository,
+        PublicationFilter $publicationFilter
+    ) {
         $this->publicationRepository = $publicationRepository;
+        $this->publicationFilter = $publicationFilter;
+    }
+
+    public function getPublications(Request $request, Response $response, array $args)
+    {
+        $parameters = $request->getParsedBody();
+        $parameters['application'] = $args['application_id'];
+
+        $publications = $this->publicationFilter
+            ->setFilters($parameters)
+            ->filterByTitle()
+            ->filterByCategory()
+            ->filterByApplication()
+            ->get();
+
+        return $response->write(json_encode(['publications' => $publications]))->withStatus(200);
     }
 
     public function store(Request $request, Response $response)

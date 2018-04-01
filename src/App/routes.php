@@ -26,6 +26,7 @@ $app->group('/app', function () {
         });
 
         $this->group('/publications', function () {
+            $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications');
             $this->post('', 'App\Controllers\PublicationsController:store');
             $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
             $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');

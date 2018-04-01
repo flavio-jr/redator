@@ -71,7 +71,9 @@ class PublicationFilter implements FilterInterface
     }
 
     /**
-     * @inheritdoc
+     * Set the values to filter
+     * @param array $requestParameters
+     * @return self
      */
     public function setFilters(array $requestParameters): FilterInterface
     {
@@ -89,6 +91,8 @@ class PublicationFilter implements FilterInterface
      */
     public function filterByTitle()
     {
+        if (empty($this->title)) return $this;
+
         $this->publicationQueryBuilder
             ->andWhere(self::QB_ALIAS . ".title LIKE :title")
             ->setParameter('title', "%{$this->title}%");
@@ -102,6 +106,8 @@ class PublicationFilter implements FilterInterface
      */
     public function filterByCategory()
     {
+        if (!$this->category) return $this;
+
         $this->publicationQueryBuilder
             ->andWhere(self::QB_CATEGORY_ALIAS . ".id = :category")
             ->setParameter('category', "{$this->category}");
@@ -115,6 +121,8 @@ class PublicationFilter implements FilterInterface
      */
     public function filterByApplication()
     {
+        if (!$this->application) return $this;
+
         $this->publicationQueryBuilder
             ->andWhere(self::QB_APPLICATION_ALIAS . ".id = :application")
             ->setParameter('application', "{$this->application}");

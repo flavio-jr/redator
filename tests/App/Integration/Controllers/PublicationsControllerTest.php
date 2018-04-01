@@ -7,7 +7,9 @@ use App\Application;
 use Tests\DatabaseRefreshTable;
 use App\Repositories\PublicationRepository;
 use App\Dumps\PublicationDump;
+use App\Dumps\ApplicationDump;
 use App\Services\Player;
+use App\Dumps\DumpsFactories\DumpFactory;
 
 class PublicationsControllerTest extends TestCase
 {
@@ -25,12 +27,26 @@ class PublicationsControllerTest extends TestCase
      */
     private $publicationDump;
 
+    /**
+     * The application dump
+     * @var ApplicationDump
+     */
+    private $applicationDump;
+
+    /**
+     * The dump factory
+     * @var DumpFactory
+     */
+    private $dumpFactory;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->publicationRepository = $this->container->get('PublicationRepository');
         $this->publicationDump = $this->container->get('App\Dumps\PublicationDump');
+        $this->applicationDump = $this->container->get('App\Dumps\ApplicationDump');
+        $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
     public function testMustReturnHttpOkForCreateNewPublication()
@@ -68,6 +84,17 @@ class PublicationsControllerTest extends TestCase
         Player::setPlayer($publication->getApplication()->getAppOwner());
 
         $response = $this->delete(Application::PREFIX . "/publications/{$publication->getId()}");
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testMustReturnHttpOkForgetAppPublications()
+    {
+        $application = $this->applicationDump->create();
+
+        $this->dumpFactory->produce($this->publicationDump, 10, ['application' => $application]);
+
+        $response = $this->get(Application::PREFIX . "/publications/{$application->getId()}");
 
         $this->assertEquals(200, $response->getStatusCode());
     }

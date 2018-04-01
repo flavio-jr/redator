@@ -25,7 +25,7 @@ class ControllersContainer
         };
 
         $container['App\Controllers\PublicationsController'] = function ($c) {
-            return new PublicationsController($c->get('PublicationRepository'));
+            return new PublicationsController($c->get('PublicationRepository'), $c->get('App\Filters\PublicationFilter'));
         };
     }
 }
