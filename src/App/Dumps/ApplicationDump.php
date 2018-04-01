@@ -28,7 +28,7 @@ class ApplicationDump implements DumpInterface
 
         $application->setName($override['name'] ?? $this->faker->name);
         $application->setDescription($override['description'] ?? $this->faker->text);
-        $application->setUrl($override['url'] ?? $this->faker->url);
+        $application->setUrl($override['url'] ?? $this->faker->domainName);
         $application->setType($override['type'] ?? rand(0, 1) === 0 ? 'LP' : 'NL');
         $application->setAppOwner($override['owner'] ?? $this->userDump->create());
 

@@ -3,6 +3,7 @@
 use App\Middlewares\LoggedUser;
 use App\RequestValidators\Login;
 use App\RequestValidators\UserRegistration;
+use App\RequestValidators\ApplicationRegistration;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -20,7 +21,7 @@ $app->group('/app', function () {
 
         $this->group('/applications', function () {
             $this->get('/user', 'App\Controllers\ApplicationsController:userApps');
-            $this->post('', 'App\Controllers\ApplicationsController:store');
+            $this->post('', 'App\Controllers\ApplicationsController:store')->add(new ApplicationRegistration());
             $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
             $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
