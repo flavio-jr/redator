@@ -43,7 +43,7 @@ class CategoryRepository
      * @param string $id
      * @return mixed
      */
-    public function find(string $id): mixed
+    public function find(string $id)
     {
         return $this->repository->find($id);
     }

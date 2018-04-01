@@ -11,6 +11,7 @@ use App\Repositories\PublicationRepository;
 use App\Entities\User;
 use App\Entities\Application;
 use App\Entities\Category;
+use App\Entities\Publication;
 
 class RepositoriesContainer
 {
@@ -43,8 +44,10 @@ class RepositoriesContainer
             $applicationRepository = $c->get('ApplicationRepository');
             $categoryRepository = $c->get('CategoryRepository');
             $htmlSanitizer = $c->get('HtmlSanitizer');
+            $publication = new Publication();
 
             return new PublicationRepository(
+                $publication,
                 $em,
                 $persisterService,
                 $applicationRepository,
