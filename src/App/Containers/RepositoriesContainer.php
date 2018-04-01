@@ -9,19 +9,23 @@ use App\Repositories\ApplicationRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PublicationRepository;
 use App\Entities\User;
+use App\Entities\Application;
 
 class RepositoriesContainer
 {
     public function register(Container $container, array $config)
     {
-        $container['UserRepository'] = function ($c) use ($config) {
+        $container['UserRepository'] = function (Container $c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
             return new UserRepository(new User(), $em, new Persister($em));
         };
 
-        $container['ApplicationRepository'] = function ($c) use ($config) {
+        $container['ApplicationRepository'] = function (Container $c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
-            return new ApplicationRepository($em, new Persister($em));
+            $persister = $c->get('PersisterService');
+            $application = new Application();
+
+            return new ApplicationRepository($application, $em, $persister);
         };
 
         $container['CategoryRepository'] = function ($c) {
