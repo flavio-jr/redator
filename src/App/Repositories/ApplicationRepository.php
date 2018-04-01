@@ -8,6 +8,7 @@ use App\Services\Persister;
 use App\Entities\Application;
 use App\Services\Player;
 use App\Exceptions\EntityNotFoundException;
+use App\Database\Types\ApplicationType;
 
 class ApplicationRepository
 {
@@ -151,7 +152,14 @@ class ApplicationRepository
         $applications = $this->repository->findBy(['owner' => $user->getId()]);
 
         return array_map(function ($app) {
-            return $app->toArray();
+            $data = $app->toArray();
+
+            $type = $data['type'];
+            $data['type'] = [$type => ApplicationType::getApplicationTypes()[$type]];
+
+            unset($data['owner']);
+
+            return $data;
         }, $applications);
     }
 }
