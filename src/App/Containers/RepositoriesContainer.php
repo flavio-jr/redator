@@ -8,6 +8,7 @@ use App\Services\Persister;
 use App\Repositories\ApplicationRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PublicationRepository;
+use App\Entities\User;
 
 class RepositoriesContainer
 {
@@ -15,7 +16,7 @@ class RepositoriesContainer
     {
         $container['UserRepository'] = function ($c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
-            return new UserRepository($em, new Persister($em));
+            return new UserRepository(new User(), $em, new Persister($em));
         };
 
         $container['ApplicationRepository'] = function ($c) use ($config) {
