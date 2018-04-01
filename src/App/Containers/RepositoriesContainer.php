@@ -19,21 +19,23 @@ class RepositoriesContainer
     {
         $container['UserRepository'] = function (Container $c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
-            return new UserRepository(new User(), $em, new Persister($em));
+            $user = $c->get('User');
+
+            return new UserRepository($user, $em, new Persister($em));
         };
 
         $container['ApplicationRepository'] = function (Container $c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
             $persister = $c->get('PersisterService');
-            $application = new Application();
+            $application = $c->get('Application');
 
             return new ApplicationRepository($application, $em, $persister);
         };
 
-        $container['CategoryRepository'] = function ($c) {
+        $container['CategoryRepository'] = function (Container $c) {
             $em = $c->get('doctrine')->getEntityManager();
             $persister = $c->get('PersisterService');
-            $category = new Category();
+            $category = $c->get('Category');
 
             return new CategoryRepository($category, $em, $persister);
         };
@@ -44,7 +46,7 @@ class RepositoriesContainer
             $applicationRepository = $c->get('ApplicationRepository');
             $categoryRepository = $c->get('CategoryRepository');
             $htmlSanitizer = $c->get('HtmlSanitizer');
-            $publication = new Publication();
+            $publication = $c->get('Publication');
 
             return new PublicationRepository(
                 $publication,
