@@ -7,6 +7,7 @@ use App\Controllers\LoginController;
 use App\Controllers\UsersController;
 use App\Controllers\ApplicationsController;
 use App\Controllers\PublicationsController;
+use App\Controllers\CategoriesController;
 
 class ControllersContainer
 {
@@ -26,6 +27,10 @@ class ControllersContainer
 
         $container['App\Controllers\PublicationsController'] = function ($c) {
             return new PublicationsController($c->get('PublicationRepository'), $c->get('App\Filters\PublicationFilter'));
+        };
+
+        $container['App\Controllers\CategoriesController'] = function ($c) {
+            return new CategoriesController($c->get('CategoryRepository'));
         };
     }
 }

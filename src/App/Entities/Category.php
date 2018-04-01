@@ -33,7 +33,7 @@ class Category implements EntityInterface
 
     public function setName(string $name)
     {
-        $this->name = $name;
+        $this->name = mb_strtolower($name);
     }
 
     public function getName(): string
