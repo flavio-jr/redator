@@ -8,6 +8,10 @@ use Slim\Http\Response;
 
 final class ApplicationsController
 {
+    /**
+     * The application repository
+     * @var ApplicationRepository
+     */
     private $applicationRepository;
 
     public function __construct(ApplicationRepository $applicationRepository)
@@ -15,6 +19,12 @@ final class ApplicationsController
         $this->applicationRepository = $applicationRepository;
     }
 
+    /**
+     * Creates an new application
+     * @method store
+     * @param Request $request
+     * @param Response $response
+     */
     public function store(Request $request, Response $response)
     {
         try {
@@ -32,6 +42,13 @@ final class ApplicationsController
         }
     }
 
+    /**
+     * Updates an app data
+     * @method update
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
     public function update(Request $request, Response $response, array $args)
     {
         try {
@@ -53,6 +70,13 @@ final class ApplicationsController
         }
     }
 
+    /**
+     * Destroy an app
+     * @method destroy
+     * @param Request $request
+     * @param Reponse $response
+     * @param array $args
+     */
     public function destroy(Request $request, Response $response, array $args)
     {
         $deleted = $this->applicationRepository->destroy($args['app_id']);
@@ -64,6 +88,12 @@ final class ApplicationsController
         return $response->write('Error trying to delete application')->withStatus(500);
     }
 
+    /**
+     * Get all apps of the logged user
+     * @method userApps
+     * @param Request $request
+     * @param Response $response
+     */
     public function userApps(Request $request, Response $response)
     {
         $applications = $this->applicationRepository->getApplicationsByUser();
