@@ -48,4 +48,18 @@ class PublicationFilterTest extends TestCase
 
         $this->assertGreaterThan(0, count($results));
     }
+
+    public function testFilterByCategoryShouldNotReturnEmptySet()
+    {
+        $someRandomCategoryId = $this->publications[rand(0, 4)]->getCategory()->getId();
+
+        $filters = ['category' => $someRandomCategoryId];
+
+        $results = $this->publicationFilter
+            ->setFilters($filters)
+            ->filterByCategory()
+            ->get();
+
+        $this->assertGreaterThan(0, count($results));
+    }
 }
