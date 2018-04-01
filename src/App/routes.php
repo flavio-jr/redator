@@ -4,6 +4,7 @@ use App\Middlewares\LoggedUser;
 use App\RequestValidators\Login;
 use App\RequestValidators\UserRegistration;
 use App\RequestValidators\ApplicationRegistration;
+use App\RequestValidators\PublicationRegistration;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -28,7 +29,7 @@ $app->group('/app', function () {
 
         $this->group('/publications', function () {
             $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications');
-            $this->post('', 'App\Controllers\PublicationsController:store');
+            $this->post('', 'App\Controllers\PublicationsController:store')->add(new PublicationRegistration());
             $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
             $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
         });
