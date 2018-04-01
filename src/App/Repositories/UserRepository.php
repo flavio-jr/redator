@@ -22,10 +22,6 @@ class UserRepository
 
     public function create(array $data)
     {
-        if ($this->repository->findOneBy(['username' => $data['username']])) {
-            throw new UniqueFieldException('username');
-        }
-
         $user = new User();
         $user->fromArray($data);
 
@@ -63,22 +59,6 @@ class UserRepository
         if (!$user) {
             throw new EntityNotFoundException('App\Entities\User');
         }
-
-        if (isset($data['username'])) {
-            $qb = $this->repository
-                ->createQueryBuilder('u')
-                ->andWhere('u.username <> :currentUsername')
-                ->setParameter('currentUsername', $user->getUsername())
-                ->andWhere('u.username = :newUsername')
-                ->setParameter('newUsername', $data['username'])
-                ->getQuery();
-
-            $userNameExists = $qb->setMaxResults(1)->getOneOrNullResult();
-
-            if ($userNameExists) {
-                throw new UniqueFieldException('username');    
-            }
-        } 
 
         $user->setName($data['name'] ?? $user->getName());
         $user->setUsername($data['username'] ?? $user->getUsername());
