@@ -22,7 +22,7 @@ class TestCase extends PHPUnit
         (new Dotenv(dirname(__DIR__)))->load();
 
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
-        $this->config['db_path'] = __DIR__ . '/database/test.sqlite';
+        $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
         
         $this->application = (new Application($this->config))->make();

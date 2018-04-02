@@ -1,3 +1,3 @@
 .env
 vendor
-tests/database/test.sqlite
+tests/test.sqlite
