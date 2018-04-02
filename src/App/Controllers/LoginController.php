@@ -9,7 +9,16 @@ use Slim\Http\Response;
 
 final class LoginController
 {
+    /**
+     * The user repository
+     * @var UserRepository
+     */
     private $userRepository;
+
+    /**
+     * The user session service
+     * @var UserSession
+     */
     private $userSessionService;
 
     public function __construct(
@@ -20,6 +29,12 @@ final class LoginController
         $this->userSessionService = $userSessionService;        
     }
 
+    /**
+     * Authorizes user return an token access
+     * @method login
+     * @param Request $request
+     * @param Response $response
+     */
     public function login(Request $request, Response $response)
     {
         $requestBody = $request->getParsedBody();

@@ -29,9 +29,16 @@ final class PublicationsController
         $this->publicationFilter = $publicationFilter;
     }
 
+    /**
+     * Get all publications of an app
+     * @method getPublications
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
     public function getPublications(Request $request, Response $response, array $args)
     {
-        $parameters = $request->getParsedBody();
+        $parameters = $request->getQueryParams();
         $parameters['application'] = $args['application_id'];
 
         $publications = $this->publicationFilter
@@ -39,11 +46,19 @@ final class PublicationsController
             ->filterByTitle()
             ->filterByCategory()
             ->filterByApplication()
+            ->filterByMinDate()
+            ->filterByMaxDate()
             ->get();
 
         return $response->write(json_encode(['publications' => $publications]))->withStatus(200);
     }
 
+    /**
+     * Creates an new publication
+     * @method store
+     * @param Request $request
+     * @param Response $response
+     */
     public function store(Request $request, Response $response)
     {
         try {
@@ -61,6 +76,12 @@ final class PublicationsController
         }
     }
 
+    /**
+     * Updates an publication data
+     * @method update
+     * @param Request $request
+     * @param Response $response
+     */
     public function update(Request $request, Response $response, array $args)
     {
         try {            
@@ -85,6 +106,13 @@ final class PublicationsController
         }
     }
 
+    /**
+     * Destroy an publication
+     * @method destroy
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     */
     public function destroy(Request $request, Response $response, array $args)
     {
         $id = $args['publication_id'];

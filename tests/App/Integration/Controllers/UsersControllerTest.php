@@ -32,11 +32,12 @@ class UsersControllerTest extends TestCase
 
     public function testRegisterUserWithExistentUsername()
     {
+        $user = $this->userDump->create();
+
         $userData = $this->userDump
-            ->make()
+            ->make(['username' => $user->getUserName()])
             ->toArray();
         
-        $firstResponse = $this->post(Application::PREFIX . '/users', $userData);
         $response = $this->post(Application::PREFIX . '/users', $userData);
 
         $this->assertEquals(412, $response->getStatusCode());

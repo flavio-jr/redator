@@ -9,7 +9,16 @@ use App\Services\Player;
 
 final class LoggedUser
 {
+    /**
+     * The user session service
+     * @var UserSession
+     */
     private $userSessionService;
+
+    /**
+     * The player service
+     * @var Player
+     */
     private $player;
 
     public function __construct(
@@ -20,6 +29,12 @@ final class LoggedUser
         $this->player = $player;
     }
 
+    /**
+     * Check user identity to authorize or not
+     * @param Request $request
+     * @param Response $response
+     * @param callback $next
+     */
     public function __invoke(Request $request, Response $response, $next)
     {
         if (getenv('APP_ENV') === 'TEST') {

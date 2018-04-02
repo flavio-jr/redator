@@ -3,13 +3,25 @@
 namespace App\Repositories;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use App\Services\Persister;
 use App\Exceptions\EntityNotFoundException;
 use App\Services\HtmlSanitizer;
 use App\Entities\Publication;
+use Doctrine\ORM\QueryBuilder;
 
 class PublicationRepository
 {
+    /**
+     * The publication entity
+     * @var Publication
+     */
+    private $publication;
+
+    /**
+     * The publication repository
+     * @var EntityRepository
+     */
     private $repository;
 
     /**
@@ -37,12 +49,14 @@ class PublicationRepository
     private $htmlSanitizer;
 
     public function __construct(
+        Publication $publication,
         EntityManager $em,
         Persister $persister,
         ApplicationRepository $applicationRepository,
         CategoryRepository $categoryRepository,
         HtmlSanitizer $htmlSanitizer
     ) {
+        $this->publication = $publication;
         $this->repository = $em->getRepository('App\Entities\Publication');
         $this->persister = $persister;
         $this->applicationRepository = $applicationRepository;
@@ -50,6 +64,12 @@ class PublicationRepository
         $this->htmlSanitizer = $htmlSanitizer;
     }
 
+    /**
+     * Gets the data of an publication by id
+     * @method getPublication
+     * @param string $id
+     * @return array
+     */
     public function getPublication(string $id): array
     {
         $publication = $this->repository->find($id);
@@ -69,11 +89,23 @@ class PublicationRepository
         return $data;
     }
 
+    /**
+     * Create an QueryBuilder for the publication repository
+     * @method createQueryBuilder
+     * @param string $alias
+     * @return QueryBuilder
+     */
     public function createQueryBuilder(string $alias)
     {
         return $this->repository->createQueryBuilder($alias);
     }
 
+    /**
+     * Creates a new Publication
+     * @method create
+     * @param array $data
+     * @return Publication
+     */
     public function create(array $data): Publication
     {
         $application = $this->applicationRepository->find($data['application']);
@@ -102,6 +134,13 @@ class PublicationRepository
         return $publication;
     }
 
+    /**
+     * Updates an publication
+     * @method update
+     * @param string $id
+     * @param array $data
+     * @return bool
+     */
     public function update(string $id, array $data): bool
     {
         $publication = $this->repository->find($id);
@@ -145,6 +184,12 @@ class PublicationRepository
         return true;
     }
 
+    /**
+     * Deletes an publication
+     * @method destroy
+     * @param string $id
+     * @return bool
+     */
     public function destroy(string $id): bool
     {
         $publication = $this->repository->find($id);

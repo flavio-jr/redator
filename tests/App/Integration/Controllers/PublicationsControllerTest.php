@@ -88,9 +88,13 @@ class PublicationsControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testMustReturnHttpOkForgetAppPublications()
+    public function testMustReturnHttpOkForGetAppPublications()
     {
         $application = $this->applicationDump->create();
+
+        $owner = $application->getAppOwner();
+
+        Player::setPlayer($owner);
 
         $this->dumpFactory->produce($this->publicationDump, 10, ['application' => $application]);
 

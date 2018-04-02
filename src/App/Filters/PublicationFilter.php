@@ -5,6 +5,8 @@ namespace App\Filters;
 use Slim\Http\Request;
 use Doctrine\ORM\QueryBuilder;
 use App\Repositories\PublicationRepository;
+use DateTime;
+use Carbon\Carbon;
 
 class PublicationFilter implements FilterInterface
 {
@@ -62,6 +64,18 @@ class PublicationFilter implements FilterInterface
      */
     private $application = null;
 
+    /**
+     * The min date of publication
+     * @var DateTime
+     */
+    private $minDate;
+
+    /**
+     * The max date of publication
+     * @var DateTime
+     */
+    private $maxDate;
+
     public function __construct(PublicationRepository $publicationRepository)
     {
         $this->publicationQueryBuilder = $publicationRepository
@@ -81,6 +95,8 @@ class PublicationFilter implements FilterInterface
         $this->category = $requestParameters['category'] ?? null;
         $this->title = $requestParameters['title'] ?? '';
         $this->application = $requestParameters['application'] ?? null;
+        $this->minDate = $requestParameters['min_date'] ?? null;
+        $this->maxDate = $requestParameters['max_date'] ?? null;
 
         return $this;
     }
@@ -93,9 +109,11 @@ class PublicationFilter implements FilterInterface
     {
         if (empty($this->title)) return $this;
 
+        $title = mb_strtolower($this->title);
+
         $this->publicationQueryBuilder
-            ->andWhere(self::QB_ALIAS . ".title LIKE :title")
-            ->setParameter('title', "%{$this->title}%");
+            ->andWhere('LOWER(' . self::QB_ALIAS . ".title) LIKE :title")
+            ->setParameter('title', "%{$title}%");
 
         return $this;
     }
@@ -131,11 +149,52 @@ class PublicationFilter implements FilterInterface
     }
 
     /**
+     * Filter the publications for min date of creation
+     * @return self
+     */
+    public function filterByMinDate()
+    {
+        if (!$this->minDate) return $this;
+
+        $this->publicationQueryBuilder
+            ->andWhere(self::QB_ALIAS . '.createdAt >= :minData')
+            ->setParameter('minData', Carbon::createFromFormat('d/m/Y', $this->minDate));
+
+        return $this;
+    }
+
+    /**
+     * Filter the publications for max date of creation
+     * @return self
+     */
+    public function filterByMaxDate()
+    {
+        if (!$this->maxDate) return $this;
+
+        $this->publicationQueryBuilder
+            ->andWhere(self::QB_ALIAS . '.createdAt <= :maxDate')
+            ->setParameter('maxDate', Carbon::createFromFormat('d/m/Y', $this->maxDate));
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function get(): array
     {
+        $pubPrefix = self::QB_ALIAS;
+        $categoryPrefix = self::QB_CATEGORY_ALIAS;
+
         return $this->publicationQueryBuilder
+            ->select("
+                {$pubPrefix}.id,
+                {$pubPrefix}.title,
+                {$pubPrefix}.description,
+                {$categoryPrefix}.name as category,
+                {$pubPrefix}.createdAt as publication_date
+            ")
+            ->orderBy(self::QB_ALIAS . '.createdAt', 'DESC')
             ->setFirstResult($this->page)
             ->getQuery()
             ->setMaxResults(self::MAX_PER_PAGE)

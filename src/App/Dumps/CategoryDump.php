@@ -8,7 +8,16 @@ use App\Entities\Category;
 
 class CategoryDump implements DumpInterface
 {
+    /**
+     * The faker library
+     * @var Generator
+     */
     private $faker;
+
+    /**
+     * The persister service
+     * @var Persister
+     */
     private $persister;
 
     public function __construct(Generator $faker, Persister $persister)
@@ -17,6 +26,12 @@ class CategoryDump implements DumpInterface
         $this->persister = $persister;
     }
 
+    /**
+     * Creates a new category without persisting it
+     * @method make
+     * @param array $override
+     * @return Category
+     */
     public function make(array $override = [])
     {
         $category = new Category();
@@ -26,6 +41,12 @@ class CategoryDump implements DumpInterface
         return $category;
     }
 
+    /**
+     * Creates a new category, persisting it
+     * @method create
+     * @param array $override
+     * @return Category
+     */
     public function create(array $override = [])
     {
         $category = $this->make($override);

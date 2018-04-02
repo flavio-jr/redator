@@ -8,8 +8,22 @@ use Faker\Generator;
 
 class ApplicationDump implements DumpInterface
 {
+    /**
+     * The faker library
+     * @var Generator
+     */
     private $faker;
+
+    /**
+     * The persister service
+     * @var Persister
+     */
     private $persister;
+
+    /**
+     * The user dump
+     * @var UserDump
+     */
     private $userDump;
 
     public function __construct(
@@ -22,28 +36,31 @@ class ApplicationDump implements DumpInterface
         $this->userDump = $userDump;
     }
 
+    /**
+     * Create an Application without persisting
+     * @method make
+     * @param array $override
+     * @return Application
+     */
     public function make(array $override = [])
     {
         $application = new Application();
 
         $application->setName($override['name'] ?? $this->faker->name);
         $application->setDescription($override['description'] ?? $this->faker->text);
-        $application->setUrl($override['url'] ?? $this->faker->url);
+        $application->setUrl($override['url'] ?? $this->faker->domainName);
         $application->setType($override['type'] ?? rand(0, 1) === 0 ? 'LP' : 'NL');
         $application->setAppOwner($override['owner'] ?? $this->userDump->create());
 
         return $application;
     }
 
-    public function getUser(array $override)
-    {
-        if (isset($override['owner'])) {
-            return $override['owner'];
-        }
-
-        return $this->userDump->create();
-    }
-
+    /**
+     * Creates a new Application, persisting it
+     * @method create
+     * @param array $override
+     * @return Application
+     */
     public function create(array $override = [])
     {
         $application = $this->make($override);

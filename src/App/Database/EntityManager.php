@@ -5,9 +5,14 @@ namespace App\Database;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager as DoctrineEntityManager;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityRepository;
 
 class EntityManager implements ModelManagerInterface
 {
+    /**
+     * The doctrine entity manager
+     * @var DoctrineEntityManager
+     */
     private $entityManager;
 
     public function __construct(array $config)
@@ -20,16 +25,32 @@ class EntityManager implements ModelManagerInterface
         $this->build($config);
     }
 
+    /**
+     * Retrieves the entity manager
+     * @method getEntityManager
+     * @return DoctrineEntityManager
+     */
     public function getEntityManager(): DoctrineEntityManager
     {
         return $this->entityManager;
     }
 
+    /**
+     * Retrieves an repository for a given model
+     * @method getModel
+     * @param string $model
+     * @return EntityRepository
+     */
     public function getModel(string $model)
     {
         return $this->entityManager->getRepository($model);   
     }
 
+    /**
+     * Build the database config for production
+     * @method build
+     * @param array $config
+     */
     public function build(array $config)
     {
         if (!Type::hasType('uuid')) {
@@ -54,6 +75,11 @@ class EntityManager implements ModelManagerInterface
         ], $setup);
     }
 
+    /**
+     * Builds the database configuration for test enviroment
+     * @method buildForTestEnvironment
+     * @param array $config
+     */
     private function buildForTestEnvironment(array $config)
     {
         if (!Type::hasType('uuid')) {

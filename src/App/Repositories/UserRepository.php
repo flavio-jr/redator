@@ -11,22 +11,43 @@ use App\Exceptions\EntityNotFoundException;
 
 class UserRepository
 {
+    /**
+     * The user entity
+     * @var User
+     */
+    private $user;
+
+    /**
+     * The user repository
+     * @var EntityRepository
+     */
     private $repository;
+
+    /**
+     * The persister service
+     * @var Persister
+     */
     private $persister;
 
-    public function __construct(EntityManager $em, Persister $persister)
-    {
-        $this->repository = $em->getRepository('App\Entities\User');
+    public function __construct(
+        User $user,
+        EntityManager $em,
+        Persister $persister
+    ) {
+        $this->user = $user;
+        $this->repository = $em->getRepository(get_class($user));
         $this->persister = $persister;
     }
 
-    public function create(array $data)
+    /**
+     * Creates new user
+     * @method create
+     * @param array $data
+     * @return User
+     */
+    public function create(array $data): User
     {
-        if ($this->repository->findOneBy(['username' => $data['username']])) {
-            throw new UniqueFieldException('username');
-        }
-
-        $user = new User();
+        $user = $this->user;
         $user->fromArray($data);
 
         $this->persister->persist($user);
@@ -34,6 +55,13 @@ class UserRepository
         return $user;
     }
 
+    /**
+     * Return user if credentials are correct
+     * @method getUserByCredentials
+     * @param string $username
+     * @param string $password
+     * @return mixed
+     */
     public function getUserByCredentials(string $username, string $password)
     {
         $users = $this->repository->findBy(['username' => $username]);
@@ -51,11 +79,24 @@ class UserRepository
         return null;
     }
 
+    /**
+     * Search user by id
+     * @method find
+     * @param string $id
+     * @return User
+     */
     public function find(string $id): User
     {
         return $this->repository->find($id);
     }
 
+    /**
+     * Updates user data
+     * @method update
+     * @param string $id
+     * @param array $data
+     * @return User
+     */
     public function update(string $id, array $data): User
     {
         $user = $this->find($id);
@@ -63,22 +104,6 @@ class UserRepository
         if (!$user) {
             throw new EntityNotFoundException('App\Entities\User');
         }
-
-        if (isset($data['username'])) {
-            $qb = $this->repository
-                ->createQueryBuilder('u')
-                ->andWhere('u.username <> :currentUsername')
-                ->setParameter('currentUsername', $user->getUsername())
-                ->andWhere('u.username = :newUsername')
-                ->setParameter('newUsername', $data['username'])
-                ->getQuery();
-
-            $userNameExists = $qb->setMaxResults(1)->getOneOrNullResult();
-
-            if ($userNameExists) {
-                throw new UniqueFieldException('username');    
-            }
-        } 
 
         $user->setName($data['name'] ?? $user->getName());
         $user->setUsername($data['username'] ?? $user->getUsername());
@@ -88,12 +113,23 @@ class UserRepository
         return $user;
     }
 
+    /**
+     * Search user by username
+     * @method findByUsername
+     * @param string $username
+     * @return mixed
+     */
     private function findByUsername(string $username)
     {
         return $this->findOneBy(['username' => $username]);
     }
 
-    public function isUsernameAvailable(string $username)
+    /**
+     * Check for username availability
+     * @param string $username
+     * @return bool
+     */
+    public function isUsernameAvailable(string $username): bool
     {
         return is_null($this->repository->findOneBy(['username' => $username]));
     }
