@@ -7,6 +7,7 @@ use App\RequestValidators\ApplicationRegistration;
 use App\RequestValidators\PublicationRegistration;
 use App\RequestValidators\CategoryRegistration;
 use App\Middlewares\Publications;
+use App\RequestValidators\PublicationsInfo;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -31,6 +32,7 @@ $app->group('/app', function () {
 
         $this->group('/publications', function () {
             $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications')
+                ->add(new PublicationsInfo())
                 ->add(new Publications($this->getContainer()->get('ApplicationRepository')));
 
             $this->post('', 'App\Controllers\PublicationsController:store')->add(new PublicationRegistration());
