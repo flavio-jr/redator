@@ -15,8 +15,8 @@ final class PublicationsInfo
             $rules = V::key('page', V::intVal(), false)
                 ->key('category', V::stringType(), false)
                 ->key('title', V::stringType(), false)
-                ->key('min_date', V::date(), false)
-                ->key('max_date', V::date(), false);
+                ->key('min_date', V::date('d/m/Y'), false)
+                ->key('max_date', V::date('d/m/Y'), false);
 
             $rules->assert($request->getQueryParams());
 

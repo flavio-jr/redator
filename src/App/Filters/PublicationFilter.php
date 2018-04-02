@@ -187,7 +187,14 @@ class PublicationFilter implements FilterInterface
         $categoryPrefix = self::QB_CATEGORY_ALIAS;
 
         return $this->publicationQueryBuilder
-            ->select("{$pubPrefix}.title, {$pubPrefix}.description, {$categoryPrefix}.name as category")
+            ->select("
+                {$pubPrefix}.id,
+                {$pubPrefix}.title,
+                {$pubPrefix}.description,
+                {$categoryPrefix}.name as category,
+                {$pubPrefix}.createdAt as publication_date
+            ")
+            ->orderBy(self::QB_ALIAS . '.createdAt', 'DESC')
             ->setFirstResult($this->page)
             ->getQuery()
             ->setMaxResults(self::MAX_PER_PAGE)
