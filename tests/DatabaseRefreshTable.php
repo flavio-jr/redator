@@ -3,21 +3,30 @@
 namespace Tests;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\EntityManager;
 
 trait DatabaseRefreshTable
 {
-    private $schemaTool;
-    private $metaClasses;
-
-    public function setUp()
+    public function setUpDatabase()
     {
-        parent::setUp();
+        $em = $this->container->get($this->config['app']['orm'])->getEntityManager();
 
-        $em = self::$application->getContainer()->get(self::$config['app']['orm'])->getEntityManager();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema($this->getMetaClass($em));
+    }
 
-        $this->schemaTool = new SchemaTool($em);
-        
-        $entities = array_diff(scandir(self::$config['app']['path'] . '/Entities'), ['.', '..']);
+    public function dropDatabase()
+    {
+        $em = $this->container->get($this->config['app']['orm'])->getEntityManager();
+
+        $schemaTool = new SchemaTool($em);
+
+        $schemaTool->dropSchema($this->getMetaClass($em));
+    }
+
+    private function getMetaClass(EntityManager $em)
+    {
+        $entities = array_diff(scandir($this->config['app']['path'] . '/Entities'), ['.', '..']);
         $entitiesNamespace = '\App\Entities\\';
 
         $metaClasses = array();
@@ -26,15 +35,6 @@ trait DatabaseRefreshTable
             $metaClasses[] = $em->getClassMetadata($entitiesNamespace . explode('.', $entity)[0]);
         }
 
-        $this->metaClasses = $metaClasses;
-
-        $this->schemaTool->createSchema($metaClasses);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->schemaTool->dropSchema($this->metaClasses);
+        return $metaClasses;
     }
 }

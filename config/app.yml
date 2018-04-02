@@ -4,5 +4,12 @@ app:
   path: 'src/App/'
   containers:
     - App\Containers\DatabaseContainer
+    - App\Containers\RepositoriesContainer
+    - App\Containers\DumpsContainer
+    - App\Containers\ServicesContainer
+    - App\Containers\ControllersContainer
+    - App\Containers\DumpsFactoriesContainer
+    - App\Containers\FiltersContainer
+    - App\Containers\EntityContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'

@@ -14,7 +14,13 @@
         "doctrine/orm": "^2.6",
         "symfony/yaml": "^4.0",
         "vlucas/phpdotenv": "^2.4",
-        "phpunit/phpunit": "^7.0"
+        "ramsey/uuid-doctrine": "^1.4",
+        "phpunit/phpunit": "^7.0",
+        "fzaninotto/faker": "^1.7",
+        "lcobucci/jwt": "^3.2",
+        "respect/validation": "^1.1",
+        "ezyang/htmlpurifier": "dev-master",
+        "nesbot/carbon": "^1.25"
     },
     "autoload": {
         "psr-4": {

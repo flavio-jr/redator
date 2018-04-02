@@ -6,8 +6,16 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false">
+         processIsolation="true"
+	 stopOnFailure="false">
+	<testsuites>
+	    <testsuite name="AppUnit">
+		    <directory suffix="Test.php">./tests/App/Unit</directory>
+	    </testsuite>
+        <testsuite name="AppIntegration">
+            <directory suffix="Test.php">./tests/App/Integration</directory>
+        </testsuite>
+	</testsuites>
     <php>
         <env name="APP_ENV" value="TEST"/>
     </php>

@@ -7,10 +7,11 @@ use App\Application;
 use Dotenv\Dotenv;
 
 $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
+$appConfig['app']['path'] = __DIR__ . '/' . $appConfig['app']['path'];
 
 $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
 
-if (is_null($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
+if (!isset($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
     $dotenv = new Dotenv(__DIR__);
     $dotenv->load();
 }
