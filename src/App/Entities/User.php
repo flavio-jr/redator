@@ -41,6 +41,11 @@ class User implements EntityInterface
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $activated = false;
+
     public function getId(): string
     {
         return $this->id;
@@ -84,6 +89,21 @@ class User implements EntityInterface
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function activeUser(): void
+    {
+        $this->activated = true;
+    }
+
+    public function disableUser(): void
+    {
+        $this->activated = false;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->activated;
     }
 
     public function toArray(): array
