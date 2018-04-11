@@ -111,6 +111,7 @@ class User implements EntityInterface
         return [
             'username' => $this->getUsername(),
             'name'     => $this->getName(),
+            'email'    => $this->getEmail(),
             'password' => $this->getPassword()
         ];
     }
@@ -119,6 +120,7 @@ class User implements EntityInterface
     {
         $this->setUsername($data['username']);
         $this->setName($data['name']);
+        $this->setEmail($data['email']);
         $this->setPassword($data['password']);
     }
 }

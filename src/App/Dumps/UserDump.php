@@ -39,6 +39,7 @@ class UserDump implements DumpInterface
 
         $user->setUsername($override['username'] ?? $this->faker->userName);
         $user->setName($override['name'] ?? $this->faker->name);
+        $user->setEmail($override['email'] ?? $this->faker->safeEmail);
         $user->setPassword($override['password'] ?? $this->faker->password);
 
         return $user;
