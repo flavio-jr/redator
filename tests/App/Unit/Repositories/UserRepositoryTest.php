@@ -79,4 +79,13 @@ class UserRepositoryTest extends TestCase
 
         $this->assertTrue($isAvailable);
     }
+
+    public function testCreateNewUserMustBeDisabled()
+    {
+        $userData = $this->userDump->make()->toArray();
+
+        $user = $this->userRepository->create($userData);
+
+        $this->assertFalse($user->isActive());
+    }
 }
