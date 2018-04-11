@@ -36,6 +36,11 @@ class User implements EntityInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $email;
+
     public function getId(): string
     {
         return $this->id;
@@ -69,6 +74,16 @@ class User implements EntityInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 
     public function toArray(): array
