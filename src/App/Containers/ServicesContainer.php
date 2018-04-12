@@ -9,6 +9,7 @@ use App\Services\Persister;
 use App\Services\HtmlSanitizer;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Services\Mailers\HTMLMailer;
+use App\Services\TemplateEngines\TwigEngine;
 
 class ServicesContainer
 {
@@ -37,6 +38,10 @@ class ServicesContainer
             $phpMailer = new PHPMailer(true);
 
             return new HTMLMailer($phpMailer, $htmlSanitizer);
+        };
+
+        $container['TwigEngine'] = function ($c) {
+            return new TwigEngine();
         };
     }
 }
