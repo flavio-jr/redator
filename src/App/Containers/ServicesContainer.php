@@ -7,6 +7,8 @@ use App\Services\UserSession;
 use App\Services\Player;
 use App\Services\Persister;
 use App\Services\HtmlSanitizer;
+use PHPMailer\PHPMailer\PHPMailer;
+use App\Services\Mailers\HTMLMailer;
 
 class ServicesContainer
 {
@@ -28,6 +30,13 @@ class ServicesContainer
             $htmlPurifyConfig = \HTMLPurifier_Config::createDefault();
 
             return new HtmlSanitizer(new \HTMLPurifier($htmlPurifyConfig));
+        };
+
+        $container['HTMLMailer'] = function ($c) {
+            $htmlSanitizer = $c->get('HtmlSanitizer');
+            $phpMailer = new PHPMailer(true);
+
+            return new HTMLMailer($phpMailer, $htmlSanitizer);
         };
     }
 }
