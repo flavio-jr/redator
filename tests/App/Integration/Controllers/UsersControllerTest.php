@@ -82,10 +82,11 @@ class UsersControllerTest extends TestCase
     public function testSendEmailToUnactiveUser()
     {
         $user = $this->userDump->create();
+        $url = 'http://my.test.com/crazy/train';
 
         Player::setPlayer($user);
 
-        $response = $this->post(Application::PREFIX . '/users/mailunactive', ['url' => 'test']);
+        $response = $this->post(Application::PREFIX . '/users/mailunactive', ['url' => $url]);
 
         $this->assertEquals(200, $response->getStatusCode());
     }

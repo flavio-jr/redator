@@ -8,6 +8,7 @@ use App\RequestValidators\PublicationRegistration;
 use App\RequestValidators\CategoryRegistration;
 use App\Middlewares\Publications;
 use App\RequestValidators\PublicationsInfo;
+use App\RequestValidators\EmailSendToUnactiveUser;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -24,7 +25,7 @@ $app->group('/app', function () {
 
         $this->group('/users', function () {
             $this->put('/{user_id}', 'App\Controllers\UsersController:update');
-            $this->post('/mailunactive', 'App\Controllers\UsersController:mailUnactiveUser');
+            $this->post('/mailunactive', 'App\Controllers\UsersController:mailUnactiveUser')->add(new EmailSendToUnactiveUser());
         });
 
 
