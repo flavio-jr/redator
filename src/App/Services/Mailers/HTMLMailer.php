@@ -73,6 +73,7 @@ class HTMLMailer implements MailerInterface
 
         $this->mailer->isHTML(true);
         $this->mailer->isSMTP();
+        $this->mailer->CharSet = 'UTF-8';
     }
 
     /**

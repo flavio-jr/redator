@@ -22,7 +22,11 @@ $app->group('/app', function () {
             return $response->write('You opened the gate');
         });
 
-        $this->put('/users/{user_id}', 'App\Controllers\UsersController:update');
+        $this->group('/users', function () {
+            $this->put('/{user_id}', 'App\Controllers\UsersController:update');
+            $this->post('/mailunactive', 'App\Controllers\UsersController:mailUnactiveUser');
+        });
+
 
         $this->group('/applications', function () {
             $this->get('/user', 'App\Controllers\ApplicationsController:userApps');

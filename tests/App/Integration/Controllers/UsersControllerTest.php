@@ -5,17 +5,21 @@ namespace Tests\App\Integration\Controllers;
 use Tests\TestCase;
 use Tests\DatabaseRefreshTable;
 use App\Application;
+use App\Dumps\UserDump;
+use App\Services\Player;
 
 class UsersControllerTest extends TestCase
 {
     use DatabaseRefreshTable;
 
+    /**
+     * @var UserDump
+     */
     private $userDump;
 
     public function setUp()
     {
         parent::setUp();
-
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
@@ -71,6 +75,17 @@ class UsersControllerTest extends TestCase
         $username = $this->userDump->make()->getUsername();
 
         $response = $this->get(Application::PREFIX . "/users/username-availaibility/{$username}");
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testSendEmailToUnactiveUser()
+    {
+        $user = $this->userDump->create();
+
+        Player::setPlayer($user);
+
+        $response = $this->post(Application::PREFIX . '/users/mailunactive', ['url' => 'test']);
 
         $this->assertEquals(200, $response->getStatusCode());
     }

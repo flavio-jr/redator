@@ -40,8 +40,11 @@ class ServicesContainer
             return new HTMLMailer($phpMailer, $htmlSanitizer);
         };
 
-        $container['TwigEngine'] = function ($c) {
-            return new TwigEngine();
+        $container['TwigEngine'] = function ($c) use ($config) {
+            $twig = new TwigEngine();
+            $twig->setTemplatesPath($config['app']['templates_path']);
+
+            return $twig;
         };
     }
 }

@@ -10,6 +10,7 @@ $appConfig = Yaml::parseFile(__DIR__ . '/config/app.yml');
 $appConfig['app']['path'] = __DIR__ . '/' . $appConfig['app']['path'];
 
 $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
+$appConfig['app']['templates_path'] = __DIR__ . "/{$appConfig['app']['templates_path']}";
 
 if (!isset($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
     $dotenv = new Dotenv(__DIR__);

@@ -7,6 +7,9 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Exceptions\UniqueFieldException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Services\Player;
+use App\Services\TemplateEngines\TemplateEngineInterface;
+use App\Services\Mailers\MailerInterface;
 
 final class UsersController
 {
@@ -16,9 +19,26 @@ final class UsersController
      */
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    /**
+     * The template engine
+     * @var TemplateEngineInterface
+     */
+    private $templateEngine;
+
+    /**
+     * The mailer service
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    public function __construct(
+        UserRepository $userRepository,
+        TemplateEngineInterface $templateEngine,
+        MailerInterface $mailer
+    ) {
         $this->userRepository = $userRepository;
+        $this->templateEngine = $templateEngine;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -87,5 +107,44 @@ final class UsersController
                 'available' => (int) $userNameAvailaibility
             ]))
             ->withStatus(200);
+    }
+
+    /**
+     * Send email to unactive user
+     * @method mailUnactiveUser
+     * @param Request $request
+     * @param Response $response
+     */
+    public function mailUnactiveUser(Request $request, Response $response)
+    {
+        try {
+            $user = Player::user();
+
+            if (!$this->userRepository->isUnactiveUser($user)) {
+                return $response->write('User already active')->withStatus(403);
+            }
+
+            $this->templateEngine->setParams([
+                'name' => $user->getName(),
+                'url'  => $request->getParam('url')
+            ]);
+
+            $emailTemplate = $this->templateEngine->render('emails/user-register-confirmation');
+
+            $this->mailer
+                ->from(getenv('APP_MAIL'))
+                ->to($user->getEmail())
+                ->subject('Register confirmation')
+                ->body($emailTemplate)
+                ->send();
+
+            return $response->write('Confirmation email sent')->withStatus(200);
+        } catch (\Exception $e) {
+            if (getenv('APP_ENV') === 'DEV') {
+                return $response->write($e->getMessage())->withStatus(500);
+            }
+
+            return $response->write('An exception ocurred')->withStatus(500);
+        }
     }
 }

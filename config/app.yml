@@ -13,3 +13,4 @@ app:
     - App\Containers\EntityContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'
+  templates_path: 'public/templates'

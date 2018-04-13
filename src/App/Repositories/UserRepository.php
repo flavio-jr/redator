@@ -133,4 +133,15 @@ class UserRepository
     {
         return is_null($this->repository->findOneBy(['username' => $username]));
     }
+
+    /**
+     * Check if the given user is unactive
+     * @method isUnactiveUser
+     * @param User $user
+     * @return bool
+     */
+    public function isUnactiveUser(User $user): bool
+    {
+        return !$user->isActive();
+    }
 }

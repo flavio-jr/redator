@@ -40,6 +40,6 @@ class TwigEngine implements TemplateEngineInterface
         $loader = new Twig_Loader_Filesystem($this->templatePath);
         $twig = new Twig_Environment($loader);
 
-        return $twig->render($viewPath . '.twig', $this->params);
+        return $twig->render("$viewPath.twig", $this->params);
     }
 }

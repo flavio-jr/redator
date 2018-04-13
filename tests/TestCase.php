@@ -24,9 +24,12 @@ class TestCase extends PHPUnit
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
+        $this->config['app']['templates_path'] = realpath(__DIR__ . '/../public/templates');
         
         $this->application = (new Application($this->config))->make();
         $this->container = $this->application->getContainer();
+
+        $this->swipeMailEnv();
     }
 
     public function setUp()
@@ -105,5 +108,13 @@ class TestCase extends PHPUnit
             ->find(get_class($entity), $id);
 
         $this->assertNull($register);
+    }
+
+    private function swipeMailEnv()
+    {
+        putenv('MAIL_HOST=' . getenv('MAIL_TEST_HOST'));
+        putenv('MAIL_USER=' . getenv('MAIL_TEST_USER'));
+        putenv('MAIL_PASSWORD=' . getenv('MAIL_TEST_PASSWORD'));
+        putenv('MAIL_PORT=' . getenv('MAIL_TEST_PORT'));
     }
 }

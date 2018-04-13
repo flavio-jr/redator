@@ -16,16 +16,7 @@ class HTMLMailerTest extends TestCase
     {
         parent::setUp();
 
-        $this->swipeMailEnv();
         $this->htmlMailer = $this->container->get('HTMLMailer');
-    }
-
-    private function swipeMailEnv()
-    {
-        putenv('MAIL_HOST=' . getenv('MAIL_TEST_HOST'));
-        putenv('MAIL_USER=' . getenv('MAIL_TEST_USER'));
-        putenv('MAIL_PASSWORD=' . getenv('MAIL_TEST_PASSWORD'));
-        putenv('MAIL_PORT=' . getenv('MAIL_TEST_PORT'));
     }
 
     public function testSendSimpleEmail()
