@@ -10,6 +10,7 @@ use App\Services\HtmlSanitizer;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Services\Mailers\HTMLMailer;
 use App\Services\TemplateEngines\TwigEngine;
+use App\Services\QueueWorkers\FPMWorker;
 
 class ServicesContainer
 {
@@ -45,6 +46,10 @@ class ServicesContainer
             $twig->setTemplatesPath($config['app']['templates_path']);
 
             return $twig;
+        };
+
+        $container['WorkerService'] = function ($c) use ($config) {
+            return new FPMWorker($config['app']['worker_dir']);
         };
     }
 }

@@ -88,6 +88,10 @@ class UsersControllerTest extends TestCase
 
         $response = $this->post(Application::PREFIX . '/users/mailunactive', ['url' => $url]);
 
+        if ($response->getStatusCode() !== 200) {
+            file_put_contents('php://stderr', $response->getBody(), FILE_APPEND);
+        }
+
         $this->assertEquals(200, $response->getStatusCode());
     }
 }

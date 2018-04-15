@@ -20,9 +20,9 @@ class ControllersContainer
         $container['App\Controllers\UsersController'] = function ($c) {
             $userRepository = $c->get('UserRepository');
             $templateEngine = $c->get('TwigEngine');
-            $mailer = $c->get('HTMLMailer');
+            $worker = $c->get('WorkerService');
  
-            return new UsersController($userRepository, $templateEngine, $mailer);
+            return new UsersController($userRepository, $templateEngine, $worker);
         };
 
         $container['App\Controllers\ApplicationsController'] = function ($c) {

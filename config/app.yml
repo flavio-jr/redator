@@ -14,3 +14,4 @@ app:
   routes: 'src/App/routes.php'
   orm: 'doctrine'
   templates_path: 'public/templates'
+  worker_dir: 'worker.php'

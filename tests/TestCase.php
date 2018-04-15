@@ -25,6 +25,7 @@ class TestCase extends PHPUnit
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
         $this->config['app']['templates_path'] = realpath(__DIR__ . '/../public/templates');
+        $this->config['app']['worker_dir'] = realpath(__DIR__ . "/../{$this->config['app']['worker_dir']}");
         
         $this->application = (new Application($this->config))->make();
         $this->container = $this->application->getContainer();

@@ -19,28 +19,10 @@ class HTMLMailer implements MailerInterface
     private $mailer;
 
     /**
-     * The mail sender
-     * @var string
-     */
-    private $from;
-
-    /**
-     * The mail receiver
-     * @var string
-     */
-    private $to;
-
-    /**
      * The HTML path for the email body
      * @var string
      */
     private $templatePath;
-
-    /**
-     * The mail subject
-     * @var string
-     */
-    private $subject;
 
     /**
      * Service for clean html
@@ -132,5 +114,8 @@ class HTMLMailer implements MailerInterface
     public function send(): bool
     {
         return $this->mailer->send();
+        //$this->worker->fire('App\Jobs\SendActiveUserMail', ['Mailer' => $this->mailer]);
+
+        return true;
     }
 }

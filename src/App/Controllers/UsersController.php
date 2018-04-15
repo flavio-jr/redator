@@ -10,6 +10,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use App\Services\Player;
 use App\Services\TemplateEngines\TemplateEngineInterface;
 use App\Services\Mailers\MailerInterface;
+use App\Services\QueueWorkers\FPMWorker;
 
 final class UsersController
 {
@@ -26,19 +27,19 @@ final class UsersController
     private $templateEngine;
 
     /**
-     * The mailer service
-     * @var MailerInterface
+     * The async worker
+     * @var FPMWorker
      */
-    private $mailer;
+    private $worker;
 
     public function __construct(
         UserRepository $userRepository,
         TemplateEngineInterface $templateEngine,
-        MailerInterface $mailer
+        FPMWorker $worker
     ) {
         $this->userRepository = $userRepository;
         $this->templateEngine = $templateEngine;
-        $this->mailer = $mailer;
+        $this->worker = $worker;
     }
 
     /**
@@ -130,16 +131,17 @@ final class UsersController
             ]);
 
             $emailTemplate = $this->templateEngine->render('emails/user-register-confirmation');
-
-            $this->mailer
-                ->from(getenv('APP_MAIL'))
-                ->to($user->getEmail())
-                ->subject('Register confirmation')
-                ->body($emailTemplate)
-                ->send();
+            
+            $this->worker->fire('App\Jobs\SendActiveUserMail', [
+                'from'    => getenv('APP_MAIL'),
+                'to'      => $user->getEmail(),
+                'subject' => 'Confirmação de cadastro',
+                'body'    => $emailTemplate
+            ]);
 
             return $response->write('Confirmation email sent')->withStatus(200);
         } catch (\Exception $e) {
+            echo $e->getMessage();
             if (getenv('APP_ENV') === 'DEV') {
                 return $response->write($e->getMessage())->withStatus(500);
             }
