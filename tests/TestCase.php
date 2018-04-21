@@ -17,10 +17,6 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
-        putenv('APP_ENV=TEST');
-
-        (new Dotenv(dirname(__DIR__)))->load();
-
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
