@@ -1,0 +1,28 @@
+version: '3'
+services:
+  pgsql:
+    image: orchardup/postgresql
+    environment:
+      POSTGRESQL_DB: ${DB_NAME}
+      POSTGRESQL_USER: ${DB_USER}
+      POSTGRESQL_PASS: ${DB_PASSWORD}
+  web:
+    container_name: redator
+    depends_on:
+      - pgsql
+    build: .
+    image: redator
+    environment:
+      APP_ENV: ${APP_ENV}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DRIVER: ${DB_DRIVER}
+      DB_TEST_NAME: ${DB_TEST_NAME}
+      DB_TEST_DRIVER: ${DB_TEST_DRIVER}
+    ports: 
+      - 80:80
+    volumes:
+      - .:/srv/app
