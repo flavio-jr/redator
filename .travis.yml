@@ -18,8 +18,11 @@ script:
   - docker exec -it redator vendor/bin/phpunit
 
 deploy:
-  provider: heroku
-  api_key:
-    secure: "6b1b01c1-83e5-4165-9b4d-3595be720fcf"
-  app:
-    master: 'redator-api'
+  - provider: script
+    script: bash deploy.sh production
+    on:
+      branch: master
+  - provider: script
+    script: bash deploy.sh development
+    on:
+      branch: develop
