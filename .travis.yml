@@ -10,10 +10,6 @@ services:
 before_install:
   - docker-compose up -d
 
-before_script: 
-  - composer self-update
-  - composer install --no-interaction
-
 script:
   - docker exec -it redator vendor/bin/phpunit
 

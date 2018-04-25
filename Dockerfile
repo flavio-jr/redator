@@ -16,7 +16,13 @@ RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/httpd.conf
 
 COPY vhost.conf /etc/apache2/conf.d/000-default.conf
 
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --filename=composer --install-dir=/usr/sbin
+
 WORKDIR /var/www/localhost/htdocs
+
+RUN composer self-update && \
+    composer install --no-interaction
 
 RUN set -x ; \
   addgroup -g 82 -S www-data ; \
