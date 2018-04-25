@@ -13,7 +13,7 @@ $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
 $appConfig['app']['templates_path'] = __DIR__ . "/{$appConfig['app']['templates_path']}";
 $appConfig['app']['worker_dir'] = __DIR__ . "/{$appConfig['app']['worker_dir']}";
 
-if (!isset($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
+if (file_exists(__DIR__ . '/.env')) {
     $dotenv = new Dotenv(__DIR__);
     $dotenv->load();
 }
