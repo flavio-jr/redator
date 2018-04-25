@@ -1,22 +1,20 @@
-FROM php:7.2-apache
+FROM phpearth/php:7.2-apache
 
-# ENV http_proxy=http://flavio.ribeiro:bernardo27@192.168.1.10:3128
-# ENV https_proxy=${http_proxy}
-# ENV ftp_proxy=${http_proxy}
-# ENV no_proxy=localhost,127.0.0.1
-ENV APACHE_RUN_DIR /var/run
+RUN apk add --no-cache php-pdo php-pgsql php-pdo_pgsql
 
-RUN a2enmod rewrite
+COPY . /var/www/localhost
 
-RUN apt-get update
+RUN sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf
+RUN sed -i 's/User apache/User www-data/g' /etc/apache2/httpd.conf
+RUN sed -i 's/Group apache/Group www-data/g' /etc/apache2/httpd.conf
+RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/httpd.conf
 
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+COPY vhost.conf /etc/apache2/conf.d/000-default.conf
 
-WORKDIR /srv/app
+WORKDIR /var/www/localhost
 
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
-COPY . /srv/app
+RUN set -x ; \
+  addgroup -g 82 -S www-data ; \
+  adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
 
-CMD apachectl -DFOREGROUND
+CMD exec /usr/sbin/httpd -DFOREGROUND

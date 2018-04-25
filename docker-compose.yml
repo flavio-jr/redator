@@ -13,6 +13,7 @@ services:
     build: .
     image: redator
     environment:
+      PORT: 80
       APP_ENV: ${APP_ENV}
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
