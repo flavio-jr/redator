@@ -11,7 +11,7 @@ $appConfig['app']['path'] = __DIR__ . '/' . $appConfig['app']['path'];
 
 $appConfig['app']['routes'] = __DIR__ . "/{$appConfig['app']['routes']}";
 
-if (!isset($_ENV['APP_ENV']) || getenv('APP_ENV') === 'DEV') {
+if (file_exists(__DIR__ . '/.env')) {
     $dotenv = new Dotenv(__DIR__);
     $dotenv->load();
 }
