@@ -26,4 +26,4 @@ services:
     ports: 
       - 80:80
     volumes:
-      - .:/srv/app
+      - .:/var/www/localhost/htdocs

@@ -1,8 +1,13 @@
 FROM phpearth/php:7.2-apache
 
-RUN apk add --no-cache php-pdo php-pgsql php-pdo_pgsql
+RUN apk add --no-cache \
+    php-pdo \
+    php-pgsql \
+    php-pdo_pgsql \
+    php-sqlite3 \
+    php-pdo_sqlite
 
-COPY . /var/www/localhost
+COPY . /var/www/localhost/htdocs
 
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /etc/apache2/httpd.conf
 RUN sed -i 's/User apache/User www-data/g' /etc/apache2/httpd.conf
@@ -11,7 +16,7 @@ RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/httpd.conf
 
 COPY vhost.conf /etc/apache2/conf.d/000-default.conf
 
-WORKDIR /var/www/localhost
+WORKDIR /var/www/localhost/htdocs
 
 RUN set -x ; \
   addgroup -g 82 -S www-data ; \
