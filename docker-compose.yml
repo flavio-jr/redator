@@ -14,15 +14,8 @@ services:
     image: redator
     environment:
       PORT: 80
-      APP_ENV: ${APP_ENV}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_DRIVER: ${DB_DRIVER}
-      DB_TEST_NAME: ${DB_TEST_NAME}
-      DB_TEST_DRIVER: ${DB_TEST_DRIVER}
+    env_file:
+      - .env
     ports: 
       - 80:80
     volumes:
