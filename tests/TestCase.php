@@ -49,6 +49,15 @@ class TestCase extends PHPUnit
         if (method_exists($this, 'dropDatabase')) {
             $this->dropDatabase();
         }
+
+        $refl = new \ReflectionObject($this);
+
+        foreach ($refl->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
+        }
     }
 
     private function makeRequest($url, $method, array $data = [], $queryString = '')
