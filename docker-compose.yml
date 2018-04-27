@@ -15,6 +15,7 @@ services:
     environment:
       PORT: 80
       APP_ENV: ${APP_ENV}
+      APP_MAIL: ${APP_MAIL}
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
@@ -23,6 +24,16 @@ services:
       DB_DRIVER: ${DB_DRIVER}
       DB_TEST_NAME: ${DB_TEST_NAME}
       DB_TEST_DRIVER: ${DB_TEST_DRIVER}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_SMTP_AUTH_ENABLED: ${MAIL_SMTP_AUTH_ENABLED}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_ENCRYPT: ${MAIL_ENCRYPT}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_TEST_HOST: ${MAIL_TEST_HOST}
+      MAIL_TEST_USER: ${MAIL_TEST_USER}
+      MAIL_TEST_PASSWORD: ${MAIL_TEST_PASSWORD}
+      MAIL_TEST_PORT: ${MAIL_TEST_PORT}
     ports: 
       - 80:80
     volumes:
