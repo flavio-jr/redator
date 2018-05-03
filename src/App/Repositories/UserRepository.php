@@ -105,8 +105,8 @@ class UserRepository
             throw new EntityNotFoundException('App\Entities\User');
         }
 
-        $user->setName($data['name'] ?? $user->getName());
-        $user->setUsername($data['username'] ?? $user->getUsername());
+        $user->setName($data['name']);
+        $user->setUsername($data['username']);
 
         $this->persister->persist($user);
 

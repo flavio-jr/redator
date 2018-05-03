@@ -30,6 +30,19 @@ class UsersControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
+    public function testRegisterUserWithoutRequiredData()
+    {
+        $userData = $this->userDump
+            ->make()
+            ->toArray();
+
+        unset($userData['name']);
+
+        $response = $this->post(Application::PREFIX . '/users', $userData);
+
+        $this->assertEquals(412, $response->getStatusCode());
+    }
+
     public function testRegisterUserWithExistentUsername()
     {
         $user = $this->userDump->create();
@@ -52,6 +65,18 @@ class UsersControllerTest extends TestCase
         $response = $this->put(Application::PREFIX . "/users/{$user->getId()}", $userDataUpdate);
 
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testUpdateUserWithoutRequiredData()
+    {
+        $user = $this->userDump->create();
+
+        $userDataUpdate = $this->userDump->make(['username' => $user->getUserName()])->toArray();
+        unset($userDataUpdate['name']);
+
+        $response = $this->put(Application::PREFIX . "/users/{$user->getId()}", $userDataUpdate);
+
+        $this->assertEquals(412, $response->getStatusCode());
     }
 
     public function testUpdateUsernameToAlreadyTakenOne()
