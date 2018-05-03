@@ -33,11 +33,21 @@ class CategoriesControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testMustNotRegisterCategoryWithExistentUsername()
+    public function testMustNotRegisterCategoryWithExistentName()
     {
         $category = $this->categoryDump->create();
 
         $data = $this->categoryDump->make(['name' => $category->getName()])->toArray();
+
+        $response = $this->post(Application::PREFIX . '/categories', $data);
+
+        $this->assertEquals(412, $response->getStatusCode());
+    }
+
+    public function testMustNotRegisterCategoryWithMissingData()
+    {
+        $data = $this->categoryDump->make()->toArray();
+        unset($data['name']);
 
         $response = $this->post(Application::PREFIX . '/categories', $data);
 
