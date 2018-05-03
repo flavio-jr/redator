@@ -36,7 +36,7 @@ $app->group('/app', function () {
                 ->add(new Publications($this->getContainer()->get('ApplicationRepository')));
 
             $this->post('', 'App\Controllers\PublicationsController:store')->add(new PublicationRegistration());
-            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
+            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update')->add(new PublicationRegistration());
             $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
         });
 

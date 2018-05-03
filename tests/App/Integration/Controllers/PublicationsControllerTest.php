@@ -60,6 +60,19 @@ class PublicationsControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
+    public function testMusNotRegisterPublicationWithMissingData()
+    {
+        $publicationData = $this->publicationDump->make()->toArray();
+        $publicationData['application'] = $publicationData['application']->getId();
+        $publicationData['category'] = $publicationData['category']->getId();
+
+        unset($publicationData['application']);
+
+        $response = $this->post(Application::PREFIX . '/publications', $publicationData);
+
+        $this->assertEquals(412, $response->getStatusCode());
+    }
+
     public function testMustReturnHttpOkForUpdatePublication()
     {
         $publication = $this->publicationDump->create();
@@ -71,10 +84,28 @@ class PublicationsControllerTest extends TestCase
         Player::setPlayer($publication->getApplication()->getAppOwner());
 
         $publicationData['category'] = $publicationData['category']->getId();
+        $publicationData['application'] = $publicationData['application']->getId();
 
         $response = $this->put(Application::PREFIX . "/publications/{$publication->getId()}", $publicationData);
 
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testMustNotUpdatePublicationWithMissingData()
+    {
+        $publication = $this->publicationDump->create();
+
+        $publicationData = $this->publicationDump->make([
+            'application' => $publication->getApplication()
+        ])->toArray();
+
+        Player::setPlayer($publication->getApplication()->getAppOwner());
+
+        unset($publicationData['application']);
+
+        $response = $this->put(Application::PREFIX . "/publications/{$publication->getId()}", $publicationData);
+
+        $this->assertEquals(412, $response->getStatusCode());
     }
 
     public function testMustReturnHttpOkForDeletePublication()

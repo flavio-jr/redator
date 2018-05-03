@@ -145,39 +145,15 @@ class PublicationRepository
     {
         $publication = $this->repository->find($id);
 
-        if (!$publication) {
+        if (!$publication || !$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
             return false;
         }
 
-        if (!$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
-            return false;
-        }
+        $data['category'] = $this->categoryRepository->find($data['category']);
+        $data['application'] = $this->applicationRepository->find($data['application']);
+        $data['body'] = $this->htmlSanitizer->sanitize($data['body']);
 
-        $category = $publication->getCategory();
-
-        if (isset($data['category'])) {
-            $newCategory = $this->categoryRepository->find($data['category']);
-
-            $category = $newCategory ?? $category;
-        }
-
-        $data['category'] = $category;
-
-        if (isset($data['body'])) {
-            $data['body'] = $this->htmlSanitizer->sanitize($data['body']);
-        }
-
-        $setters = Publication::getSetterMap();
-
-        $allowedData = array_diff_key($data, [
-            'application' => false
-        ]);
-
-        foreach ($allowedData as $field => $value) {
-            $setter = $setters[$field];
-
-            $publication->{$setter}($value);
-        }
+        $publication->fromArray($data);
 
         $this->persister->persist($publication);
 
@@ -194,11 +170,7 @@ class PublicationRepository
     {
         $publication = $this->repository->find($id);
 
-        if (!$publication) {
-            return false;
-        }
-
-        if (!$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
+        if (!$publication || !$this->applicationRepository->appBelongsToUser($publication->getApplication())) {
             return false;
         }
 
