@@ -89,14 +89,7 @@ class ApplicationRepository
             return false;
         }
 
-        $setterMap = Application::getSetterMap();
-
-        foreach ($data as $colunmName => $value)
-        {
-            $setter = $setterMap[$colunmName];
-
-            $application->{$setter}($value);
-        }
+        $application->fromArray($data);
 
         $this->persister->persist($application);
 

@@ -26,7 +26,7 @@ $app->group('/app', function () {
         $this->group('/applications', function () {
             $this->get('/user', 'App\Controllers\ApplicationsController:userApps');
             $this->post('', 'App\Controllers\ApplicationsController:store')->add(new ApplicationRegistration());
-            $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
+            $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update')->add(new ApplicationRegistration());
             $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
 

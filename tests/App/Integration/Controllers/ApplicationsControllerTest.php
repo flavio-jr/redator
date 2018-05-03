@@ -35,6 +35,20 @@ class ApplicationsControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
+    public function testNotRegisterApplicationWithMissingData()
+    {
+        $appData = $this->applicationDump->make();
+
+        Player::setPlayer($appData->getAppOwner());
+
+        $data = $appData->toArray();
+        unset($data['name']);
+
+        $response = $this->post(Application::PREFIX . '/applications', $data);
+
+        $this->assertEquals(412, $response->getStatusCode());
+    }
+
     public function testMustReturnHttpOkForUpdateApp()
     {
         $application = $this->applicationDump->create();
@@ -48,6 +62,23 @@ class ApplicationsControllerTest extends TestCase
         $response = $this->put(Application::PREFIX . "/applications/{$application->getId()}", $updateData);
 
         $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testMustNotUpdateWithMissingData()
+    {
+        $application = $this->applicationDump->create();
+
+        Player::setPlayer($application->getAppOwner());
+
+        $updateData = $this->applicationDump
+            ->make(['owner' => $application->getAppOwner()])
+            ->toArray();
+
+        unset($updateData['name']);
+
+        $response = $this->put(Application::PREFIX . "/applications/{$application->getId()}", $updateData);
+
+        $this->assertEquals(412, $response->getStatusCode());
     }
 
     public function testMustReturnHttpOkForDestroyApp()
