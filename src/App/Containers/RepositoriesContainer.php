@@ -20,8 +20,9 @@ class RepositoriesContainer
         $container['UserRepository'] = function (Container $c) use ($config) {
             $em = $c->get('doctrine')->getEntityManager();
             $user = $c->get('User');
+            $persister = $c->get('PersisterService');
 
-            return new UserRepository($user, $em, new Persister($em));
+            return new UserRepository($user, $em, $persister);
         };
 
         $container['ApplicationRepository'] = function (Container $c) use ($config) {
