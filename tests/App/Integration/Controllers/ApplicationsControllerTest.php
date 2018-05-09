@@ -91,17 +91,4 @@ class ApplicationsControllerTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
     }
-
-    public function testMustReturnHttpOkForGetUserApps()
-    {
-        $user = $this->userDump->create();
-
-        Player::setPlayer($user);
-
-        $applications = $this->dumpFactory->produce($this->applicationDump, 5, ['owner' => $user]);
-
-        $response = $this->get(Application::PREFIX . "/applications/user");
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
 }
