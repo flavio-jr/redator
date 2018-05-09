@@ -144,15 +144,16 @@ class ApplicationRepository
 
         $applications = $this->repository->findBy(['owner' => $user->getId()]);
 
-        return array_map(function ($app) {
-            $data = $app->toArray();
+        return array_map(function (Application $app) {
+            $type = $app->getType();
 
-            $data['id'] = $app->getId();
-
-            $type = $data['type'];
-            $data['type'] = [$type => ApplicationType::getApplicationTypes()[$type]];
-
-            unset($data['owner']);
+            return [
+                'id'          => $app->getId(),
+                'name'        => $app->getName(),
+                'url'         => $app->getUrl(),
+                'type'        => [$type => ApplicationType::getApplicationTypes()[$type]],
+                'description' => $app->getDescription()
+            ];
 
             return $data;
         }, $applications);

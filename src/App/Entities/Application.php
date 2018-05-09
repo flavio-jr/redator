@@ -113,11 +113,6 @@ class Application implements EntityInterface
         return $this->type;
     }
 
-    public function getTypeDesc(string $type): string
-    {
-        return ApplicationType::$type;
-    }
-
     public function setAppOwner(User $user)
     {
         $this->owner = $user;
