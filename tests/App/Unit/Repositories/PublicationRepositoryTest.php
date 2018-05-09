@@ -66,6 +66,7 @@ class PublicationRepositoryTest extends TestCase
 
         $newPublication = $this->publicationDump->make()->toArray();
         $newPublication['category'] = $newPublication['category']->getId();
+        $newPublication['application'] = $newPublication['application']->getId();
 
         $publicationUpdated = $this->publicationRepository->update($publication->getId(), $newPublication);
 
