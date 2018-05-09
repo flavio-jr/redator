@@ -17,6 +17,10 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
+        if (getenv('APP_ENV') === 'DEV') {
+            (new Dotenv(realpath(__DIR__ . '/../')))->load();
+        }
+        
         putenv('APP_ENV=TEST');
 
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
