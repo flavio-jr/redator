@@ -12,6 +12,7 @@ use App\Entities\User;
 use App\Entities\Application;
 use App\Entities\Category;
 use App\Entities\Publication;
+use App\Repositories\UserRepository\Store\UserStore;
 
 class RepositoriesContainer
 {
@@ -57,6 +58,14 @@ class RepositoriesContainer
                 $categoryRepository,
                 $htmlSanitizer
             );
+        };
+
+        $container[UserStore::class] = function (Container $c) {
+            $user = $c->get('User');
+            $em = $c->get('doctrine')->getEntityManager();
+            $persisterService = $c->get('PersisterService');
+            
+            return new UserStore($user, $em, $persisterService);
         };
     }
 }
