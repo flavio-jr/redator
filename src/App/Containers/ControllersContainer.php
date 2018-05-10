@@ -8,6 +8,8 @@ use App\Controllers\UsersController;
 use App\Controllers\ApplicationsController;
 use App\Controllers\PublicationsController;
 use App\Controllers\CategoriesController;
+use App\Controllers\UsersController\UserStoreController;
+use App\Repositories\UserRepository\Store\UserStore;
 
 class ControllersContainer
 {
@@ -31,6 +33,10 @@ class ControllersContainer
 
         $container['App\Controllers\CategoriesController'] = function ($c) {
             return new CategoriesController($c->get('CategoryRepository'));
+        };
+
+        $container[UserStoreController::class] = function (Container $c) {
+            return new UserStoreController($c->get(UserStore::class));
         };
     }
 }
