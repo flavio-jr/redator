@@ -14,6 +14,7 @@ use App\Entities\Category;
 use App\Entities\Publication;
 use App\Repositories\UserRepository\Store\UserStore;
 use App\Repositories\UserRepository\Update\UserUpdate;
+use App\Repositories\UserRepository\Query\UserQuery;
 
 class RepositoriesContainer
 {
@@ -75,6 +76,12 @@ class RepositoriesContainer
             $persisterService = $c->get('PersisterService');
             
             return new UserUpdate($user, $em, $persisterService);
+        };
+
+        $container[UserQuery::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new UserQuery($em);
         };
     }
 }
