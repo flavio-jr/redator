@@ -10,6 +10,8 @@ use App\Controllers\PublicationsController;
 use App\Controllers\CategoriesController;
 use App\Controllers\UsersController\UserStoreController;
 use App\Repositories\UserRepository\Store\UserStore;
+use App\Controllers\UsersController\UserUpdateController;
+use App\Repositories\UserRepository\Update\UserUpdate;
 
 class ControllersContainer
 {
@@ -37,6 +39,12 @@ class ControllersContainer
 
         $container[UserStoreController::class] = function (Container $c) {
             return new UserStoreController($c->get(UserStore::class));
+        };
+
+        $container[UserUpdateController::class] = function (Container $c) {
+            $userUpdateRepository = $c->get(UserUpdate::class);
+
+            return new UserUpdateController($userUpdateRepository);
         };
     }
 }

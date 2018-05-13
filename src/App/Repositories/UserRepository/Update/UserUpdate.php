@@ -6,6 +6,7 @@ use App\Entities\User;
 use Doctrine\ORM\EntityManager;
 use App\Services\Persister;
 use Doctrine\ORM\EntityRepository;
+use App\Services\Player;
 
 final class UserUpdate implements UserUpdateInterface
 {
@@ -39,14 +40,11 @@ final class UserUpdate implements UserUpdateInterface
     }
 
     /**
-     * Updates user data
-     * @param string $id The user uuid
-     * @param array $data The user new data
-     * @return bool The result of the update operation
+     * @inheritdoc
      */
-    public function update(string $id, array $data): bool
+    public function update(array $data): bool
     {
-        $user = $this->repository->find($id);
+        $user = Player::user();
 
         if (!$user) {
             return false;

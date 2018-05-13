@@ -4,5 +4,11 @@ namespace App\Repositories\UserRepository\Update;
 
 interface UserUpdateInterface
 {
-    public function update(string $id, array $data): bool;
+    /**
+     * Updates user data
+     * @param string $username The user username
+     * @param array $data The user new data
+     * @return bool The result of the update operation
+     */
+    public function update(array $data): bool;
 }

@@ -19,7 +19,7 @@ $app->group('/app', function () {
 
         $this->group('/users', function () {
             $this->post('', 'App\Controllers\UsersController\UserStoreController:store')->add(new UserRegistration());
-            $this->put('/{user_id}', 'App\Controllers\UsersController:update')->add(new UserRegistration());
+            $this->put('', 'App\Controllers\UsersController\UserUpdateController:update')->add(new UserRegistration());
             $this->get('/username-availaibility/{username}', 'App\Controllers\UsersController:usernameAvailaibility');
             $this->get('/apps', 'App\Controllers\ApplicationsController:userApps');
         });

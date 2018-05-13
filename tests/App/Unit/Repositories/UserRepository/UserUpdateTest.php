@@ -36,7 +36,7 @@ class UserUpdateTest extends TestCase
         $user = $this->userDump->create();
         $data = $this->userDump->make()->toArray();
 
-        $userUpdated = $this->userUpdate->update($user->getId(), $data);
+        $userUpdated = $this->userUpdate->update($data);
 
         $this->assertTrue($userUpdated);
     }
