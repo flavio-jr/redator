@@ -12,6 +12,8 @@ use App\Controllers\UsersController\UserStoreController;
 use App\Repositories\UserRepository\Store\UserStore;
 use App\Controllers\UsersController\UserUpdateController;
 use App\Repositories\UserRepository\Update\UserUpdate;
+use App\Controllers\UsersController\UserQueryController;
+use App\Repositories\UserRepository\Query\UserQuery;
 
 class ControllersContainer
 {
@@ -45,6 +47,12 @@ class ControllersContainer
             $userUpdateRepository = $c->get(UserUpdate::class);
 
             return new UserUpdateController($userUpdateRepository);
+        };
+
+        $container[UserQueryController::class] = function (Container $c) {
+            $userQueryRepository = $c->get(UserQuery::class);
+
+            return new UserQueryController($userQueryRepository);
         };
     }
 }

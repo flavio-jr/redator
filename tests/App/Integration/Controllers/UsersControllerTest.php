@@ -38,15 +38,6 @@ class UsersControllerTest extends TestCase
         $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
-    public function testCheckForUsernameAvailability()
-    {
-        $username = $this->userDump->make()->getUsername();
-
-        $response = $this->get(Application::PREFIX . "/users/username-availaibility/{$username}");
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
     public function testMustReturnHttpOkForGetUserApps()
     {
         $user = $this->userDump->create();
