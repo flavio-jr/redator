@@ -25,17 +25,6 @@ class ApplicationRepositoryTest extends TestCase
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
-    public function testCreateApplication()
-    {
-        $applicationData = $this->applicationDump->make();
-
-        Player::setPlayer($applicationData->getAppOwner());
-
-        $application = $this->applicationRepository->create($applicationData->toArray());
-
-        $this->assertDatabaseHave($application);
-    }
-
     public function testUpdateApplication()
     {
         $application = $this->applicationDump->create();

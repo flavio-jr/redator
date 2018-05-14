@@ -15,6 +15,7 @@ use App\Entities\Publication;
 use App\Repositories\UserRepository\Store\UserStore;
 use App\Repositories\UserRepository\Update\UserUpdate;
 use App\Repositories\UserRepository\Query\UserQuery;
+use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 
 class RepositoriesContainer
 {
@@ -82,6 +83,14 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new UserQuery($em);
+        };
+
+        $container[ApplicationStore::class] = function (Container $c) {
+            $application = $c->get('Application');
+            $em = $c->get('doctrine')->getEntityManager();
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationStore($application, $persister, $em);
         };
     }
 }
