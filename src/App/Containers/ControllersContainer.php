@@ -16,6 +16,8 @@ use App\Controllers\UsersController\UserQueryController;
 use App\Repositories\UserRepository\Query\UserQuery;
 use App\Controllers\ApplicationsController\UserAppsController;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
+use App\Controllers\ApplicationsController\AppStoreController;
+use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 
 class ControllersContainer
 {
@@ -61,6 +63,12 @@ class ControllersContainer
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new UserAppsController($applicationQuery);
+        };
+
+        $container[AppStoreController::class] = function (Container $c) {
+            $appStore = $c->get(ApplicationStore::class);
+
+            return new AppStoreController($appStore);
         };
     }
 }

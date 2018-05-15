@@ -24,31 +24,6 @@ class ApplicationsControllerTest extends TestCase
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
-    public function testMustReturnHttpOkForStoreApp()
-    {
-        $appData = $this->applicationDump->make();
-
-        Player::setPlayer($appData->getAppOwner());
-
-        $response = $this->post(Application::PREFIX . '/applications', $appData->toArray());
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    public function testNotRegisterApplicationWithMissingData()
-    {
-        $appData = $this->applicationDump->make();
-
-        Player::setPlayer($appData->getAppOwner());
-
-        $data = $appData->toArray();
-        unset($data['name']);
-
-        $response = $this->post(Application::PREFIX . '/applications', $data);
-
-        $this->assertEquals(412, $response->getStatusCode());
-    }
-
     public function testMustReturnHttpOkForUpdateApp()
     {
         $application = $this->applicationDump->create();

@@ -22,12 +22,12 @@ $app->group('/app', function () {
             $this->put('', 'App\Controllers\UsersController\UserUpdateController:update')->add(new UserRegistration());
             $this->group('/apps', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
+                $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
         });
 
         $this->group('/applications', function () {
-            $this->post('', 'App\Controllers\ApplicationsController:store')->add(new ApplicationRegistration());
             $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update')->add(new ApplicationRegistration());
             $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
