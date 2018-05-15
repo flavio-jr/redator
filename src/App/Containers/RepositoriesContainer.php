@@ -17,6 +17,7 @@ use App\Repositories\UserRepository\Update\UserUpdate;
 use App\Repositories\UserRepository\Query\UserQuery;
 use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
+use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 
 class RepositoriesContainer
 {
@@ -98,6 +99,13 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new ApplicationQuery($em);
+        };
+
+        $container[ApplicationUpdate::class] = function (Container $c) {
+            $persister = $c->get('PersisterService');
+            $applicationQuery = $c->get(ApplicationQuery::class);
+
+            return new ApplicationUpdate($persister, $applicationQuery);
         };
     }
 }

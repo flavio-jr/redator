@@ -25,37 +25,6 @@ class ApplicationRepositoryTest extends TestCase
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
-    public function testUpdateApplication()
-    {
-        $application = $this->applicationDump->create();
-
-        Player::setPlayer($application->getAppOwner());
-
-        $applicationData = $this->applicationDump
-            ->make(['owner' => $application->getAppOwner()])
-            ->toArray();
-
-        $applicationUpdated = $this->applicationRepository->update($application->getId(), $applicationData);
-
-        $this->assertTrue($applicationUpdated);
-    }
-
-    public function testUpdateApplicationThatDoesntBelongsToUser()
-    {
-        $application = $this->applicationDump->create();
-        $user = $this->userDump->create();
-
-        Player::setPlayer($user);
-
-        $applicationData = $this->applicationDump
-            ->make(['owner' => $application->getAppOwner()])
-            ->toArray();
-
-        $applicationUpdate = $this->applicationRepository->update($application->getId(), $applicationData);
-
-        $this->assertFalse($applicationUpdate);
-    }
-
     public function testDestroyApplication()
     {
         $application = $this->applicationDump->create();
