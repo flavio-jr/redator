@@ -25,29 +25,6 @@ class ApplicationRepositoryTest extends TestCase
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
-    public function testDestroyApplication()
-    {
-        $application = $this->applicationDump->create();
-
-        Player::setPlayer($application->getAppOwner());
-
-        $deleted = $this->applicationRepository->destroy($application->getId());
-
-        $this->assertTrue($deleted);
-    }
-
-    public function testOnlyAppOwnerCanDestroy()
-    {
-        $application = $this->applicationDump->create();
-        $otherUserNotAppOwner = $this->userDump->create();
-
-        Player::setPlayer($otherUserNotAppOwner);
-
-        $deleted = $this->applicationRepository->destroy($application->getId());
-
-        $this->assertFalse($deleted);
-    }
-
     public function testShouldReturnAllUserApps()
     {
         $user = $this->userDump->create();

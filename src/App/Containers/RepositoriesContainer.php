@@ -18,6 +18,7 @@ use App\Repositories\UserRepository\Query\UserQuery;
 use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
+use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 
 class RepositoriesContainer
 {
@@ -106,6 +107,13 @@ class RepositoriesContainer
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new ApplicationUpdate($persister, $applicationQuery);
+        };
+
+        $container[ApplicationDestruction::class] = function (Container $c) {
+            $applicationQuery = $c->get(ApplicationQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationDestruction($applicationQuery, $persister);
         };
     }
 }
