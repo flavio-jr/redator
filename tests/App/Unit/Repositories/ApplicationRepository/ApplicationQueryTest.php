@@ -8,6 +8,7 @@ use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Services\Player;
 use Tests\DatabaseRefreshTable;
 use App\Dumps\UserDump;
+use App\Dumps\DumpsFactories\DumpFactory;
 
 class ApplicationQueryTest extends TestCase
 {
@@ -28,6 +29,11 @@ class ApplicationQueryTest extends TestCase
      */
     private $applicationQuery;
 
+    /**
+     * @var DumpFactory
+     */
+    private $dumpFactory;
+
     public function setUp()
     {
         parent::setUp();
@@ -35,6 +41,7 @@ class ApplicationQueryTest extends TestCase
         $this->applicationDump = $this->container->get(ApplicationDump::class);
         $this->userDump = $this->container->get(UserDump::class);
         $this->applicationQuery = $this->container->get(ApplicationQuery::class);
+        $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
     public function testShouldFindApplication()
@@ -57,5 +64,18 @@ class ApplicationQueryTest extends TestCase
         $applicationNotFound = $this->applicationQuery->getApplication($application->getName());
 
         $this->assertNull($applicationNotFound);
+    }
+
+    public function testGetAllAplicationsOfCurrentUser()
+    {
+        $user = $this->userDump->create();
+
+        Player::setPlayer($user);
+
+        $this->dumpFactory->produce($this->applicationDump, 5, ['owner' => $user]);
+
+        $userApps = $this->applicationQuery->getUserApplications();
+
+        $this->assertCount(5, $userApps);
     }
 }

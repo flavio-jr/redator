@@ -13,4 +13,11 @@ interface ApplicationQueryInterface
      * @return Application
      */
     public function getApplication(string $appName): ?Application;
+
+    /**
+     * Get the applications that belongs to the current user
+     * @method getUserApplications
+     * @return array
+     */
+    public function getUserApplications(): array;
 }
