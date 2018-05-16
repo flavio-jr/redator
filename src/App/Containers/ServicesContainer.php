@@ -7,6 +7,8 @@ use App\Services\UserSession;
 use App\Services\Player;
 use App\Services\Persister;
 use App\Services\HtmlSanitizer;
+use App\Services\Slugify\Slugify;
+use Cocur\Slugify\Slugify as Slugifier;
 
 class ServicesContainer
 {
@@ -28,6 +30,12 @@ class ServicesContainer
             $htmlPurifyConfig = \HTMLPurifier_Config::createDefault();
 
             return new HtmlSanitizer(new \HTMLPurifier($htmlPurifyConfig));
+        };
+
+        $container[Slugify::class] = function (Container $c) {
+            $slugifier = new Slugifier();
+
+            return new Slugify($slugifier);
         };
     }
 }
