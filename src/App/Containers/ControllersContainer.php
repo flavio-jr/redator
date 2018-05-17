@@ -20,6 +20,8 @@ use App\Controllers\ApplicationsController\AppStoreController;
 use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use App\Controllers\ApplicationsController\AppUpdateController;
 use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
+use App\Controllers\ApplicationsController\AppDeleteController;
+use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 
 class ControllersContainer
 {
@@ -77,6 +79,12 @@ class ControllersContainer
             $appUpdateRepository = $c->get(ApplicationUpdate::class);
 
             return new AppUpdateController($appUpdateRepository);
+        };
+
+        $container[AppDeleteController::class] = function (Container $c) {
+            $appDeleteRepository = $c->get(ApplicationDestruction::class);
+
+            return new AppDeleteController($appDeleteRepository);
         };
     }
 }

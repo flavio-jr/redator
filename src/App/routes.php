@@ -24,12 +24,9 @@ $app->group('/app', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
                 $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
                 $this->put('/{app}', 'App\Controllers\ApplicationsController\AppUpdateController:update')->add(new ApplicationRegistration());
+                $this->delete('/{app}', 'App\Controllers\ApplicationsController\AppDeleteController:delete');
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
-        });
-
-        $this->group('/applications', function () {
-            $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
 
         $this->group('/publications', function () {
