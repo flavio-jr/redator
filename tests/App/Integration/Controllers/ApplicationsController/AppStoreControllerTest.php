@@ -54,4 +54,17 @@ class AppStoreControllerTest extends TestCase
 
         $this->assertEquals(412, $response->getStatusCode());
     }
+
+    public function testStoreAppWithExistentNameMustReturnPreConditionFailed()
+    {
+        $application = $this->applicationDump->create();
+
+        Player::setPlayer($this->userDump->create());
+
+        $appData = $this->applicationDump->make(['name' => $application->getName()])->toArray();
+
+        $response = $this->post(Application::PREFIX . '/users/apps', $appData);
+
+        $this->assertEquals(412, $response->getStatusCode());
+    }
 }
