@@ -24,15 +24,19 @@ final class AppUpdateController
         $appUpdated = $this->appUpdate->update($args['app'], $request->getParsedBody());
 
         if ($appUpdated) {
-            return $response
-                ->withStatus(200)
+            $response
                 ->getBody()
                 ->write('The app was successfully updated');
+
+            return $response
+                ->withStatus(200);
         }
 
-        return $response
-            ->withStatus(500)
+        $response
             ->getBody()
             ->write('The app was not updated');
+
+        return $response
+            ->withStatus(403);
     }
 }
