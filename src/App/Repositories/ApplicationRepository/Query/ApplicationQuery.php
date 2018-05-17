@@ -31,7 +31,7 @@ final class ApplicationQuery implements ApplicationQueryInterface
         return $this->repository
             ->findOneBy([
                 'owner' => $user->getId(),
-                'name' => $appName
+                'slug'  => $appName
             ]);
     }
 

@@ -160,6 +160,7 @@ class Application implements EntityInterface
     {
         return [
             'name'        => $this->getName(),
+            'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'url'         => $this->getUrl(),
             'type'        => $this->getType(),

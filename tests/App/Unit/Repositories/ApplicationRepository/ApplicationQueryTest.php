@@ -50,7 +50,7 @@ class ApplicationQueryTest extends TestCase
 
         Player::setPlayer($application->getAppOwner());
 
-        $applicationFind = $this->applicationQuery->getApplication($application->getName());
+        $applicationFind = $this->applicationQuery->getApplication($application->getSlug());
 
         $this->assertNotNull($applicationFind);
     }
@@ -61,7 +61,7 @@ class ApplicationQueryTest extends TestCase
 
         Player::setPlayer($this->userDump->create());
 
-        $applicationNotFound = $this->applicationQuery->getApplication($application->getName());
+        $applicationNotFound = $this->applicationQuery->getApplication($application->getSlug());
 
         $this->assertNull($applicationNotFound);
     }

@@ -38,7 +38,7 @@ class ApplicationUpdateTest extends TestCase
 
         $appData = $this->applicationDump->make()->toArray();
 
-        $appUpdated = $this->applicationUpdate->update($application->getName(), $appData);
+        $appUpdated = $this->applicationUpdate->update($application->getSlug(), $appData);
 
         $this->assertTrue($appUpdated);
     }
@@ -51,7 +51,7 @@ class ApplicationUpdateTest extends TestCase
 
         $appData = $this->applicationDump->make()->toArray();
 
-        $appNotUpdated = $this->applicationUpdate->update($appData['name'], $appData);
+        $appNotUpdated = $this->applicationUpdate->update($appData['slug'], $appData);
 
         $this->assertFalse($appNotUpdated);
     }

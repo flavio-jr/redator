@@ -43,7 +43,7 @@ class ApplicationDestructionTest extends TestCase
 
         Player::setPlayer($application->getAppOwner());
 
-        $deleted = $this->applicationDestruction->destroy($application->getName());
+        $deleted = $this->applicationDestruction->destroy($application->getSlug());
 
         $this->assertTrue($deleted);
     }
@@ -54,7 +54,7 @@ class ApplicationDestructionTest extends TestCase
 
         Player::setPlayer($this->userDump->create());
 
-        $notDeleted = $this->applicationDestruction->destroy($application->getName());
+        $notDeleted = $this->applicationDestruction->destroy($application->getSlug());
 
         $this->assertFalse($notDeleted);
     }
