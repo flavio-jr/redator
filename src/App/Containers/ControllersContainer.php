@@ -18,6 +18,8 @@ use App\Controllers\ApplicationsController\UserAppsController;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Controllers\ApplicationsController\AppStoreController;
 use App\Repositories\ApplicationRepository\Store\ApplicationStore;
+use App\Controllers\ApplicationsController\AppUpdateController;
+use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 
 class ControllersContainer
 {
@@ -69,6 +71,12 @@ class ControllersContainer
             $appStore = $c->get(ApplicationStore::class);
 
             return new AppStoreController($appStore);
+        };
+
+        $container[AppUpdateController::class] = function (Container $c) {
+            $appUpdateRepository = $c->get(ApplicationUpdate::class);
+
+            return new AppUpdateController($appUpdateRepository);
         };
     }
 }

@@ -23,6 +23,7 @@ $app->group('/app', function () {
             $this->group('/apps', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
                 $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
+                $this->put('/{app}', 'App\Controllers\ApplicationsController\AppUpdateController:update')->add(new ApplicationRegistration());
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
         });
