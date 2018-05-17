@@ -24,38 +24,6 @@ class ApplicationsControllerTest extends TestCase
         $this->userDump = $this->container->get('App\Dumps\UserDump');
     }
 
-    public function testMustReturnHttpOkForUpdateApp()
-    {
-        $application = $this->applicationDump->create();
-
-        Player::setPlayer($application->getAppOwner());
-
-        $updateData = $this->applicationDump
-            ->make(['owner' => $application->getAppOwner()])
-            ->toArray();
-
-        $response = $this->put(Application::PREFIX . "/applications/{$application->getId()}", $updateData);
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    public function testMustNotUpdateWithMissingData()
-    {
-        $application = $this->applicationDump->create();
-
-        Player::setPlayer($application->getAppOwner());
-
-        $updateData = $this->applicationDump
-            ->make(['owner' => $application->getAppOwner()])
-            ->toArray();
-
-        unset($updateData['name']);
-
-        $response = $this->put(Application::PREFIX . "/applications/{$application->getId()}", $updateData);
-
-        $this->assertEquals(412, $response->getStatusCode());
-    }
-
     public function testMustReturnHttpOkForDestroyApp()
     {
         $application = $this->applicationDump->create();

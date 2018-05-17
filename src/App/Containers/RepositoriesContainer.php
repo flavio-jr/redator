@@ -19,6 +19,7 @@ use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
+use App\Services\Slugify\Slugify;
 
 class RepositoriesContainer
 {
@@ -90,10 +91,10 @@ class RepositoriesContainer
 
         $container[ApplicationStore::class] = function (Container $c) {
             $application = $c->get('Application');
-            $em = $c->get('doctrine')->getEntityManager();
             $persister = $c->get('PersisterService');
+            $slugifier = $c->get(Slugify::class);
 
-            return new ApplicationStore($application, $persister, $em);
+            return new ApplicationStore($application, $persister, $slugifier);
         };
 
         $container[ApplicationQuery::class] = function (Container $c) {
@@ -105,8 +106,9 @@ class RepositoriesContainer
         $container[ApplicationUpdate::class] = function (Container $c) {
             $persister = $c->get('PersisterService');
             $applicationQuery = $c->get(ApplicationQuery::class);
+            $slugifier = $c->get(Slugify::class);
 
-            return new ApplicationUpdate($persister, $applicationQuery);
+            return new ApplicationUpdate($persister, $applicationQuery, $slugifier);
         };
 
         $container[ApplicationDestruction::class] = function (Container $c) {

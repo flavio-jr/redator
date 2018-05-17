@@ -5,6 +5,7 @@ namespace App\Dumps;
 use App\Entities\Application;
 use App\Services\Persister;
 use Faker\Generator;
+use App\Services\Slugify\SlugifyInterface;
 
 class ApplicationDump implements DumpInterface
 {
@@ -26,14 +27,22 @@ class ApplicationDump implements DumpInterface
      */
     private $userDump;
 
+    /**
+     * The slugifier service
+     * @var SlugifyInterface
+     */
+    private $slugifier;
+
     public function __construct(
         Generator $faker,
         Persister $persister,
-        UserDump $userDump
+        UserDump $userDump,
+        SlugifyInterface $slugifier
     ) {
         $this->faker = $faker;
         $this->persister = $persister;
         $this->userDump = $userDump;
+        $this->slugifier = $slugifier;
     }
 
     /**
@@ -47,6 +56,7 @@ class ApplicationDump implements DumpInterface
         $application = new Application();
 
         $application->setName($override['name'] ?? $this->faker->name);
+        $application->setSlug($this->slugifier->slugify($application->getName()));
         $application->setDescription($override['description'] ?? $this->faker->text);
         $application->setUrl($override['url'] ?? $this->faker->domainName);
         $application->setType($override['type'] ?? rand(0, 1) === 0 ? 'LP' : 'NL');

@@ -28,7 +28,6 @@ $app->group('/app', function () {
         });
 
         $this->group('/applications', function () {
-            $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update')->add(new ApplicationRegistration());
             $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
         });
 

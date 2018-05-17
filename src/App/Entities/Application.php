@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\Types\ApplicationType;
 use App\Database\EntityInterface;
+use App\Services\Slugify\SlugifyInterface as Slugify;
 
 /**
  * @ORM\Entity
@@ -28,6 +29,11 @@ class Application implements EntityInterface
      * @ORM\Column(type="string", length=45)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $slug;
 
     /**
      * @ORM\Column(type="text")
@@ -78,6 +84,23 @@ class Application implements EntityInterface
         return $this->name;
     }
 
+    public function setSlug(string $slug): void
+    {
+        // Accept string without space and in lowercase
+        if (!preg_match('/[\sA-Z]+/', $slug)) {
+            $this->slug = $slug;
+
+            return;
+        }
+
+        throw new \Exception("The string '$slug' is not an slug");
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
     public function setDescription(string $description): void
     {
         $this->description = $description;
@@ -126,6 +149,7 @@ class Application implements EntityInterface
     public function fromArray(array $data): void
     {
         $this->setName($data['name']);
+        $this->setSlug($data['slug']);
         $this->setDescription($data['description']);
         $this->setUrl($data['url']);
         $this->setType($data['type']);
