@@ -13,7 +13,7 @@ use App\Services\Slugify\SlugifyInterface as Slugify;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="applications")
+ * @ORM\Table(name="applications", uniqueConstraints={@UniqueConstraint(name="slug", columns={"slug"})})
  */
 class Application implements EntityInterface
 {
