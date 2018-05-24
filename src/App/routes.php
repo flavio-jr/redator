@@ -40,7 +40,7 @@ $app->group('/app', function () {
         });
 
         $this->group('/categories', function () {
-            $this->post('', 'App\Controllers\CategoriesController:store')->add(new CategoryRegistration());
+            $this->post('', 'App\Controllers\CategoriesController\CategoryStoreController:store')->add(new CategoryRegistration());
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));
