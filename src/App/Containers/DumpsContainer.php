@@ -9,7 +9,6 @@ use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
 use App\Dumps\CategoryDump;
 use App\Dumps\PublicationDump;
-use App\Services\Slugify\Slugify;
 
 class DumpsContainer
 {
@@ -25,8 +24,7 @@ class DumpsContainer
             return new ApplicationDump(
                 Factory::create(), 
                 $c->get('PersisterService'), 
-                $c->get(self::DUMPS_NAMESPACE . 'UserDump'),
-                $c->get(Slugify::class)
+                $c->get(self::DUMPS_NAMESPACE . 'UserDump')
             );
         };
 

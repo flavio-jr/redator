@@ -3,17 +3,14 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\Types\ApplicationType;
 use App\Database\EntityInterface;
-use App\Services\Slugify\SlugifyInterface as Slugify;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="applications", uniqueConstraints={@UniqueConstraint(name="slug", columns={"slug"})})
+ * @ORM\Table(name="applications")
  */
 class Application implements EntityInterface
 {
@@ -31,11 +28,6 @@ class Application implements EntityInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=60)
-     */
-    private $slug;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -51,10 +43,16 @@ class Application implements EntityInterface
     private $type;
 
     /**
-     * @ManyToOne(targetEntity="App\Entities\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entities\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $owner;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     private static $setterMap = [
         'name'        => 'setName',
@@ -84,19 +82,7 @@ class Application implements EntityInterface
         return $this->name;
     }
 
-    public function setSlug(string $slug): void
-    {
-        // Accept string without space and in lowercase
-        if (!preg_match('/[\sA-Z]+/', $slug)) {
-            $this->slug = $slug;
-
-            return;
-        }
-
-        throw new \Exception("The string '$slug' is not an slug");
-    }
-
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -149,7 +135,6 @@ class Application implements EntityInterface
     public function fromArray(array $data): void
     {
         $this->setName($data['name']);
-        $this->setSlug($data['slug']);
         $this->setDescription($data['description']);
         $this->setUrl($data['url']);
         $this->setType($data['type']);

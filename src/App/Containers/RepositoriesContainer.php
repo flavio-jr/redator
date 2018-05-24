@@ -106,9 +106,8 @@ class RepositoriesContainer
         $container[ApplicationUpdate::class] = function (Container $c) {
             $persister = $c->get('PersisterService');
             $applicationQuery = $c->get(ApplicationQuery::class);
-            $slugifier = $c->get(Slugify::class);
 
-            return new ApplicationUpdate($persister, $applicationQuery, $slugifier);
+            return new ApplicationUpdate($persister, $applicationQuery);
         };
 
         $container[ApplicationDestruction::class] = function (Container $c) {
