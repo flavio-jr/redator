@@ -22,6 +22,7 @@ use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 use App\Services\Slugify\Slugify;
 use App\Repositories\CategoryRepository\Store\CategoryStore;
 use App\Repositories\CategoryRepository\Query\CategoryQuery;
+use App\Repositories\PublicationRepository\Store\PublicationStore;
 
 class RepositoriesContainer
 {
@@ -131,6 +132,22 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new CategoryQuery($em);
+        };
+
+        $container[PublicationStore::class] = function (Container $c) {
+            $publication = $c->get('Publication');
+            $persister = $c->get('PersisterService');
+            $htmlSanitizer = $c->get('HtmlSanitizer');
+            $applicationQuery = $c->get(ApplicationQuery::class);
+            $categoryQuery = $c->get(CategoryQuery::class);
+
+            return new PublicationStore(
+                $publication,
+                $persister,
+                $htmlSanitizer,
+                $applicationQuery,
+                $categoryQuery
+            );
         };
     }
 }

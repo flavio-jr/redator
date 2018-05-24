@@ -33,7 +33,7 @@ class CategoryQueryTest extends TestCase
     {
         $category = $this->categoryDump->create();
 
-        $categorySearch = $this->categoryQuery->getCategoryByName($category->getName());
+        $categorySearch = $this->categoryQuery->getCategoryByName($category->getSlug());
 
         $this->assertNotNull($categorySearch);
     }

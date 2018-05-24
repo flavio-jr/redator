@@ -21,6 +21,6 @@ final class CategoryQuery implements CategoryQueryInterface
 
     public function getCategoryByName(string $category): ?Category
     {
-        return $this->repository->findOneBy(['name' => $category]);
+        return $this->repository->findOneBy(['slug' => $category]);
     }
 }
