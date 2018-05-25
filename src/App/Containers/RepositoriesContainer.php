@@ -25,6 +25,7 @@ use App\Repositories\CategoryRepository\Query\CategoryQuery;
 use App\Repositories\PublicationRepository\Store\PublicationStore;
 use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
 use App\Repositories\PublicationRepository\Update\PublicationUpdate;
+use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
 
 class RepositoriesContainer
 {
@@ -170,6 +171,16 @@ class RepositoriesContainer
                 $persister,
                 $htmlSanitizer,
                 $categoryQuery
+            );
+        };
+
+        $container[PublicationDestruction::class] = function (Container $c) {
+            $publicationFinder = $c->get(PublicationSlugFinder::class);
+            $persister = $c->get('PersisterService');
+
+            return new PublicationDestruction(
+                $publicationFinder,
+                $persister
             );
         };
     }
