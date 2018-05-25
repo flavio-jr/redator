@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -27,6 +28,12 @@ class Publication implements EntityInterface
      * @ORM\Column(type="string", length=80)
      */
     private $title;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=140, unique=true)
+     */
+    private $slug;
 
     /**
      * @ORM\Column(type="string", length=120)
@@ -80,6 +87,11 @@ class Publication implements EntityInterface
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
     }
 
     public function setDescription(string $description)
