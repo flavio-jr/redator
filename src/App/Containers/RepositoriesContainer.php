@@ -23,6 +23,7 @@ use App\Services\Slugify\Slugify;
 use App\Repositories\CategoryRepository\Store\CategoryStore;
 use App\Repositories\CategoryRepository\Query\CategoryQuery;
 use App\Repositories\PublicationRepository\Store\PublicationStore;
+use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
 
 class RepositoriesContainer
 {
@@ -148,6 +149,13 @@ class RepositoriesContainer
                 $applicationQuery,
                 $categoryQuery
             );
+        };
+
+        $container[PublicationSlugFinder::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+            $applicationQuery = $c->get(ApplicationQuery::class);
+
+            return new PublicationSlugFinder($em, $applicationQuery);
         };
     }
 }

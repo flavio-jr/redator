@@ -147,6 +147,7 @@ class Publication implements EntityInterface
     {
         return [
             'title'       => $this->getTitle(),
+            'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'category'    => $this->getCategory(),
             'application' => $this->getApplication(),
