@@ -35,7 +35,8 @@ final class PublicationQuery implements PublicationQueryInterface
         $this->queryBuilder = $em
             ->getRepository(Publication::class)
             ->createQueryBuilder(self::PUBLICATION_ALIAS)
-            ->innerJoin(self::PUBLICATION_ALIAS . '.category', self::CATEGORY_ALIAS);
+            ->innerJoin(self::PUBLICATION_ALIAS . '.category', self::CATEGORY_ALIAS)
+            ->addSelect(self::CATEGORY_ALIAS);
     }
 
     public function get(Application $application, array $filters = []): array
@@ -98,9 +99,11 @@ final class PublicationQuery implements PublicationQueryInterface
 
         $title = mb_strtolower($filters['title']);
 
-        return $this->queryBuilder
+        $this->queryBuilder
             ->andWhere('LOWER(' . self::PUBLICATION_ALIAS . '.title) LIKE :title')
-            ->setParameter('title', $title);
+            ->setParameter('title', "%$title%");
+
+        return $this;
     }
 
     public function filterCategory(array $filters): self
@@ -109,8 +112,10 @@ final class PublicationQuery implements PublicationQueryInterface
             return $this;
         }
 
-        return $this->queryBuilder
+        $this->queryBuilder
             ->andWhere(self::CATEGORY_ALIAS . '.slug = :category')
             ->setParameter('category', $filters['category']);
+
+        return $this;
     }
 }
