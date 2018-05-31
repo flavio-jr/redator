@@ -17,6 +17,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Publication implements EntityInterface
 {
     /**
+     * The default amount of days for querying publications
+     * @var int
+     */
+    const DEFAULT_START_DATE = 7;
+
+    /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
