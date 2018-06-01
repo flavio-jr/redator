@@ -26,6 +26,8 @@ use App\Repositories\PublicationRepository\Store\PublicationStore;
 use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
 use App\Repositories\PublicationRepository\Update\PublicationUpdate;
 use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
+use App\Repositories\PublicationRepository\Collect\PublicationCollection;
+use App\Querys\Publications\PublicationQuery;
 
 class RepositoriesContainer
 {
@@ -182,6 +184,13 @@ class RepositoriesContainer
                 $publicationFinder,
                 $persister
             );
+        };
+
+        $container[PublicationCollection::class] = function (Container $c) {
+            $applicationQuery = $c->get(ApplicationQuery::class);
+            $publicationQuery = $c->get(PublicationQuery::class);
+
+            return new PublicationCollection($applicationQuery, $publicationQuery);
         };
     }
 }
