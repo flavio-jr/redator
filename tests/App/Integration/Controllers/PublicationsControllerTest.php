@@ -49,41 +49,6 @@ class PublicationsControllerTest extends TestCase
         $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
-    public function testMustReturnHttpOkForUpdatePublication()
-    {
-        $publication = $this->publicationDump->create();
-
-        $publicationData = $this->publicationDump->make([
-            'application' => $publication->getApplication()
-        ])->toArray();
-
-        Player::setPlayer($publication->getApplication()->getAppOwner());
-
-        $publicationData['category'] = $publicationData['category']->getId();
-        $publicationData['application'] = $publicationData['application']->getId();
-
-        $response = $this->put(Application::PREFIX . "/publications/{$publication->getId()}", $publicationData);
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    public function testMustNotUpdatePublicationWithMissingData()
-    {
-        $publication = $this->publicationDump->create();
-
-        $publicationData = $this->publicationDump->make([
-            'application' => $publication->getApplication()
-        ])->toArray();
-
-        Player::setPlayer($publication->getApplication()->getAppOwner());
-
-        unset($publicationData['application']);
-
-        $response = $this->put(Application::PREFIX . "/publications/{$publication->getId()}", $publicationData);
-
-        $this->assertEquals(412, $response->getStatusCode());
-    }
-
     public function testMustReturnHttpOkForDeletePublication()
     {
         $publication = $this->publicationDump->create();

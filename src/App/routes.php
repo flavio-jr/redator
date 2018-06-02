@@ -28,6 +28,7 @@ $app->group('/app', function () {
 
                 $this->group('/{app}/publications', function () {
                     $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
+                    $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
@@ -38,7 +39,6 @@ $app->group('/app', function () {
                 ->add(new PublicationsInfo())
                 ->add(new Publications($this->getContainer()->get('ApplicationRepository')));
 
-            $this->post('', 'App\Controllers\PublicationsController:store')->add(new PublicationRegistration());
             $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update')->add(new PublicationRegistration());
             $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
         });

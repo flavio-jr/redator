@@ -26,6 +26,8 @@ use App\Controllers\CategoriesController\CategoryStoreController;
 use App\Repositories\CategoryRepository\Store\CategoryStore;
 use App\Controllers\PublicationsController\PublicationStoreController;
 use App\Repositories\PublicationRepository\Store\PublicationStore;
+use App\Controllers\PublicationsController\PublicationUpdateController;
+use App\Repositories\PublicationRepository\Update\PublicationUpdate;
 
 class ControllersContainer
 {
@@ -101,6 +103,12 @@ class ControllersContainer
             $publicationStore = $c->get(PublicationStore::class);
 
             return new PublicationStoreController($publicationStore);
+        };
+
+        $container[PublicationUpdateController::class] = function (Container $c) {
+            $publicationUpdate = $c->get(PublicationUpdate::class);
+
+            return new PublicationUpdateController($publicationUpdate);
         };
     }
 }
