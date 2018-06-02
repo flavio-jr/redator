@@ -49,17 +49,6 @@ class PublicationsControllerTest extends TestCase
         $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
-    public function testMustReturnHttpOkForDeletePublication()
-    {
-        $publication = $this->publicationDump->create();
-
-        Player::setPlayer($publication->getApplication()->getAppOwner());
-
-        $response = $this->delete(Application::PREFIX . "/publications/{$publication->getId()}");
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
     public function testMustReturnHttpOkForGetAppPublications()
     {
         $application = $this->applicationDump->create();
