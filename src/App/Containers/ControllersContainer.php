@@ -24,6 +24,8 @@ use App\Controllers\ApplicationsController\AppDeleteController;
 use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 use App\Controllers\CategoriesController\CategoryStoreController;
 use App\Repositories\CategoryRepository\Store\CategoryStore;
+use App\Controllers\PublicationsController\PublicationStoreController;
+use App\Repositories\PublicationRepository\Store\PublicationStore;
 
 class ControllersContainer
 {
@@ -93,6 +95,12 @@ class ControllersContainer
             $categoryStore = $c->get(CategoryStore::class);
 
             return new CategoryStoreController($categoryStore);
+        };
+
+        $container[PublicationStoreController::class] = function (Container $c) {
+            $publicationStore = $c->get(PublicationStore::class);
+
+            return new PublicationStoreController($publicationStore);
         };
     }
 }
