@@ -27,6 +27,7 @@ use App\Repositories\PublicationRepository\Update\PublicationUpdate;
 use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
 use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 use App\Querys\Publications\PublicationQuery;
+use App\Repositories\UserRepository\Security\UserSecurity;
 
 class RepositoriesContainer
 {
@@ -60,6 +61,13 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new UserQuery($em);
+        };
+
+        $container[UserSecurity::class] = function (Container $c) {
+            $userSession = $c->get('UserSession');
+            $userQuery = $c->get(UserQuery::class);
+
+            return new UserSecurity($userSession, $userQuery);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {
