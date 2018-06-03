@@ -19,7 +19,6 @@ use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
-use App\Services\Slugify\Slugify;
 use App\Repositories\CategoryRepository\Store\CategoryStore;
 use App\Repositories\CategoryRepository\Query\CategoryQuery;
 use App\Repositories\PublicationRepository\Store\PublicationStore;
@@ -39,40 +38,6 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new UserRepository($user, $em, $persister);
-        };
-
-        $container['ApplicationRepository'] = function (Container $c) use ($config) {
-            $em = $c->get('doctrine')->getEntityManager();
-            $persister = $c->get('PersisterService');
-            $application = $c->get('Application');
-
-            return new ApplicationRepository($application, $em, $persister);
-        };
-
-        $container['CategoryRepository'] = function (Container $c) {
-            $em = $c->get('doctrine')->getEntityManager();
-            $persister = $c->get('PersisterService');
-            $category = $c->get('Category');
-
-            return new CategoryRepository($category, $em, $persister);
-        };
-
-        $container['PublicationRepository'] = function ($c) {
-            $em = $c->get('doctrine')->getEntityManager();
-            $persisterService = $c->get('PersisterService');
-            $applicationRepository = $c->get('ApplicationRepository');
-            $categoryRepository = $c->get('CategoryRepository');
-            $htmlSanitizer = $c->get('HtmlSanitizer');
-            $publication = $c->get('Publication');
-
-            return new PublicationRepository(
-                $publication,
-                $em,
-                $persisterService,
-                $applicationRepository,
-                $categoryRepository,
-                $htmlSanitizer
-            );
         };
 
         $container[UserStore::class] = function (Container $c) {
@@ -100,9 +65,8 @@ class RepositoriesContainer
         $container[ApplicationStore::class] = function (Container $c) {
             $application = $c->get('Application');
             $persister = $c->get('PersisterService');
-            $slugifier = $c->get(Slugify::class);
 
-            return new ApplicationStore($application, $persister, $slugifier);
+            return new ApplicationStore($application, $persister);
         };
 
         $container[ApplicationQuery::class] = function (Container $c) {
@@ -114,9 +78,8 @@ class RepositoriesContainer
         $container[ApplicationUpdate::class] = function (Container $c) {
             $persister = $c->get('PersisterService');
             $applicationQuery = $c->get(ApplicationQuery::class);
-            $slugifier = $c->get(Slugify::class);
 
-            return new ApplicationUpdate($persister, $applicationQuery, $slugifier);
+            return new ApplicationUpdate($persister, $applicationQuery);
         };
 
         $container[ApplicationDestruction::class] = function (Container $c) {

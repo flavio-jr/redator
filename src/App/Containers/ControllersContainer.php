@@ -41,22 +41,6 @@ class ControllersContainer
             return new LoginController($c->get('UserRepository'), $c->get('UserSession'));
         };
 
-        $container['App\Controllers\UsersController'] = function ($c) {
-            return new UsersController($c->get('UserRepository'));
-        };
-
-        $container['App\Controllers\ApplicationsController'] = function ($c) {
-            return new ApplicationsController($c->get('ApplicationRepository'));
-        };
-
-        $container['App\Controllers\PublicationsController'] = function ($c) {
-            return new PublicationsController($c->get('PublicationRepository'), $c->get('App\Filters\PublicationFilter'));
-        };
-
-        $container['App\Controllers\CategoriesController'] = function ($c) {
-            return new CategoriesController($c->get('CategoryRepository'));
-        };
-
         $container[UserStoreController::class] = function (Container $c) {
             return new UserStoreController($c->get(UserStore::class));
         };
