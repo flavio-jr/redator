@@ -27,21 +27,13 @@ $app->group('/app', function () {
                 $this->delete('/{app}', 'App\Controllers\ApplicationsController\AppDeleteController:delete');
 
                 $this->group('/{app}/publications', function () {
+                    $this->get('', 'App\Controllers\PublicationsController\ApplicationPublicationsController:get')->add(new PublicationsInfo());
                     $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
                     $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                     $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
-        });
-
-        $this->group('/publications', function () {
-            $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications')
-                ->add(new PublicationsInfo())
-                ->add(new Publications($this->getContainer()->get('ApplicationRepository')));
-
-            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update')->add(new PublicationRegistration());
-            $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
         });
 
         $this->group('/categories', function () {

@@ -64,6 +64,12 @@ class PublicationsQueryTest extends TestCase
     {
         $application = $this->applicationDump->create();
 
+        $firstPublication = $this->publicationDump
+            ->create([
+                'application' => $application,
+                'title'       => 'These are not the droids you are looking for'
+            ]);
+
         $publications = $this->dumpFactory
             ->produce(
                 $this->publicationDump,
@@ -71,18 +77,19 @@ class PublicationsQueryTest extends TestCase
                 ['application' => $application]
             );
 
-        $firstItem = $publications[0];
-
         $results = $this->publicationsQuery
-            ->get($application, ['title' => $firstItem->getTitle()]);
+            ->get($application, ['title' => $firstPublication->getTitle()]);
 
-        $itemsWithCorrectRegex = array_filter($results, function ($item) use ($firstItem) {
+        $itemsWithCorrectRegex = array_filter($results, function ($item) use ($firstPublication) {
             $replaceSubject = ['.', '\'', '?'];
             $replace = ['\.', '\\\'', '\?'];
 
-            $titleResult = str_replace($replaceSubject, $replace, $item['title']);
+            $regex = '/[^A-Za-z0-9]/g';
 
-            return preg_match_all('/[\w\s][' . $titleResult . '][\w\s]*/', $firstItem->getTitle());
+            $subject = str_replace($regex, '', $item['title']);
+            $search = str_replace($regex, '', $firstPublication->getTitle());
+
+            return preg_match_all('/[\w\s][' . $subject . '][\w\s]*/', $search);
         });
 
         $this->assertCount(count($itemsWithCorrectRegex), $results);

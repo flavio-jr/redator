@@ -30,6 +30,8 @@ use App\Controllers\PublicationsController\PublicationUpdateController;
 use App\Repositories\PublicationRepository\Update\PublicationUpdate;
 use App\Controllers\PublicationsController\PublicationDestructionController;
 use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
+use App\Controllers\PublicationsController\ApplicationPublicationsController;
+use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 
 class ControllersContainer
 {
@@ -117,6 +119,12 @@ class ControllersContainer
             $publicationDestruction = $c->get(PublicationDestruction::class);
 
             return new PublicationDestructionController($publicationDestruction);
+        };
+
+        $container[ApplicationPublicationsController::class] = function (Container $c) {
+            $publicationCollection = $c->get(PublicationCollection::class);
+
+            return new ApplicationPublicationsController($publicationCollection);
         };
     }
 }
