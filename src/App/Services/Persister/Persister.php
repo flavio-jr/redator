@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Persister;
 
 use Doctrine\ORM\EntityManager;
 use App\Database\EntityInterface;
+use App\Services\Persister\PersisterInterface;
 
-class Persister
+class Persister implements PersisterInterface
 {
     /**
      * The entity manager
@@ -19,9 +20,7 @@ class Persister
     }
 
     /**
-     * Persists an entity
-     * @method persist
-     * @param EntityInterface $entity
+     * @inheritdoc
      */
     public function persist(EntityInterface $entity)
     {
@@ -30,9 +29,7 @@ class Persister
     }
 
     /**
-     * Remove an entity of the database
-     * @method remove
-     * @param EntityInterface
+     * @inheritdoc
      */
     public function remove(EntityInterface $entity)
     {

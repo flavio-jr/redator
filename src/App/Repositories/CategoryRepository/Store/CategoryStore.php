@@ -3,7 +3,7 @@
 namespace App\Repositories\CategoryRepository\Store;
 
 use App\Entities\Category;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 
 final class CategoryStore implements CategoryStoreInterface
 {

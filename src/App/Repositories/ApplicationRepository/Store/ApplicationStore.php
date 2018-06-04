@@ -3,7 +3,7 @@
 namespace App\Repositories\ApplicationRepository\Store;
 
 use App\Entities\Application;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use App\Services\Player;
 
 final class ApplicationStore implements ApplicationStoreInterface

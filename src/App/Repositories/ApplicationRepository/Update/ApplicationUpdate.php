@@ -2,7 +2,7 @@
 
 namespace App\Repositories\ApplicationRepository\Update;
 
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Services\Player;
 

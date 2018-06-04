@@ -4,7 +4,7 @@ namespace App\Repositories\UserRepository\Store;
 
 use App\Entities\User;
 use Doctrine\ORM\EntityManager;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use Doctrine\ORM\EntityRepository;
 
 final class UserStore implements UserStoreInterface

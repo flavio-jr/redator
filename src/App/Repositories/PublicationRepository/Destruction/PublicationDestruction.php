@@ -3,7 +3,7 @@
 namespace App\Repositories\PublicationRepository\Destruction;
 
 use App\Repositories\PublicationRepository\Finder\PublicationFinderInterface as PublicationFinder;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 
 final class PublicationDestruction implements PublicationDestructionInterface
 {

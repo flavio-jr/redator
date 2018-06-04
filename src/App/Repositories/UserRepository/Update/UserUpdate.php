@@ -4,7 +4,7 @@ namespace App\Repositories\UserRepository\Update;
 
 use App\Entities\User;
 use Doctrine\ORM\EntityManager;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use Doctrine\ORM\EntityRepository;
 use App\Services\Player;
 

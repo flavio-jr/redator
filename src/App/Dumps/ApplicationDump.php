@@ -3,7 +3,7 @@
 namespace App\Dumps;
 
 use App\Entities\Application;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use Faker\Generator;
 
 class ApplicationDump implements DumpInterface

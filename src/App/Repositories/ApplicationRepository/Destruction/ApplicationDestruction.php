@@ -3,7 +3,7 @@
 namespace App\Repositories\ApplicationRepository\Destruction;
 
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 
 final class ApplicationDestruction implements ApplicationDestructionInterface
 {
