@@ -28,6 +28,7 @@ use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
 use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 use App\Querys\Publications\PublicationQuery;
 use App\Repositories\UserRepository\Security\UserSecurity;
+use App\Repositories\UserRepository\Finder\UserFinder;
 
 class RepositoriesContainer
 {
@@ -68,6 +69,12 @@ class RepositoriesContainer
             $userQuery = $c->get(UserQuery::class);
 
             return new UserSecurity($userSession, $userQuery);
+        };
+
+        $container[UserFinder::class] = function (Container $c) {
+            $em = $c->get('orm')->getEntityManager();
+
+            return new UserFinder($em);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {
