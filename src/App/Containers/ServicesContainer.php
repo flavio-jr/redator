@@ -9,6 +9,7 @@ use App\Services\Persister;
 use App\Services\HtmlSanitizer;
 use App\Services\Slugify\Slugify;
 use Cocur\Slugify\Slugify as Slugifier;
+use App\Repositories\UserRepository\Finder\UserFinder;
 
 class ServicesContainer
 {
@@ -19,7 +20,7 @@ class ServicesContainer
         };
 
         $container['Player'] = function ($c) {
-            return new Player($c->get('UserRepository'));
+            return new Player($c->get(UserFinder::class));
         };
 
         $container['PersisterService'] = function ($c) {

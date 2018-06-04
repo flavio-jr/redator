@@ -34,14 +34,6 @@ class RepositoriesContainer
 {
     public function register(Container $container, array $config)
     {
-        $container['UserRepository'] = function (Container $c) use ($config) {
-            $em = $c->get('doctrine')->getEntityManager();
-            $user = $c->get('User');
-            $persister = $c->get('PersisterService');
-
-            return new UserRepository($user, $em, $persister);
-        };
-
         $container[UserStore::class] = function (Container $c) {
             $user = $c->get('User');
             $em = $c->get('doctrine')->getEntityManager();

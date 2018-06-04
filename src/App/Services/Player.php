@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Lcobucci\JWT\Parser;
-use App\Repositories\UserRepository;
 use App\Entities\User;
+use App\Repositories\UserRepository\Finder\UserFinderInterface as UserFinder;
 
 final class Player
 {
@@ -16,13 +16,13 @@ final class Player
 
     /**
      * The user repository
-     * @var UserRepository
+     * @var UserFinder
      */
-    private $userRepository;
+    private $userFinder;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserFinder $userFinder)
     {
-        $this->userRepository = $userRepository;
+        $this->userFinder = $userFinder;
     }
 
     /**
@@ -34,7 +34,7 @@ final class Player
     {
         $token = (new Parser())->parse($jwt);
 
-        self::$user = $this->userRepository->find($token->getHeader('jti'));
+        self::$user = $this->userFinder->find($token->getHeader('jti'));
     }
 
     /**
