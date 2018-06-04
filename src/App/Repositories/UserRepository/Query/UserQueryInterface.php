@@ -3,6 +3,7 @@
 namespace App\Repositories\UserRepository\Query;
 
 use App\Entities\User;
+use App\Exceptions\EntityNotFoundException;
 
 interface UserQueryInterface
 {
@@ -11,8 +12,9 @@ interface UserQueryInterface
      * @method findByUsername
      * @param string $username
      * @return User
+     * @throws EntityNotFoundException
      */
-    public function findByUsername(string $username): ?User;
+    public function findByUsername(string $username): User;
 
     /**
      * Check for username availability

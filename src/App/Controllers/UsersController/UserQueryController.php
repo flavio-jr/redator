@@ -3,8 +3,9 @@
 namespace App\Controllers\UsersController;
 
 use App\Repositories\UserRepository\Query\UserQueryInterface as UserQuery;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use App\Exceptions\EntityNotFoundException;
 
 final class UserQueryController
 {
@@ -21,12 +22,18 @@ final class UserQueryController
 
     public function getByUsername(Request $request, Response $response, array $args)
     {   
-        $user = $this->userQueryRepository->findByUsername($args['username']);
+        try {
+            $user = $this->userQueryRepository->findByUsername($args['username']);
 
-        if ($user) {
-            return $response->write(json_encode(['user' => $user]))->withStatus(200);
+            $response->getBody()
+                ->write(json_encode(['user' => $user]));
+
+            return $response->withStatus(200);
+        } catch (EntityNotFoundException $e) {
+            $response->getBody()
+                ->write('User not found');
+
+            return $response->withStatus(404);
         }
-
-        return $response->write('User not found')->withStatus(404);
     }
 }

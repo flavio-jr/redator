@@ -26,8 +26,11 @@ class UserUpdateControllerTest extends TestCase
 
     public function testUpdateUserMustReturnHttpOk()
     {
-        $user = $this->userDump->create();
+        $pass = 'obi-wan';
+
+        $user = $this->userDump->create(['password' => $pass]);
         $data = $this->userDump->make()->toArray();
+        $data['password'] = $pass;
 
         Player::setPlayer($user);
 
@@ -38,10 +41,13 @@ class UserUpdateControllerTest extends TestCase
 
     public function testUpdateUserWithExistentUserNameMustReturnPreconditionFailed()
     {
-        $someUser = $this->userDump->create();
-        $currentUser = $this->userDump->create(); 
+        $pass = 'obi-wan';
+
+        $someUser = $this->userDump->create(['password' => $pass]);
+        $currentUser = $this->userDump->create(['password' => $pass]); 
 
         $data = $this->userDump->make(['username' => $someUser->getUsername()])->toArray();
+        $data['password'] = $pass;
 
         Player::setPlayer($currentUser);
 

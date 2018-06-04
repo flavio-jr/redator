@@ -25,7 +25,10 @@ class UserStoreControllerTest extends TestCase
 
     public function testMustReturnHttpOkForStoreUser()
     {
-        $data = $this->userDump->make()->toArray();
+        $pass = 'buzz';
+
+        $data = $this->userDump->make(['password' => $pass])->toArray();
+        $data['password'] = $pass;
 
         $response = $this->post(Application::PREFIX . '/users', $data);
 

@@ -2,18 +2,20 @@
 
 namespace App\Controllers;
 
-use App\Repositories\UserRepository;
+use App\Repositories\UserRepository\Security\UserSecurityInterface as UserSecurity;
 use App\Services\UserSession;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use App\Exceptions\WrongCredentialsException;
+use App\Exceptions\EntityNotFoundException;
 
 final class LoginController
 {
     /**
      * The user repository
-     * @var UserRepository
+     * @var UserSecurity
      */
-    private $userRepository;
+    private $userSecurity;
 
     /**
      * The user session service
@@ -22,10 +24,10 @@ final class LoginController
     private $userSessionService;
 
     public function __construct(
-        UserRepository $userRepository,
+        UserSecurity $userSecurity,
         UserSession $userSessionService
     ) {
-        $this->userRepository = $userRepository;
+        $this->userSecurity = $userSecurity;
         $this->userSessionService = $userSessionService;        
     }
 
@@ -34,20 +36,25 @@ final class LoginController
      * @method login
      * @param Request $request
      * @param Response $response
+     * @return Response
      */
     public function login(Request $request, Response $response)
     {
-        $requestBody = $request->getParsedBody();
+        try {
+            $requestBody = $request->getParsedBody();
 
-        $user = $this->userRepository
-            ->getUserByCredentials($requestBody['username'], $requestBody['password']);
-        
-        if (!$user) {
-            return $response->write(json_encode(['message' => 'Invalid user']))->withStatus(403);    
+            $token = $this->userSecurity
+                ->getAccessToken($requestBody['username'], $requestBody['password']);
+
+            $response->getBody()
+                ->write(json_encode(['token' => $token]));
+
+            return $response->withStatus(200);
+        } catch (WrongCredentialsException | EntityNotFoundException $e) {
+            $response->getBody()
+                ->write('ERROR: INVALID CREDENTIALS');
+
+            return $response->withStatus(403);
         }
-
-        $token = $this->userSessionService->createNewToken($user->getId());
-
-        return $response->write(json_encode(['token' => $token]))->withStatus(200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Repositories\UserRepository\Query;
 use App\Entities\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use App\Exceptions\EntityNotFoundException;
 
 final class UserQuery implements UserQueryInterface
 {
@@ -22,9 +23,15 @@ final class UserQuery implements UserQueryInterface
     /**
      * @inheritdoc
      */
-    public function findByUsername(string $username): ?User
+    public function findByUsername(string $username): User
     {
-        return $this->repository->findOneBy(['username' => $username]);
+        $user = $this->repository->findOneBy(['username' => $username]);
+
+        if (!$user) {
+            throw new EntityNotFoundException('User');
+        }
+
+        return $user;
     }
 
     /**

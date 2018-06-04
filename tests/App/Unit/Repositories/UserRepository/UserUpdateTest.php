@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Tests\DatabaseRefreshTable;
 use App\Dumps\UserDump;
 use App\Repositories\UserRepository\Update\UserUpdate;
+use App\Services\Player;
 
 class UserUpdateTest extends TestCase
 {
@@ -33,8 +34,14 @@ class UserUpdateTest extends TestCase
 
     public function testUpdateUser()
     {
-        $user = $this->userDump->create();
+        $pass = 'potter';
+
+        $user = $this->userDump->create(['password' => $pass]);
+
+        Player::setPlayer($user);
+
         $data = $this->userDump->make()->toArray();
+        $data['password'] = $pass;
 
         $userUpdated = $this->userUpdate->update($data);
 

@@ -33,7 +33,13 @@ class UserStoreTest extends TestCase
 
     public function testUserCreation()
     {
-        $userData = $this->userDump->make()->toArray();
+        $pass = 'snow';
+
+        $userData = $this->userDump
+            ->make(['password' => $pass])
+            ->toArray();
+        
+        $userData['password'] = $pass;
 
         $user = $this->userStore->store($userData);
 

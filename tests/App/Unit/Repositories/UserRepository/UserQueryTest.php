@@ -37,16 +37,4 @@ class UserQueryTest extends TestCase
 
         $this->assertNotNull($userFinded);
     }
-
-    public function testCheckForUsernameAvailabilityMustReturnTrue()
-    {
-        $this->assertTrue($this->userQuery->isUsernameAvailable('foo'));
-    }
-
-    public function testCheckForUsernameAvailabilityMustReturnFalse()
-    {
-        $user = $this->userDump->create();
-
-        $this->assertFalse($this->userQuery->isUsernameAvailable($user->getUsername()));
-    }
 }

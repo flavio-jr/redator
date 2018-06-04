@@ -32,13 +32,14 @@ use App\Controllers\PublicationsController\PublicationDestructionController;
 use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
 use App\Controllers\PublicationsController\ApplicationPublicationsController;
 use App\Repositories\PublicationRepository\Collect\PublicationCollection;
+use App\Repositories\UserRepository\Security\UserSecurity;
 
 class ControllersContainer
 {
     public function register(Container $container, array $config)
     {
-        $container['App\Controllers\LoginController'] = function ($c) {
-            return new LoginController($c->get('UserRepository'), $c->get('UserSession'));
+        $container[LoginController::class] = function ($c) {
+            return new LoginController($c->get(UserSecurity::class), $c->get('UserSession'));
         };
 
         $container[UserStoreController::class] = function (Container $c) {
