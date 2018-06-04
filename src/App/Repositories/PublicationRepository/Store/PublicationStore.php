@@ -4,7 +4,7 @@ namespace App\Repositories\PublicationRepository\Store;
 
 use App\Entities\Publication;
 use App\Services\Persister\PersisterInterface as Persister;
-use App\Services\HtmlSanitizer;
+use App\Services\HtmlSanitizer\HtmlSanitizerInterface as HtmlSanitizer;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Repositories\CategoryRepository\Query\CategoryQueryInterface as CategoryQuery;
 

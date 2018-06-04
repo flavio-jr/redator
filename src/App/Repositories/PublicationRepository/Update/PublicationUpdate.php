@@ -5,7 +5,7 @@ namespace App\Repositories\PublicationRepository\Update;
 use App\Repositories\PublicationRepository\Finder\PublicationFinderInterface as PublicationFinder;
 use App\Repositories\CategoryRepository\Query\CategoryQueryInterface as CategoryQuery;
 use App\Services\Persister\PersisterInterface as Persister;
-use App\Services\HtmlSanitizer;
+use App\Services\HtmlSanitizer\HtmlSanitizerInterface as HtmlSanitizer;
 
 final class PublicationUpdate implements PublicationUpdateInterface
 {
