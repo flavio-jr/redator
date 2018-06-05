@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\UserSession;
 
 use App\Entities\User;
 use Lcobucci\JWT\Builder;
@@ -8,19 +8,10 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\ValidationData;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 
-class UserSession
+class UserSession implements UserSessionInterface
 {
     /**
-     * Token expiration time
-     * @var int
-     */
-    const EXPIRATION_TIME = 3600;
-
-    /**
-     * Creates an new token
-     * @method createNewToken
-     * @param string $id
-     * @return string
+     * @inheritdoc
      */
     public function createNewToken(string $id): string
     {
@@ -42,10 +33,7 @@ class UserSession
     }
 
     /**
-     * Check is an given token is valid
-     * @method isValidToken
-     * @param string $token
-     * @return bool
+     * @inheritdoc
      */
     public function isValidToken(string $token): bool
     {

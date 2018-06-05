@@ -3,13 +3,13 @@
 namespace App\Containers;
 
 use Slim\Container;
-use App\Services\UserSession;
 use App\Services\Player;
 use App\Services\Slugify\Slugify;
 use Cocur\Slugify\Slugify as Slugifier;
 use App\Repositories\UserRepository\Finder\UserFinder;
 use App\Services\Persister\Persister;
 use App\Services\HtmlSanitizer\HtmlSanitizer;
+use App\Services\UserSession\UserSession;
 
 class ServicesContainer
 {

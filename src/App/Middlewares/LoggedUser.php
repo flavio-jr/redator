@@ -4,7 +4,7 @@ namespace App\Middlewares;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Services\UserSession;
+use App\Services\UserSession\UserSessionInterface as UserSession;
 use App\Services\Player;
 
 final class LoggedUser

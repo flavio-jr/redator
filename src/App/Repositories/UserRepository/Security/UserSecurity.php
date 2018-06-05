@@ -2,7 +2,7 @@
 
 namespace App\Repositories\UserRepository\Security;
 
-use App\Services\UserSession;
+use App\Services\UserSession\UserSessionInterface as UserSession;
 use App\Repositories\UserRepository\Query\UserQueryInterface as UserQuery;
 use App\Exceptions\WrongCredentialsException;
 

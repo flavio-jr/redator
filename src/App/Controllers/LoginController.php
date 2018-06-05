@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Repositories\UserRepository\Security\UserSecurityInterface as UserSecurity;
-use App\Services\UserSession;
+use App\Services\UserSession\UserSessionInterface as UserSession;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Exceptions\WrongCredentialsException;
