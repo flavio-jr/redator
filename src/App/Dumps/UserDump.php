@@ -2,7 +2,7 @@
 
 namespace App\Dumps;
 
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use App\Repositories\UserRepository;
 use App\Entities\User;
 use Faker\Generator;

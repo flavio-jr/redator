@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -15,6 +16,12 @@ use Doctrine\ORM\Id\UuidGenerator as Uuid;
  */
 class Publication implements EntityInterface
 {
+    /**
+     * The default amount of days for querying publications
+     * @var int
+     */
+    const DEFAULT_START_DATE = 7;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -27,6 +34,12 @@ class Publication implements EntityInterface
      * @ORM\Column(type="string", length=80)
      */
     private $title;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=140, unique=true)
+     */
+    private $slug;
 
     /**
      * @ORM\Column(type="string", length=120)
@@ -82,6 +95,11 @@ class Publication implements EntityInterface
         return $this->title;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
     public function setDescription(string $description)
     {
         $this->description = $description;
@@ -135,6 +153,7 @@ class Publication implements EntityInterface
     {
         return [
             'title'       => $this->getTitle(),
+            'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'category'    => $this->getCategory(),
             'application' => $this->getApplication(),

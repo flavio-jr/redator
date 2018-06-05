@@ -24,8 +24,8 @@ class DumpsContainer
             return new ApplicationDump(
                 Factory::create(), 
                 $c->get('PersisterService'), 
-                $c->get(self::DUMPS_NAMESPACE . 'UserDump'
-            ));
+                $c->get(self::DUMPS_NAMESPACE . 'UserDump')
+            );
         };
 
         $container[self::DUMPS_NAMESPACE . 'CategoryDump'] = function ($c) {

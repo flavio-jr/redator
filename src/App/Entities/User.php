@@ -75,8 +75,7 @@ class User implements EntityInterface
     {
         return [
             'username' => $this->getUsername(),
-            'name'     => $this->getName(),
-            'password' => $this->getPassword()
+            'name'     => $this->getName()
         ];
     }
 

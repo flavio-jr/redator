@@ -3,12 +3,10 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\Types\ApplicationType;
 use App\Database\EntityInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -45,10 +43,16 @@ class Application implements EntityInterface
     private $type;
 
     /**
-     * @ManyToOne(targetEntity="App\Entities\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entities\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $owner;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
 
     private static $setterMap = [
         'name'        => 'setName',
@@ -76,6 +80,11 @@ class Application implements EntityInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
     }
 
     public function setDescription(string $description): void
@@ -113,11 +122,6 @@ class Application implements EntityInterface
         return $this->type;
     }
 
-    public function getTypeDesc(string $type): string
-    {
-        return ApplicationType::$type;
-    }
-
     public function setAppOwner(User $user)
     {
         $this->owner = $user;
@@ -141,6 +145,7 @@ class Application implements EntityInterface
     {
         return [
             'name'        => $this->getName(),
+            'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'url'         => $this->getUrl(),
             'type'        => $this->getType(),

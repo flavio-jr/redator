@@ -9,7 +9,7 @@ app:
     - App\Containers\ServicesContainer
     - App\Containers\ControllersContainer
     - App\Containers\DumpsFactoriesContainer
-    - App\Containers\FiltersContainer
     - App\Containers\EntityContainer
+    - App\Containers\QuerysContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'

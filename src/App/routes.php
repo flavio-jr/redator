@@ -12,37 +12,32 @@ use App\RequestValidators\PublicationsInfo;
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
 
-    $this->group('/users', function () {
-        $this->post('', 'App\Controllers\UsersController:store')->add(new UserRegistration());
-        $this->get('/username-availaibility/{username}', 'App\Controllers\UsersController:usernameAvailaibility');
-    });
-
     $this->group('', function () {
         $this->get('', function ($request, $response) {
             return $response->write('You opened the gate');
         });
 
-        $this->put('/users/{user_id}', 'App\Controllers\UsersController:update');
+        $this->group('/users', function () {
+            $this->post('', 'App\Controllers\UsersController\UserStoreController:store')->add(new UserRegistration());
+            $this->put('', 'App\Controllers\UsersController\UserUpdateController:update')->add(new UserRegistration());
+            $this->group('/apps', function () {
+                $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
+                $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
+                $this->put('/{app}', 'App\Controllers\ApplicationsController\AppUpdateController:update')->add(new ApplicationRegistration());
+                $this->delete('/{app}', 'App\Controllers\ApplicationsController\AppDeleteController:delete');
 
-        $this->group('/applications', function () {
-            $this->get('/user', 'App\Controllers\ApplicationsController:userApps');
-            $this->post('', 'App\Controllers\ApplicationsController:store')->add(new ApplicationRegistration());
-            $this->put('/{app_id}', 'App\Controllers\ApplicationsController:update');
-            $this->delete('/{app_id}', 'App\Controllers\ApplicationsController:destroy');
-        });
-
-        $this->group('/publications', function () {
-            $this->get('/{application_id}', 'App\Controllers\PublicationsController:getPublications')
-                ->add(new PublicationsInfo())
-                ->add(new Publications($this->getContainer()->get('ApplicationRepository')));
-
-            $this->post('', 'App\Controllers\PublicationsController:store')->add(new PublicationRegistration());
-            $this->put('/{publication_id}', 'App\Controllers\PublicationsController:update');
-            $this->delete('/{publication_id}', 'App\Controllers\PublicationsController:destroy');
+                $this->group('/{app}/publications', function () {
+                    $this->get('', 'App\Controllers\PublicationsController\ApplicationPublicationsController:get')->add(new PublicationsInfo());
+                    $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
+                    $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
+                    $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
+                });
+            });
+            $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
         });
 
         $this->group('/categories', function () {
-            $this->post('', 'App\Controllers\CategoriesController:store')->add(new CategoryRegistration());
+            $this->post('', 'App\Controllers\CategoriesController\CategoryStoreController:store')->add(new CategoryRegistration());
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));

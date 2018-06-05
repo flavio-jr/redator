@@ -17,6 +17,10 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
+        if (getenv('APP_ENV') === 'DEV') {
+            (new Dotenv(realpath(__DIR__ . '/../')))->load();
+        }
+        
         putenv('APP_ENV=TEST');
 
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
@@ -44,6 +48,15 @@ class TestCase extends PHPUnit
 
         if (method_exists($this, 'dropDatabase')) {
             $this->dropDatabase();
+        }
+
+        $refl = new \ReflectionObject($this);
+        
+        foreach ($refl->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
         }
     }
 
