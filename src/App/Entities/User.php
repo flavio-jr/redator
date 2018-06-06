@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\EntityInterface;
+use App\Database\Types\UserType;
+use App\Exceptions\WrongEnumTypeException;
 
 /**
  * @ORM\Entity
@@ -30,6 +32,11 @@ class User implements EntityInterface
      * @ORM\Column(type="string", length=100)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $type = 'W';
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -59,6 +66,21 @@ class User implements EntityInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setType(string $type): void
+    {
+        if (defined("\App\Database\Types\UserType::$type")) {
+            $this->type = $type;
+            return;
+        }
+
+        throw new WrongEnumTypeException($type, UserType::getTypes());
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     public function setPassword(string $password): void

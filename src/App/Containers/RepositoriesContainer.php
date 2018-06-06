@@ -29,6 +29,7 @@ use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 use App\Querys\Publications\PublicationQuery;
 use App\Repositories\UserRepository\Security\UserSecurity;
 use App\Repositories\UserRepository\Finder\UserFinder;
+use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 
 class RepositoriesContainer
 {
@@ -67,6 +68,12 @@ class RepositoriesContainer
             $em = $c->get('orm')->getEntityManager();
 
             return new UserFinder($em);
+        };
+
+        $container[UserMasterQuery::class] = function (Container $c) {
+            $em = $c->get('orm')->getEntityManager();
+
+            return new UserMasterQuery($em);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {
