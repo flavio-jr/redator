@@ -30,6 +30,7 @@ use App\Querys\Publications\PublicationQuery;
 use App\Repositories\UserRepository\Security\UserSecurity;
 use App\Repositories\UserRepository\Finder\UserFinder;
 use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
+use App\Repositories\UserMasterRepository\Store\UserMasterStore;
 
 class RepositoriesContainer
 {
@@ -74,6 +75,14 @@ class RepositoriesContainer
             $em = $c->get('orm')->getEntityManager();
 
             return new UserMasterQuery($em);
+        };
+
+        $container[UserMasterStore::class] = function (Container $c) {
+            $user = $c->get('User');
+            $persister = $c->get('PersisterService');
+            $userMasterQuery = $c->get(UserMasterQuery::class);
+
+            return new UserMasterStore($user, $persister, $userMasterQuery);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {
