@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+require_once('bootstrap.php');
+
+use Symfony\Component\Console\Application as Console;
+use App\Commands\CreateMasterUser;
+use Slim\Container;
+
+/**
+ * The application container
+ * @var Container
+ */
+$container = $app->getContainer();
+
+$console = new Console();
+
+$console->add($container->get(CreateMasterUser::class));
+
+$console->run();
