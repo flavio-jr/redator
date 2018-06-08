@@ -8,20 +8,16 @@ use App\Services\Persister\PersisterInterface as Persister;
 use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 use App\Exceptions\EntityNotFoundException;
 use Tests\DatabaseRefreshTable;
+use App\Dumps\UserMasterDump;
 
 class UserMasterQueryTest extends TestCase
 {
     use DatabaseRefreshTable;
 
     /**
-     * @var User
+     * @var UserMasterDump
      */
-    private $userEntity;
-
-    /**
-     * @var Persister
-     */
-    private $persister;
+    private $userMasterDump;
 
     /**
      * @var UserMasterQuery
@@ -32,8 +28,7 @@ class UserMasterQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->userEntity = $this->container->get('User');
-        $this->persister = $this->container->get('PersisterService');
+        $this->userMasterDump = $this->container->get(UserMasterDump::class);
         $this->userMasterQuery = $this->container->get(UserMasterQuery::class);
     }
 
@@ -47,14 +42,7 @@ class UserMasterQueryTest extends TestCase
 
     public function testShouldFindTheMasterUser()
     {
-        $user = $this->userEntity;
-
-        $user->setName('master');
-        $user->setUsername('master');
-        $user->setPassword('123456');
-        $user->setType('M');
-
-        $this->persister->persist($user);
+        $this->userMasterDump->create();
 
         $user = $this->userMasterQuery
             ->getMasterUser();
