@@ -6,6 +6,7 @@ require_once('bootstrap.php');
 use Symfony\Component\Console\Application as Console;
 use App\Commands\CreateMasterUser;
 use Slim\Container;
+use App\Commands\UpdateMasterUser;
 
 /**
  * The application container
@@ -16,5 +17,6 @@ $container = $app->getContainer();
 $console = new Console();
 
 $console->add($container->get(CreateMasterUser::class));
+$console->add($container->get(UpdateMasterUser::class));
 
 $console->run();
