@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\App\Unit\Repositories\UserMaster;
+namespace Tests\App\Unit\Repositories\UserMasterRepository;
 
 use Tests\TestCase;
 use App\Entities\User;

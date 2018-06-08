@@ -31,6 +31,7 @@ use App\Repositories\UserRepository\Security\UserSecurity;
 use App\Repositories\UserRepository\Finder\UserFinder;
 use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 use App\Repositories\UserMasterRepository\Store\UserMasterStore;
+use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
 
 class RepositoriesContainer
 {
@@ -83,6 +84,13 @@ class RepositoriesContainer
             $userMasterQuery = $c->get(UserMasterQuery::class);
 
             return new UserMasterStore($user, $persister, $userMasterQuery);
+        };
+
+        $container[UserMasterUpdate::class] = function (Container $c) {
+            $userMasterQuery = $c->get(UserMasterQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new UserMasterUpdate($userMasterQuery, $persister);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {

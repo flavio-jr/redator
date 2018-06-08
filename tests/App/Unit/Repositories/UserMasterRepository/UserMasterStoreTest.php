@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\App\Unit\Repositories\UserRepository;
+namespace Tests\App\Unit\Repositories\UserMasterRepository;
 
 use Tests\TestCase;
 use Tests\DatabaseRefreshTable;

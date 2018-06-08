@@ -9,6 +9,7 @@ use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
 use App\Dumps\CategoryDump;
 use App\Dumps\PublicationDump;
+use App\Dumps\UserMasterDump;
 
 class DumpsContainer
 {
@@ -41,6 +42,13 @@ class DumpsContainer
                 $c->get('PersisterService'),
                 $applicationDump,
                 $categoryDump
+            );
+        };
+
+        $container[UserMasterDump::class] = function (Container $c) {
+            return new UserMasterDump(
+                Factory::create(),
+                $c->get('PersisterService')
             );
         };
     }
