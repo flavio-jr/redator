@@ -11,5 +11,5 @@ interface UserMasterUpdateInterface
      * @method update
      * @return User
      */
-    public function update(): User;
+    public function update(array $data): User;
 }

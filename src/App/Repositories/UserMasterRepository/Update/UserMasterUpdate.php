@@ -31,11 +31,13 @@ final class UserMasterUpdate implements UserMasterUpdateInterface
     /**
      * @inheritdoc
      */
-    public function update(): User
+    public function update(array $data): User
     {
         $masterUser = $this->userMasterQuery
             ->getMasterUser();
 
+        $masterUser->setName($data['name']);
+        $masterUser->setUsername($data['username']);
         $masterUser->setPassword(getenv('USER_DEFAULT_PASSWORD'));
 
         $this->persister->persist($masterUser);

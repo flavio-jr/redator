@@ -30,17 +30,20 @@ class UserMasterUpdateTest extends TestCase
         $this->userMasterDump = $this->container->get(UserMasterDump::class);
     }
 
-    public function testUpdateUserMustChangeOnlyTheUserPassword()
+    public function testUpdateUserMustBeTheSameAsTheEnv()
     {
         $userMaster = $this->userMasterDump->create();
         $pass = strrev(getenv('USER_DEFAULT_PASSWORD'));
 
         putenv("USER_DEFAULT_PASSWORD={$pass}");
+        
+        $data = $this->userMasterDump
+            ->make()
+            ->toArray();
 
         $updatedUserMaster = $this->userMasterUpdate
-            ->update();
+            ->update($data);
 
-        $this->assertEquals($userMaster->getUsername(), $updatedUserMaster->getUsername());
-        $this->assertEquals($userMaster->getName(), $updatedUserMaster->getName());
+        $this->assertTrue(password_verify(getenv('USER_DEFAULT_PASSWORD'), $updatedUserMaster->getPassword()));
     }
 }
