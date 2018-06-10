@@ -31,4 +31,4 @@ RUN set -x ; \
 COPY docker-entrypoint.sh /usr/sbin
 RUN chmod +x /usr/sbin/docker-entrypoint.sh
 
-ENTRYPOINT [ "/usr/sbin/docker-entrypoint.sh" ]
+CMD [ "/usr/sbin/docker-entrypoint.sh" ]
