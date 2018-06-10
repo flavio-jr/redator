@@ -8,6 +8,7 @@ use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\EntityInterface;
 use App\Database\Types\UserType;
 use App\Exceptions\WrongEnumTypeException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -42,6 +43,17 @@ class User implements EntityInterface
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+    /**
+     * The applications that the user can interact
+     * @ORM\ManyToMany(targetEntity="App\Entities\Application", mappedBy="team")
+     */
+    private $applications;
+
+    public function __construct()
+    {
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): string
     {
