@@ -32,6 +32,7 @@ use App\Repositories\UserRepository\Finder\UserFinder;
 use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 use App\Repositories\UserMasterRepository\Store\UserMasterStore;
 use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
+use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 
 class RepositoriesContainer
 {
@@ -104,6 +105,12 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new ApplicationQuery($em);
+        };
+
+        $container[ApplicationMasterQuery::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationMasterQuery($em);
         };
 
         $container[ApplicationUpdate::class] = function (Container $c) {
