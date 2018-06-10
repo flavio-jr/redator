@@ -33,6 +33,7 @@ use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 use App\Repositories\UserMasterRepository\Store\UserMasterStore;
 use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
 use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
+use App\Factorys\Application\Query\ApplicationQueryFactory;
 
 class RepositoriesContainer
 {
@@ -115,16 +116,16 @@ class RepositoriesContainer
 
         $container[ApplicationUpdate::class] = function (Container $c) {
             $persister = $c->get('PersisterService');
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
 
-            return new ApplicationUpdate($persister, $applicationQuery);
+            return new ApplicationUpdate($persister, $applicationQueryFactory);
         };
 
         $container[ApplicationDestruction::class] = function (Container $c) {
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $persister = $c->get('PersisterService');
 
-            return new ApplicationDestruction($applicationQuery, $persister);
+            return new ApplicationDestruction($applicationQueryFactory, $persister);
         };
 
         $container[CategoryStore::class] = function (Container $c) {

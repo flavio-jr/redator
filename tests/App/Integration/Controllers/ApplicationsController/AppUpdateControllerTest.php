@@ -33,9 +33,10 @@ class AppUpdateControllerTest extends TestCase
 
     public function testUpdateAppMustReturnHttpOk()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $response = $this->put(Application::PREFIX . "/users/apps/{$application->getSlug()}", $application->toArray());
 
@@ -46,7 +47,7 @@ class AppUpdateControllerTest extends TestCase
     {
         $application = $this->applicationDump->create();
 
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($this->userDump->create(['type' => 'P']));
 
         $response = $this->put(Application::PREFIX . "/users/apps/{$application->getSlug()}", $application->toArray());
 

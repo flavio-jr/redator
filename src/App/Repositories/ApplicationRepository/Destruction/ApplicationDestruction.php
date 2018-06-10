@@ -4,14 +4,15 @@ namespace App\Repositories\ApplicationRepository\Destruction;
 
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Services\Persister\PersisterInterface as Persister;
+use App\Factorys\Application\Query\ApplicationQueryFactoryInterface as ApplicationQueryFactory;
 
 final class ApplicationDestruction implements ApplicationDestructionInterface
 {
     /**
      * The repository for querying an application
-     * @var ApplicationQuery
+     * @var ApplicationQueryFactory
      */
-    private $applicationQuery;
+    private $applicationQueryFactory;
 
     /**
      * The persister service
@@ -20,16 +21,17 @@ final class ApplicationDestruction implements ApplicationDestructionInterface
     private $persister;
 
     public function __construct(
-        ApplicationQuery $applicationQuery,
+        ApplicationQueryFactory $applicationQueryFactory,
         Persister $persister
     ) {
-        $this->applicationQuery = $applicationQuery;
+        $this->applicationQueryFactory = $applicationQueryFactory;
         $this->persister = $persister;
     }
 
     public function destroy(string $appName): bool
     {
-        $application = $this->applicationQuery
+        $application = $this->applicationQueryFactory
+            ->getApplicationQuery()
             ->getApplication($appName);
 
         if (!$application) return false;

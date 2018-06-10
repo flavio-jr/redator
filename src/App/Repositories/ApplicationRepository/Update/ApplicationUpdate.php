@@ -5,6 +5,7 @@ namespace App\Repositories\ApplicationRepository\Update;
 use App\Services\Persister\PersisterInterface as Persister;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Services\Player;
+use App\Factorys\Application\Query\ApplicationQueryFactoryInterface as ApplicationQueryFactory;
 
 final class ApplicationUpdate implements ApplicationUpdateInterface
 {
@@ -16,16 +17,16 @@ final class ApplicationUpdate implements ApplicationUpdateInterface
 
     /**
      * The repository for application
-     * @var ApplicationQuery
+     * @var ApplicationQueryFactory
      */
-    private $applicationQuery;
+    private $applicationQueryFactory;
 
     public function __construct(
         Persister $persister,
-        ApplicationQuery $applicationQuery
+        ApplicationQueryFactory $applicationQueryFactory
     ) {
         $this->persister = $persister;
-        $this->applicationQuery = $applicationQuery;
+        $this->applicationQueryFactory = $applicationQueryFactory;
     }
 
     /**
@@ -33,11 +34,13 @@ final class ApplicationUpdate implements ApplicationUpdateInterface
      */
     public function update(string $appName, array $data): bool
     {
-        $application = $this->applicationQuery->getApplication($appName);
+        $application = $this->applicationQueryFactory
+            ->getApplicationQuery()
+            ->getApplication($appName);
 
         if (!$application) return false;
 
-        $data['owner'] = Player::user();
+        $data['owner'] = $application->getAppOwner();
 
         $application->fromArray($data);
 

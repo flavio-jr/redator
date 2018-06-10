@@ -39,9 +39,10 @@ class ApplicationDestructionTest extends TestCase
 
     public function testShouldDeleteApplicationThatBelongsToCurrentUser()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $deleted = $this->applicationDestruction->destroy($application->getSlug());
 
@@ -50,9 +51,10 @@ class ApplicationDestructionTest extends TestCase
 
     public function testShouldNotDeleteApplicationThatDoesntBelongsToCurrentUser()
     {
+        $owner = $this->userDump->create(['type' => 'P']);
         $application = $this->applicationDump->create();
 
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($owner);
 
         $notDeleted = $this->applicationDestruction->destroy($application->getSlug());
 

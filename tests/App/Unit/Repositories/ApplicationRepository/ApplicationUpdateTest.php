@@ -7,6 +7,7 @@ use App\Dumps\ApplicationDump;
 use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
+use App\Dumps\UserDump;
 
 class ApplicationUpdateTest extends TestCase
 {
@@ -18,6 +19,11 @@ class ApplicationUpdateTest extends TestCase
     private $applicationDump;
 
     /**
+     * @var UserDump
+     */
+    private $userDump;
+
+    /**
      * @var ApplicationUpdate
      */
     private $applicationUpdate;
@@ -27,14 +33,16 @@ class ApplicationUpdateTest extends TestCase
         parent::setUp();
 
         $this->applicationDump = $this->container->get(ApplicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
         $this->applicationUpdate = $this->container->get(ApplicationUpdate::class);
     }
 
     public function testShouldUpdateExistentApp()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $appData = $this->applicationDump->make()->toArray();
 
@@ -45,9 +53,10 @@ class ApplicationUpdateTest extends TestCase
 
     public function testShouldNotUpdateUnexistentApp()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $appData = $this->applicationDump->make()->toArray();
 
