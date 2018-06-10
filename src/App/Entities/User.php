@@ -105,6 +105,21 @@ class User implements EntityInterface
         return $this->password;
     }
 
+    public function isPartner(): bool
+    {
+        return $this->type === 'P';
+    }
+
+    public function isMaster(): bool
+    {
+        return $this->type === 'M';
+    }
+
+    public function isWritter(): bool
+    {
+        return $this->type === 'W';
+    }
+
     public function toArray(): array
     {
         return [

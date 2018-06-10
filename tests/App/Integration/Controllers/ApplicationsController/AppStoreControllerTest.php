@@ -33,7 +33,7 @@ class AppStoreControllerTest extends TestCase
 
     public function testStoreAppMustReturnHttpOk()
     {
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($this->userDump->create(['type' => 'P']));
 
         $appData = $this->applicationDump->make()->toArray();
 
@@ -44,7 +44,7 @@ class AppStoreControllerTest extends TestCase
 
     public function testStoreAppWithMissingDataMustReturnPreConditionFailed()
     {
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($this->userDump->create(['type' => 'P']));
 
         $appData = $this->applicationDump->make()->toArray();
 
