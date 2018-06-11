@@ -120,6 +120,11 @@ class User implements EntityInterface
         return $this->type === 'W';
     }
 
+    public function addAplication(Application $app)
+    {
+        $this->applications[] = $app;
+    }
+
     public function toArray(): array
     {
         return [

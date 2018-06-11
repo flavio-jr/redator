@@ -34,6 +34,7 @@ use App\Repositories\UserMasterRepository\Store\UserMasterStore;
 use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
 use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 use App\Factorys\Application\Query\ApplicationQueryFactory;
+use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 
 class RepositoriesContainer
 {
@@ -193,6 +194,14 @@ class RepositoriesContainer
             $publicationQuery = $c->get(PublicationQuery::class);
 
             return new PublicationCollection($applicationQuery, $publicationQuery);
+        };
+
+        $container[ApplicationTeamStore::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $applicationQuery = $c->get(ApplicationQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationTeamStore($userQuery, $applicationQuery, $persister);
         };
     }
 }

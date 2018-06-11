@@ -138,6 +138,17 @@ class Application implements EntityInterface
         return $this->owner;
     }
 
+    public function addUserToTeam(User $user)
+    {
+        $user->addAplication($this);
+        $this->team[] = $user;
+    }
+
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
     public function fromArray(array $data): void
     {
         $this->setName($data['name']);
