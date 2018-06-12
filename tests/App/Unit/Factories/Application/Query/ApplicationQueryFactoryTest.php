@@ -9,6 +9,7 @@ use App\Factorys\Application\Query\ApplicationQueryFactory;
 use App\Services\Player;
 use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
+use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 
 class ApplicationQueryFactoryTest extends TestCase
 {
@@ -50,5 +51,15 @@ class ApplicationQueryFactoryTest extends TestCase
             ->getApplicationQuery();
 
         $this->assertInstanceOf(ApplicationQuery::class, $applicationQuery);
+    }
+
+    public function testGetApplicationMustReturnTeamQuery()
+    {
+        Player::setPlayer($this->userDump->create());
+
+        $applicationQuery = $this->applicationQueryFactory
+            ->getApplicationQuery();
+
+        $this->assertInstanceOf(ApplicationTeamQuery::class, $applicationQuery);
     }
 }

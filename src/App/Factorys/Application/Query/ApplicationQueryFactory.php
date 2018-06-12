@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use App\Repositories\ApplicationRepository\Query\ApplicationQuery;
 use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 use App\Exceptions\UserTypeNotFoundException;
+use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 
 final class ApplicationQueryFactory implements ApplicationQueryFactoryInterface
 {
@@ -31,6 +32,8 @@ final class ApplicationQueryFactory implements ApplicationQueryFactoryInterface
                 return $this->dependecyContainer->get(ApplicationQuery::class);
             case 'M':
                 return $this->dependecyContainer->get(ApplicationMasterQuery::class);
+            case 'W':
+                return $this->dependecyContainer->get(ApplicationTeamQuery::class);
         }
     }
 }

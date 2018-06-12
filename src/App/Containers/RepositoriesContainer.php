@@ -35,6 +35,7 @@ use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
 use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 use App\Factorys\Application\Query\ApplicationQueryFactory;
 use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
+use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 
 class RepositoriesContainer
 {
@@ -113,6 +114,12 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new ApplicationMasterQuery($em);
+        };
+
+        $container[ApplicationTeamQuery::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationTeamQuery($em);
         };
 
         $container[ApplicationUpdate::class] = function (Container $c) {
