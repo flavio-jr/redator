@@ -36,6 +36,7 @@ use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
 use App\Factorys\Application\Query\ApplicationQueryFactory;
 use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
+use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
 
 class RepositoriesContainer
 {
@@ -134,6 +135,12 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new ApplicationDestruction($applicationQueryFactory, $persister);
+        };
+
+        $container[ApplicationSlugFinder::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationSlugFinder($em);
         };
 
         $container[CategoryStore::class] = function (Container $c) {
