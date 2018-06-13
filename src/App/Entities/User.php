@@ -47,6 +47,7 @@ class User implements EntityInterface
     /**
      * The applications that the user can interact
      * @ORM\ManyToMany(targetEntity="App\Entities\Application", mappedBy="team")
+     * @var ArrayCollection
      */
     private $applications;
 
@@ -123,6 +124,11 @@ class User implements EntityInterface
     public function getApplications()
     {
         return $this->applications;
+    }
+
+    public function removeApplication(Application $application)
+    {
+        $this->applications->removeElement($application);
     }
 
     public function addAplication(Application $app)

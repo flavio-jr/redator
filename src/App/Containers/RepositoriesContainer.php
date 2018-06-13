@@ -37,6 +37,7 @@ use App\Factorys\Application\Query\ApplicationQueryFactory;
 use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
+use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 
 class RepositoriesContainer
 {
@@ -216,6 +217,14 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new ApplicationTeamStore($userQuery, $applicationQuery, $persister);
+        };
+
+        $container[ApplicationMemberDestruction::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $applicationFinder = $c->get(ApplicationSlugFinder::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationMemberDestruction($userQuery, $applicationFinder, $persister);
         };
     }
 }

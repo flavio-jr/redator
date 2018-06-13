@@ -8,6 +8,7 @@ use App\Database\Types\ApplicationType;
 use App\Database\EntityInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Exceptions\EntityNotFoundException;
 
 /**
  * @ORM\Entity
@@ -147,6 +148,16 @@ class Application implements EntityInterface
     public function getTeam()
     {
         return $this->team;
+    }
+
+    public function removeUserOfTeam(User $user)
+    {
+        if (!$this->team->contains($user)) {
+            throw new EntityNotFoundException('UserApplication');
+        }
+
+        $user->removeApplication($this);
+        $this->team->removeElement($user);
     }
 
     public function fromArray(array $data): void
