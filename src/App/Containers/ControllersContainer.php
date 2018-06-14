@@ -33,6 +33,8 @@ use App\Repositories\PublicationRepository\Destruction\PublicationDestruction;
 use App\Controllers\PublicationsController\ApplicationPublicationsController;
 use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 use App\Repositories\UserRepository\Security\UserSecurity;
+use App\Controllers\ApplicationMembershipController\MembershipStore;
+use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 
 class ControllersContainer
 {
@@ -110,6 +112,12 @@ class ControllersContainer
             $publicationCollection = $c->get(PublicationCollection::class);
 
             return new ApplicationPublicationsController($publicationCollection);
+        };
+
+        $container[MembershipStore::class] = function (Container $c) {
+            $applicationTeamStore = $c->get(ApplicationTeamStore::class);
+
+            return new MembershipStore($applicationTeamStore);
         };
     }
 }

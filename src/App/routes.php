@@ -8,6 +8,7 @@ use App\RequestValidators\PublicationRegistration;
 use App\RequestValidators\CategoryRegistration;
 use App\Middlewares\Publications;
 use App\RequestValidators\PublicationsInfo;
+use App\RequestValidators\MembershipStore;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -31,6 +32,10 @@ $app->group('/app', function () {
                     $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
                     $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                     $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
+                });
+
+                $this->group('/{app}/membership', function () {
+                    $this->post('', 'App\Controllers\ApplicationMembershipController\MembershipStore:store')->add(new MembershipStore());
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
