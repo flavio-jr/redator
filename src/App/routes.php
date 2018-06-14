@@ -36,6 +36,7 @@ $app->group('/app', function () {
 
                 $this->group('/{app}/membership', function () {
                     $this->post('', 'App\Controllers\ApplicationMembershipController\MembershipStore:store')->add(new MembershipStore());
+                    $this->delete('/{member}', 'App\Controllers\ApplicationMembershipController\MembershipDestruction:destroy');
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');

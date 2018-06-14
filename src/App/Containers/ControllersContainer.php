@@ -35,6 +35,8 @@ use App\Repositories\PublicationRepository\Collect\PublicationCollection;
 use App\Repositories\UserRepository\Security\UserSecurity;
 use App\Controllers\ApplicationMembershipController\MembershipStore;
 use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
+use App\Controllers\ApplicationMembershipController\MembershipDestruction;
+use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 
 class ControllersContainer
 {
@@ -118,6 +120,12 @@ class ControllersContainer
             $applicationTeamStore = $c->get(ApplicationTeamStore::class);
 
             return new MembershipStore($applicationTeamStore);
+        };
+
+        $container[MembershipDestruction::class] = function (Container $c) {
+            $applicationMemberDestruction = $c->get(ApplicationMemberDestruction::class);
+
+            return new MembershipDestruction($applicationMemberDestruction);
         };
     }
 }
