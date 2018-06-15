@@ -8,6 +8,7 @@ use Slim\Http\Request;
 use App\Application;
 use Symfony\Component\Yaml\Yaml;
 use Dotenv\Dotenv;
+use App\Services\Player;
 
 class TestCase extends PHPUnit
 {
@@ -45,6 +46,8 @@ class TestCase extends PHPUnit
     public function tearDown()
     {
         parent::tearDown();
+
+        Player::gameOver();
 
         if (method_exists($this, 'dropDatabase')) {
             $this->dropDatabase();

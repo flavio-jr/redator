@@ -48,12 +48,14 @@ class PublicationStoreTest extends TestCase
     public function testStorePublicationWithUnexistentApplicationMustReturnNull()
     {
         $publicationData = $this->publicationDump->make();
-        $application = $publicationData->getApplication()->getSlug();
+        $application = $publicationData->getApplication();
+
+        Player::setPlayer($application->getAppOwner());
         
         $data = $publicationData->toArray();
         $data['category'] = $publicationData->getCategory()->getSlug();
 
-        $publication = $this->publicationStore->store(strrev($application), $data);
+        $publication = $this->publicationStore->store(strrev($application->getSlug()), $data);
 
         $this->assertNull($publication);
     }
@@ -61,12 +63,14 @@ class PublicationStoreTest extends TestCase
     public function testStorePublicationWithUnexistentCategoryMustReturnNull()
     {
         $publicationData = $this->publicationDump->make();
-        $application = $publicationData->getApplication()->getSlug();
+        $application = $publicationData->getApplication();
+
+        Player::setPlayer($application->getAppOwner());
         
         $data = $publicationData->toArray();
         $data['category'] = strrev($publicationData->getCategory()->getSlug());
 
-        $publication = $this->publicationStore->store($application, $data);
+        $publication = $this->publicationStore->store($application->getSlug(), $data);
 
         $this->assertNull($publication);
     }

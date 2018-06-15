@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Repositories\UserRepository\Store\UserStore;
 use App\Dumps\UserDump;
 use Tests\DatabaseRefreshTable;
+use App\Services\Player;
 
 class UserStoreTest extends TestCase
 {
@@ -44,5 +45,37 @@ class UserStoreTest extends TestCase
         $user = $this->userStore->store($userData);
 
         $this->assertNotNull($user);
+    }
+
+    public function testUserCreationWithoutLoggedUserMustDisableUserCreated()
+    {
+        $pass = 'snow';
+
+        $userData = $this->userDump
+            ->make(['password' => $pass])
+            ->toArray();
+        
+        $userData['password'] = $pass;
+
+        $user = $this->userStore->store($userData);
+
+        $this->assertFalse($user->isEnabled());
+    }
+
+    public function testUserCreationWithLoggedUserMustKeepUserEnabled()
+    {
+        Player::setPlayer($this->userDump->create());
+
+        $pass = 'snow';
+
+        $userData = $this->userDump
+            ->make(['password' => $pass])
+            ->toArray();
+        
+        $userData['password'] = $pass;
+
+        $user = $this->userStore->store($userData);
+
+        $this->assertTrue($user->isEnabled());
     }
 }
