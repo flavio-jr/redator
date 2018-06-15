@@ -26,6 +26,7 @@ $app->group('/app', function () {
                 $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
                 $this->put('/{app}', 'App\Controllers\ApplicationsController\AppUpdateController:update')->add(new ApplicationRegistration());
                 $this->delete('/{app}', 'App\Controllers\ApplicationsController\AppDeleteController:delete');
+                $this->patch('/{app}', 'App\Controllers\ApplicationsController\AppOwnershipTransferController:transferOwnership');
 
                 $this->group('/{app}/publications', function () {
                     $this->get('', 'App\Controllers\PublicationsController\ApplicationPublicationsController:get')->add(new PublicationsInfo());

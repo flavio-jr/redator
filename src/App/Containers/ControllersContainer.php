@@ -37,6 +37,8 @@ use App\Controllers\ApplicationMembershipController\MembershipStore;
 use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 use App\Controllers\ApplicationMembershipController\MembershipDestruction;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
+use App\Controllers\ApplicationsController\AppOwnershipTransferController;
+use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 
 class ControllersContainer
 {
@@ -114,6 +116,12 @@ class ControllersContainer
             $publicationCollection = $c->get(PublicationCollection::class);
 
             return new ApplicationPublicationsController($publicationCollection);
+        };
+
+        $container[AppOwnershipTransferController::class] = function (Container $c) {
+            $applicationOwnershipTransfer = $c->get(ApplicationOwnershipTransfer::class);
+
+            return new AppOwnershipTransferController($applicationOwnershipTransfer);
         };
 
         $container[MembershipStore::class] = function (Container $c) {

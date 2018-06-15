@@ -96,6 +96,11 @@ class TestCase extends PHPUnit
         return $this->makeRequest($route, 'DELETE');
     }
 
+    protected function patch($route, array $data)
+    {
+        return $this->makeRequest($route, 'PATCH', $data);
+    }
+
     protected function assertDatabaseHave($entity)
     {
         $register = $this->application
