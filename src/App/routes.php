@@ -12,6 +12,7 @@ use App\RequestValidators\MembershipStore;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
+    $this->post('/users', 'App\Controllers\UsersController\UserStoreController:store')->add(new UserRegistration());
 
     $this->group('', function () {
         $this->get('', function ($request, $response) {
@@ -19,7 +20,6 @@ $app->group('/app', function () {
         });
 
         $this->group('/users', function () {
-            $this->post('', 'App\Controllers\UsersController\UserStoreController:store')->add(new UserRegistration());
             $this->put('', 'App\Controllers\UsersController\UserUpdateController:update')->add(new UserRegistration());
             $this->group('/apps', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
