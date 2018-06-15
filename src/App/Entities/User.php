@@ -51,6 +51,11 @@ class User implements EntityInterface
      */
     private $applications;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = true;
+
     public function __construct()
     {
         $this->applications = new ArrayCollection();
@@ -134,6 +139,21 @@ class User implements EntityInterface
     public function addAplication(Application $app)
     {
         $this->applications[] = $app;
+    }
+
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
+    public function disable()
+    {
+        $this->enabled = false;
+    }
+
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
     public function toArray(): array
