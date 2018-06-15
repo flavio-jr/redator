@@ -38,6 +38,7 @@ use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
 use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
+use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 
 class RepositoriesContainer
 {
@@ -225,6 +226,14 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new ApplicationMemberDestruction($userQuery, $applicationFinder, $persister);
+        };
+
+        $container[ApplicationOwnershipTransfer::class] = function (Container $c) {
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
+            $userQuery = $c->get(UserQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationOwnershipTransfer($applicationQueryFactory, $userQuery, $persister);
         };
     }
 }
