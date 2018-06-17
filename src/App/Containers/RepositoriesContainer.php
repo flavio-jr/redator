@@ -176,9 +176,9 @@ class RepositoriesContainer
 
         $container[PublicationSlugFinder::class] = function (Container $c) {
             $em = $c->get('doctrine')->getEntityManager();
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
 
-            return new PublicationSlugFinder($em, $applicationQuery);
+            return new PublicationSlugFinder($em, $applicationQueryFactory);
         };
 
         $container[PublicationUpdate::class] = function (Container $c) {
@@ -206,10 +206,10 @@ class RepositoriesContainer
         };
 
         $container[PublicationCollection::class] = function (Container $c) {
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $publicationQuery = $c->get(PublicationQuery::class);
 
-            return new PublicationCollection($applicationQuery, $publicationQuery);
+            return new PublicationCollection($applicationQueryFactory, $publicationQuery);
         };
 
         $container[ApplicationTeamStore::class] = function (Container $c) {

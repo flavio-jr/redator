@@ -10,6 +10,7 @@ use App\Services\Player;
 use App\Application;
 use Tests\DatabaseRefreshTable;
 use Carbon\Carbon;
+use App\Dumps\UserDump;
 
 class ApplicationPublicationsControllerTest extends TestCase
 {
@@ -26,6 +27,11 @@ class ApplicationPublicationsControllerTest extends TestCase
     private $applicationDump;
 
     /**
+     * @var UserDump
+     */
+    private $userDump;
+
+    /**
      * @var DumpFactory
      */
     private $dumpFactory;
@@ -36,14 +42,16 @@ class ApplicationPublicationsControllerTest extends TestCase
 
         $this->publicationDump = $this->container->get(PublicationDump::class);
         $this->applicationDump = $this->container->get(ApplicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
         $this->dumpFactory = $this->container->get('DumpFactory');
     }
 
     public function testMustReturnHttpOkForGetPublications()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
@@ -54,9 +62,10 @@ class ApplicationPublicationsControllerTest extends TestCase
 
     public function testMustReturnHttpOkForGetPublicationsWithTitleQueryParam()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $publications = $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
@@ -70,9 +79,10 @@ class ApplicationPublicationsControllerTest extends TestCase
 
     public function testMustReturnHttpOkForGetPublicationsWithMinDateQueryParam()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $publications = $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
@@ -86,9 +96,10 @@ class ApplicationPublicationsControllerTest extends TestCase
 
     public function testMustReturnHttpOkForGetPublicationsWithMaxDateQueryParam()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $publications = $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
@@ -102,9 +113,10 @@ class ApplicationPublicationsControllerTest extends TestCase
 
     public function testMustReturnHttpOkForGetPublicationsWithCategoryQueryParam()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $publications = $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
@@ -118,9 +130,10 @@ class ApplicationPublicationsControllerTest extends TestCase
 
     public function testMustReturnHttpOkForGetPublicationsWithPageQueryParam()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $publications = $this->dumpFactory->produce($this->publicationDump, 5, ['application' => $application]);
 
