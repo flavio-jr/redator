@@ -7,6 +7,8 @@ use App\Dumps\PublicationDump;
 use Tests\DatabaseRefreshTable;
 use App\Repositories\PublicationRepository\Store\PublicationStore;
 use App\Services\Player;
+use App\Dumps\UserDump;
+use App\Dumps\ApplicationDump;
 
 class PublicationStoreTest extends TestCase
 {
@@ -22,35 +24,51 @@ class PublicationStoreTest extends TestCase
      */
     private $publicationDump;
 
+    /**
+     * @var UserDump
+     */
+    private $userDump;
+
+    /**
+     * @var ApplicationDump
+     */
+    private $applicationDump;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->publicationStore = $this->container->get(PublicationStore::class);
         $this->publicationDump = $this->container->get(PublicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
+        $this->applicationDump = $this->container->get(ApplicationDump::class);
     }
 
     public function testStorePublicationMustPersistOnDatabase()
     {
-        $publicationData = $this->publicationDump->make();
-        $application = $publicationData->getApplication()->getSlug();
+        $user = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $user]);
 
-        Player::setPlayer($publicationData->getApplication()->getAppOwner());
+        $publicationData = $this->publicationDump->make(['application' => $application]);
+
+        Player::setPlayer($user);
         
         $data = $publicationData->toArray();
         $data['category'] = $publicationData->getCategory()->getSlug();
 
-        $publication = $this->publicationStore->store($application, $data);
+        $publication = $this->publicationStore->store($application->getSlug(), $data);
 
         $this->assertDatabaseHave($publication);
     }
 
     public function testStorePublicationWithUnexistentApplicationMustReturnNull()
     {
-        $publicationData = $this->publicationDump->make();
-        $application = $publicationData->getApplication();
+        $user = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $user]);
 
-        Player::setPlayer($application->getAppOwner());
+        $publicationData = $this->publicationDump->make(['application' => $application]);
+
+        Player::setPlayer($user);
         
         $data = $publicationData->toArray();
         $data['category'] = $publicationData->getCategory()->getSlug();
@@ -62,10 +80,12 @@ class PublicationStoreTest extends TestCase
 
     public function testStorePublicationWithUnexistentCategoryMustReturnNull()
     {
-        $publicationData = $this->publicationDump->make();
-        $application = $publicationData->getApplication();
+        $user = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $user]);
 
-        Player::setPlayer($application->getAppOwner());
+        $publicationData = $this->publicationDump->make(['application' => $application]);
+
+        Player::setPlayer($user);
         
         $data = $publicationData->toArray();
         $data['category'] = strrev($publicationData->getCategory()->getSlug());

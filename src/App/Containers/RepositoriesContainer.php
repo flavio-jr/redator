@@ -162,14 +162,14 @@ class RepositoriesContainer
             $publication = $c->get('Publication');
             $persister = $c->get('PersisterService');
             $htmlSanitizer = $c->get('HtmlSanitizer');
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $categoryQuery = $c->get(CategoryQuery::class);
 
             return new PublicationStore(
                 $publication,
                 $persister,
                 $htmlSanitizer,
-                $applicationQuery,
+                $applicationQueryFactory,
                 $categoryQuery
             );
         };
