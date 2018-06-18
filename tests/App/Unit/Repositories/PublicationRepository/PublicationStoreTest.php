@@ -9,6 +9,7 @@ use App\Repositories\PublicationRepository\Store\PublicationStore;
 use App\Services\Player;
 use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
+use Doctrine\ORM\NoResultException;
 
 class PublicationStoreTest extends TestCase
 {
@@ -93,5 +94,59 @@ class PublicationStoreTest extends TestCase
         $publication = $this->publicationStore->store($application->getSlug(), $data);
 
         $this->assertNull($publication);
+    }
+
+    public function testWritterUserMustBeCapableOfStorePublication()
+    {
+        $owner = $this->userDump->create(['type' => 'P']);
+        $writter = $this->userDump->create();
+
+        Player::setPlayer($writter);
+
+        $application = $this->applicationDump->create(['owner' => $owner, 'team' => [$writter]]);
+        $publicationData = $this->publicationDump->make(['application' => $application]);
+
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $publication = $this->publicationStore->store($application->getSlug(), $data);
+
+        $this->assertDatabaseHave($publication);
+    }
+
+    public function testMasterUserMustBeCapableOfWritePublicationInAnyApp()
+    {
+        $master = $this->userDump->create(['type' => 'M']);
+
+        $publication = $this->publicationDump->create();
+
+        Player::setPlayer($master);
+
+        $publicationData = $this->publicationDump->make();
+
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $publication = $this->publicationStore->store($publication->getApplication()->getSlug(), $data);
+
+        $this->assertDatabaseHave($publication);
+    }
+
+    public function testWritterNotInApplicationTeamMustNotBeAbleToStorePublication()
+    {
+        $owner = $this->userDump->create(['type' => 'P']);
+        $writter = $this->userDump->create();
+
+        Player::setPlayer($writter);
+
+        $application = $this->applicationDump->create(['owner' => $owner]);
+        $publicationData = $this->publicationDump->make(['application' => $application]);
+
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $this->expectException(NoResultException::class);
+
+        $publication = $this->publicationStore->store($application->getSlug(), $data);
     }
 }
