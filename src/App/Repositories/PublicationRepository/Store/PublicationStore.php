@@ -8,6 +8,8 @@ use App\Services\HtmlSanitizer\HtmlSanitizerInterface as HtmlSanitizer;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Repositories\CategoryRepository\Query\CategoryQueryInterface as CategoryQuery;
 use App\Factorys\Application\Query\ApplicationQueryFactoryInterface;
+use App\Exceptions\UserNotAllowedToWritePublication;
+use App\Exceptions\EntityNotFoundException;
 
 final class PublicationStore implements PublicationStoreInterface
 {
@@ -65,10 +67,14 @@ final class PublicationStore implements PublicationStoreInterface
             ->getApplicationQuery()
             ->getApplication($application);
 
+        if (!$application) {
+            throw new UserNotAllowedToWritePublication();
+        }
+
         $category = $this->categoryQuery->getCategoryByName($data['category']);
 
-        if (!$application || !$category) {
-            return null;
+        if (!$category) {
+            throw new EntityNotFoundException('Category');
         }
 
         $data['application'] = $application;

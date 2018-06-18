@@ -55,4 +55,24 @@ class PublicationStoreControllerTest extends TestCase
 
         $this->assertEquals(201, $response->getStatusCode());
     }
+
+    public function testMustReturnHttpForbiddenForUnauthorizedUser()
+    {
+        $user = $this->userDump->create(['type' => 'P']);
+        $otherUser = $this->userDump->create(['type' => 'P']);
+
+        $application = $this->applicationDump->create(['owner' => $user]);
+
+        $publication = $this->publicationDump->make(['application' => $application]);
+        
+        Player::setPlayer($otherUser);
+
+        $data = $publication->toArray();
+        $data['category'] = $publication->getCategory()
+            ->getSlug();
+
+        $response = $this->post(Application::PREFIX . "/users/apps/{$application->getSlug()}/publications", $data);
+
+        $this->assertEquals(403, $response->getStatusCode());
+    }
 }

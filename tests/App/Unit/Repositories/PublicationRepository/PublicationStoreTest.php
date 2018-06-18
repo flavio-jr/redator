@@ -10,6 +10,8 @@ use App\Services\Player;
 use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
 use Doctrine\ORM\NoResultException;
+use App\Exceptions\EntityNotFoundException;
+use App\Exceptions\UserNotAllowedToWritePublication;
 
 class PublicationStoreTest extends TestCase
 {
@@ -74,12 +76,12 @@ class PublicationStoreTest extends TestCase
         $data = $publicationData->toArray();
         $data['category'] = $publicationData->getCategory()->getSlug();
 
-        $publication = $this->publicationStore->store(strrev($application->getSlug()), $data);
+        $this->expectException(UserNotAllowedToWritePublication::class);
 
-        $this->assertNull($publication);
+        $this->publicationStore->store(strrev($application->getSlug()), $data);
     }
 
-    public function testStorePublicationWithUnexistentCategoryMustReturnNull()
+    public function testStorePublicationWithUnexistentCategoryMustThrowException()
     {
         $user = $this->userDump->create(['type' => 'P']);
         $application = $this->applicationDump->create(['owner' => $user]);
@@ -91,9 +93,9 @@ class PublicationStoreTest extends TestCase
         $data = $publicationData->toArray();
         $data['category'] = strrev($publicationData->getCategory()->getSlug());
 
-        $publication = $this->publicationStore->store($application->getSlug(), $data);
+        $this->expectException(EntityNotFoundException::class);
 
-        $this->assertNull($publication);
+        $this->publicationStore->store($application->getSlug(), $data);
     }
 
     public function testWritterUserMustBeCapableOfStorePublication()
