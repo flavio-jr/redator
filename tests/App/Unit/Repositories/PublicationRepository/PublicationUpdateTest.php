@@ -115,4 +115,43 @@ class PublicationUpdateTest extends TestCase
 
         $this->assertFalse($publicationUpdated);
     }
+
+    public function testWritterUserMustNotBeCapableOfUpdatePublication()
+    {
+        $owner = $this->userDump->create(['type' => 'P']);
+        $writter = $this->userDump->create();
+
+        Player::setPlayer($writter);
+
+        $application = $this->applicationDump->create(['owner' => $owner, 'team' => [$writter]]);
+        $publication = $this->publicationDump->create(['application' => $application]);
+
+        $publicationData = $this->publicationDump->make();
+
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $publicationUpdated = $this->publicationUpdate->update($publication->getSlug(), $application->getSlug(), $data);
+
+        $this->assertFalse($publicationUpdated);
+    }
+
+    public function testMasterUserMustBeCapableOfUpdatePublicationInAnyApp()
+    {
+        $master = $this->userDump->create(['type' => 'M']);
+        $application = $this->applicationDump->create();
+
+        $publication = $this->publicationDump->create(['application' => $application]);
+
+        Player::setPlayer($master);
+
+        $publicationData = $this->publicationDump->make();
+
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $publicationUpdated = $this->publicationUpdate->update($publication->getSlug(), $application->getSlug(), $data);
+
+        $this->assertTrue($publicationUpdated);
+    }
 }
