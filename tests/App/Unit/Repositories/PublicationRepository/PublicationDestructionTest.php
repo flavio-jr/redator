@@ -79,4 +79,33 @@ class PublicationDestructionTest extends TestCase
 
         $this->assertFalse($publicationDeleted);
     }
+
+    public function testWritterUserMustNotBeAbleToDestroyPublication()
+    {
+        $owner = $this->userDump->create(['type' => 'P']);
+        $writter = $this->userDump->create();
+
+        $application = $this->applicationDump->create(['owner' => $owner, 'team' => [$writter]]);
+        $publication = $this->publicationDump->create(['application' => $application]);
+
+        Player::setPlayer($writter);
+
+        $publicationNotDeleted = $this->publicationDestruction
+            ->destroy($publication->getSlug(), $application->getSlug());
+
+        $this->assertFalse($publicationNotDeleted);
+    }
+
+    public function testMasterUserMustBeCapableOfDestroyAnyPublication()
+    {
+        $master = $this->userDump->create(['type' => 'M']);
+        $publication = $this->publicationDump->create();
+
+        Player::setPlayer($master);
+
+        $publicationDeleted = $this->publicationDestruction
+            ->destroy($publication->getSlug(), $publication->getApplication()->getSlug());
+
+        $this->assertTrue($publicationDeleted);
+    }
 }
