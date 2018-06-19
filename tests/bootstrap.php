@@ -21,7 +21,7 @@ class DBBuilder
     {
         putenv('APP_ENV=TEST');
 
-        $config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
+        $config = require realpath(__DIR__ . '/../config/config.php');
 
         $config['db_path'] = __DIR__ . '/test.sqlite';
         $config['test_driver'] = getenv('DB_TEST_DRIVER');

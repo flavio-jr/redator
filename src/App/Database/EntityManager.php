@@ -65,7 +65,7 @@ class EntityManager implements ModelManagerInterface
         $evm = $this->buildEventManager();
 
         $setup = Setup::createAnnotationMetadataConfiguration(
-            [$config['app']['path'] . 'Entities'],
+            [$config['app']['path'] . '/Entities'],
             $config['app']['debug'],
             null,
             null,
@@ -98,7 +98,7 @@ class EntityManager implements ModelManagerInterface
         $evm = $this->buildEventManager();
 
         $setup = Setup::createAnnotationMetadataConfiguration(
-            [$config['app']['path'] . 'Entities'],
+            [$config['app']['path'] . '/Entities'],
             $config['app']['debug'],
             null,
             null,

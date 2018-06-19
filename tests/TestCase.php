@@ -18,7 +18,7 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
-        $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
+        $this->config = require realpath(__DIR__ . '/../config/config.php');
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
         
