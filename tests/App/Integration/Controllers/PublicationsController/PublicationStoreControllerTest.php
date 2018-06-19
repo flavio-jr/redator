@@ -56,7 +56,7 @@ class PublicationStoreControllerTest extends TestCase
         $this->assertEquals(201, $response->getStatusCode());
     }
 
-    public function testMustReturnHttpForbiddenForUnauthorizedUser()
+    public function testMustReturnHttpNotFoundForNotFoundUserApplication()
     {
         $user = $this->userDump->create(['type' => 'P']);
         $otherUser = $this->userDump->create(['type' => 'P']);
@@ -73,6 +73,6 @@ class PublicationStoreControllerTest extends TestCase
 
         $response = $this->post(Application::PREFIX . "/users/apps/{$application->getSlug()}/publications", $data);
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

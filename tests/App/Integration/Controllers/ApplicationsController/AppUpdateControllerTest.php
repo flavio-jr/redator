@@ -43,7 +43,7 @@ class AppUpdateControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testUpdateAppMustReturnHttpForbidden()
+    public function testUpdateAppMustReturnHttpNotFound()
     {
         $application = $this->applicationDump->create();
 
@@ -51,6 +51,6 @@ class AppUpdateControllerTest extends TestCase
 
         $response = $this->put(Application::PREFIX . "/users/apps/{$application->getSlug()}", $application->toArray());
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

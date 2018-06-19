@@ -62,24 +62,6 @@ class PublicationDestructionTest extends TestCase
         $this->assertTrue($publicationDeleted);
     }
 
-    public function testDestroyPublicationWithUnexistentAplicationShouldNotBeSuccessful()
-    {
-        $owner = $this->userDump->create(['type' => 'P']);
-        $application = $this->applicationDump->create(['owner' => $owner]);
-
-        $publication = $this->publicationDump->create(['application' => $application]);
-
-        Player::setPlayer($owner);
-
-        $publicationDeleted = $this->publicationDestruction
-            ->destroy(
-                $publication->getSlug(),
-                strrev($publication->getApplication()->getSlug())
-            );
-
-        $this->assertFalse($publicationDeleted);
-    }
-
     public function testWritterUserMustNotBeAbleToDestroyPublication()
     {
         $owner = $this->userDump->create(['type' => 'P']);

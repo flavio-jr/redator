@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use App\Entities\Application;
 use App\Services\Player;
 use App\Database\Types\ApplicationType;
+use App\Exceptions\EntityNotFoundException;
 
 final class ApplicationQuery implements ApplicationQueryInterface
 {
@@ -24,15 +25,21 @@ final class ApplicationQuery implements ApplicationQueryInterface
     /**
      * @inheritdoc
      */
-    public function getApplication(string $appName): ?Application
+    public function getApplication(string $appName): Application
     {
         $user = Player::user();
 
-        return $this->repository
+        $application =  $this->repository
             ->findOneBy([
                 'owner' => $user->getId(),
                 'slug'  => $appName
             ]);
+
+        if (!$application) {
+            throw new EntityNotFoundException('Application');
+        }
+
+        return $application;
     }
 
     /**

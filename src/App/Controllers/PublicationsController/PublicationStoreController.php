@@ -31,11 +31,6 @@ final class PublicationStoreController
                 ->write(json_encode(['app' => $publicationCreated->getSlug()]));
 
             return $response->withStatus(201);
-        } catch (UserNotAllowedToWritePublication $e) {
-            $response->getBody()
-                ->write("The user is not allowed to store publication in the given app");
-
-            return $response->withStatus(403);
         } catch (EntityNotFoundException $e) {
             $response->getBody()
                 ->write("The given {$e->getEntityName()} was not found");

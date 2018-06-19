@@ -67,10 +67,6 @@ final class PublicationStore implements PublicationStoreInterface
             ->getApplicationQuery()
             ->getApplication($application);
 
-        if (!$application) {
-            throw new UserNotAllowedToWritePublication();
-        }
-
         $category = $this->categoryQuery->getCategoryByName($data['category']);
 
         if (!$category) {

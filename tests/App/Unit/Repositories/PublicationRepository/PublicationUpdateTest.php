@@ -68,54 +68,6 @@ class PublicationUpdateTest extends TestCase
         $this->assertTrue($publicationUpdated);
     }
 
-    public function testUpdatePublicationWithUnexistentApplicationMustReturnFalse()
-    {
-        $owner = $this->userDump->create(['type' => 'P']);
-        $application = $this->applicationDump->create(['owner' => $owner]);
-
-        $publication = $this->publicationDump->create(['application' => $application]);
-
-        $data = $this->publicationDump->make();
-
-        Player::setPlayer($owner);
-
-        $updateData = $data->toArray();
-        $updateData['category'] = $data->getCategory()->getSlug();
-
-        $publicationUpdated = $this->publicationUpdate
-            ->update(
-                $publication->getSlug(),
-                strrev($application->getSlug()),
-                $updateData
-            );
-
-        $this->assertFalse($publicationUpdated);
-    }
-
-    public function testUpdatePublicationWithUnexistentCategoryMustReturnFalse()
-    {
-        $owner = $this->userDump->create(['type' => 'P']);
-        $application = $this->applicationDump->create(['owner' => $owner]);
-
-        $publication = $this->publicationDump->create(['application' => $application]);
-
-        $data = $this->publicationDump->make();
-
-        Player::setPlayer($owner);
-
-        $updateData = $data->toArray();
-        $updateData['category'] = strrev($data->getCategory()->getSlug());
-
-        $publicationUpdated = $this->publicationUpdate
-            ->update(
-                $publication->getSlug(),
-                strrev($publication->getApplication()->getSlug()),
-                $updateData
-            );
-
-        $this->assertFalse($publicationUpdated);
-    }
-
     public function testWritterUserMustNotBeCapableOfUpdatePublication()
     {
         $owner = $this->userDump->create(['type' => 'P']);

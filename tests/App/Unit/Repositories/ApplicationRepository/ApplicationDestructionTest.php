@@ -8,6 +8,7 @@ use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
 use App\Dumps\UserDump;
+use App\Exceptions\EntityNotFoundException;
 
 class ApplicationDestructionTest extends TestCase
 {
@@ -56,8 +57,8 @@ class ApplicationDestructionTest extends TestCase
 
         Player::setPlayer($owner);
 
-        $notDeleted = $this->applicationDestruction->destroy($application->getSlug());
+        $this->expectException(EntityNotFoundException::class);
 
-        $this->assertFalse($notDeleted);
+        $this->applicationDestruction->destroy($application->getSlug()); 
     }
 }

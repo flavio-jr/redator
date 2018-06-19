@@ -43,7 +43,7 @@ class AppDeleteControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testShouldReturnHttpForbiddenForDeleteApp()
+    public function testShouldReturnHttpNotFoundForDeleteApp()
     {
         $application = $this->applicationDump->create();
         $user = $this->userDump->create(['type' => 'P']);
@@ -52,6 +52,6 @@ class AppDeleteControllerTest extends TestCase
 
         $response = $this->delete(Application::PREFIX . "/users/apps/{$application->getSlug()}");
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

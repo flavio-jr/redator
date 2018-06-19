@@ -9,6 +9,7 @@ use App\Services\Player;
 use Tests\DatabaseRefreshTable;
 use App\Dumps\UserDump;
 use App\Dumps\DumpsFactories\DumpFactory;
+use App\Exceptions\EntityNotFoundException;
 
 class ApplicationQueryTest extends TestCase
 {
@@ -61,9 +62,9 @@ class ApplicationQueryTest extends TestCase
 
         Player::setPlayer($this->userDump->create());
 
-        $applicationNotFound = $this->applicationQuery->getApplication($application->getSlug());
+        $this->expectException(EntityNotFoundException::class);
 
-        $this->assertNull($applicationNotFound);
+        $this->applicationQuery->getApplication($application->getSlug());
     }
 
     public function testGetAllAplicationsOfCurrentUser()

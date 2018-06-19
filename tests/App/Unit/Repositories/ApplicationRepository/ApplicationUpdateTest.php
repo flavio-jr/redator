@@ -8,6 +8,7 @@ use App\Repositories\ApplicationRepository\Update\ApplicationUpdate;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
 use App\Dumps\UserDump;
+use App\Exceptions\EntityNotFoundException;
 
 class ApplicationUpdateTest extends TestCase
 {
@@ -60,8 +61,8 @@ class ApplicationUpdateTest extends TestCase
 
         $appData = $this->applicationDump->make()->toArray();
 
-        $appNotUpdated = $this->applicationUpdate->update(strrev($application->getSlug()), $appData);
+        $this->expectException(EntityNotFoundException::class);
 
-        $this->assertFalse($appNotUpdated);
+        $this->applicationUpdate->update(strrev($application->getSlug()), $appData);
     }
 }

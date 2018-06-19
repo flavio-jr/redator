@@ -63,23 +63,6 @@ class PublicationStoreTest extends TestCase
         $this->assertDatabaseHave($publication);
     }
 
-    public function testStorePublicationWithUnexistentApplicationMustReturnNull()
-    {
-        $user = $this->userDump->create(['type' => 'P']);
-        $application = $this->applicationDump->create(['owner' => $user]);
-
-        $publicationData = $this->publicationDump->make(['application' => $application]);
-
-        Player::setPlayer($user);
-        
-        $data = $publicationData->toArray();
-        $data['category'] = $publicationData->getCategory()->getSlug();
-
-        $this->expectException(UserNotAllowedToWritePublication::class);
-
-        $this->publicationStore->store(strrev($application->getSlug()), $data);
-    }
-
     public function testStorePublicationWithUnexistentCategoryMustThrowException()
     {
         $user = $this->userDump->create(['type' => 'P']);
