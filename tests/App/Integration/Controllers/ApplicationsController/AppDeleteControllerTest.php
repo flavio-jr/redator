@@ -33,24 +33,25 @@ class AppDeleteControllerTest extends TestCase
 
     public function testShouldReturnHttpOkForDeleteApp()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $response = $this->delete(Application::PREFIX . "/users/apps/{$application->getSlug()}");
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testShouldReturnHttpForbiddenForDeleteApp()
+    public function testShouldReturnHttpNotFoundForDeleteApp()
     {
         $application = $this->applicationDump->create();
-        $user = $this->userDump->create();
+        $user = $this->userDump->create(['type' => 'P']);
 
         Player::setPlayer($user);
 
         $response = $this->delete(Application::PREFIX . "/users/apps/{$application->getSlug()}");
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

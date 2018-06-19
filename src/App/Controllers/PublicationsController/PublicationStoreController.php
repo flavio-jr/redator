@@ -5,6 +5,8 @@ namespace App\Controllers\PublicationsController;
 use App\Repositories\PublicationRepository\Store\PublicationStoreInterface as PublicationStore;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Exceptions\UserNotAllowedToWritePublication;
+use App\Exceptions\EntityNotFoundException;
 
 final class PublicationStoreController
 {
@@ -21,19 +23,19 @@ final class PublicationStoreController
 
     public function store(Request $request, Response $response, array $args)
     {
-        $publicationCreated = $this->publicationStore
-            ->store($args['app'], $request->getParsedBody());
+        try {
+            $publicationCreated = $this->publicationStore
+                ->store($args['app'], $request->getParsedBody());
 
-        if (!$publicationCreated) {
             $response->getBody()
-                ->write('The publication could not be created');
+                ->write(json_encode(['app' => $publicationCreated->getSlug()]));
 
-            return $response->withStatus(501);
+            return $response->withStatus(201);
+        } catch (EntityNotFoundException $e) {
+            $response->getBody()
+                ->write("The given {$e->getEntityName()} was not found");
+
+            return $response->withStatus(404);
         }
-
-        $response->getBody()
-            ->write(json_encode(['app' => $publicationCreated->getSlug()]));
-
-        return $response->withStatus(201);
     }
 }

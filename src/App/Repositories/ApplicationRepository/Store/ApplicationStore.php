@@ -5,6 +5,7 @@ namespace App\Repositories\ApplicationRepository\Store;
 use App\Entities\Application;
 use App\Services\Persister\PersisterInterface as Persister;
 use App\Services\Player;
+use App\Exceptions\UserNotAllowedToCreateApplication;
 
 final class ApplicationStore implements ApplicationStoreInterface
 {
@@ -34,7 +35,13 @@ final class ApplicationStore implements ApplicationStoreInterface
      */
     public function store(array $data): Application
     {
-        $data['owner'] = Player::user();
+        $user = Player::user();
+
+        if ($user->isWritter()) {
+            throw new UserNotAllowedToCreateApplication();
+        }
+
+        $data['owner'] = $user;
 
         $this->application->fromArray($data);
 

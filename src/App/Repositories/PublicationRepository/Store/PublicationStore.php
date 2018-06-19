@@ -7,6 +7,9 @@ use App\Services\Persister\PersisterInterface as Persister;
 use App\Services\HtmlSanitizer\HtmlSanitizerInterface as HtmlSanitizer;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Repositories\CategoryRepository\Query\CategoryQueryInterface as CategoryQuery;
+use App\Factorys\Application\Query\ApplicationQueryFactoryInterface;
+use App\Exceptions\UserNotAllowedToWritePublication;
+use App\Exceptions\EntityNotFoundException;
 
 final class PublicationStore implements PublicationStoreInterface
 {
@@ -29,10 +32,10 @@ final class PublicationStore implements PublicationStoreInterface
     private $htmlSanitizer;
 
     /**
-     * The repository for application query
-     * @var ApplicationQuery
+     * The factory to get the repository for application query
+     * @var ApplicationQueryFactoryInterface
      */
-    private $applicationQuery;
+    private $applicationQueryFactory;
 
     /**
      * The repository for category query
@@ -44,14 +47,14 @@ final class PublicationStore implements PublicationStoreInterface
         Publication $publication,
         Persister $persister,
         HtmlSanitizer $htmlSanitizer,
-        ApplicationQuery $applicationQuery,
+        ApplicationQueryFactoryInterface $applicationQueryFactory,
         CategoryQuery $categoryQuery
     )
     {
         $this->publication = $publication;
         $this->persister = $persister;
         $this->htmlSanitizer = $htmlSanitizer;
-        $this->applicationQuery = $applicationQuery;
+        $this->applicationQueryFactory = $applicationQueryFactory;
         $this->categoryQuery = $categoryQuery;
     }
 
@@ -60,11 +63,14 @@ final class PublicationStore implements PublicationStoreInterface
      */
     public function store(string $application, array $data): ?Publication
     {
-        $application = $this->applicationQuery->getApplication($application);
+        $application = $this->applicationQueryFactory
+            ->getApplicationQuery()
+            ->getApplication($application);
+
         $category = $this->categoryQuery->getCategoryByName($data['category']);
 
-        if (!$application || !$category) {
-            return null;
+        if (!$category) {
+            throw new EntityNotFoundException('Category');
         }
 
         $data['application'] = $application;

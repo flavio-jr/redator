@@ -8,6 +8,7 @@ use App\Repositories\ApplicationRepository\Destruction\ApplicationDestruction;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
 use App\Dumps\UserDump;
+use App\Exceptions\EntityNotFoundException;
 
 class ApplicationDestructionTest extends TestCase
 {
@@ -39,9 +40,10 @@ class ApplicationDestructionTest extends TestCase
 
     public function testShouldDeleteApplicationThatBelongsToCurrentUser()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $deleted = $this->applicationDestruction->destroy($application->getSlug());
 
@@ -50,12 +52,13 @@ class ApplicationDestructionTest extends TestCase
 
     public function testShouldNotDeleteApplicationThatDoesntBelongsToCurrentUser()
     {
+        $owner = $this->userDump->create(['type' => 'P']);
         $application = $this->applicationDump->create();
 
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($owner);
 
-        $notDeleted = $this->applicationDestruction->destroy($application->getSlug());
+        $this->expectException(EntityNotFoundException::class);
 
-        $this->assertFalse($notDeleted);
+        $this->applicationDestruction->destroy($application->getSlug()); 
     }
 }

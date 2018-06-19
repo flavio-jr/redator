@@ -12,5 +12,6 @@ app:
     - App\Containers\EntityContainer
     - App\Containers\QuerysContainer
     - App\Containers\CommandsContainer
+    - App\Containers\FactoriesContainer
   routes: 'src/App/routes.php'
   orm: 'doctrine'

@@ -33,23 +33,24 @@ class AppUpdateControllerTest extends TestCase
 
     public function testUpdateAppMustReturnHttpOk()
     {
-        $application = $this->applicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        Player::setPlayer($owner);
 
         $response = $this->put(Application::PREFIX . "/users/apps/{$application->getSlug()}", $application->toArray());
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testUpdateAppMustReturnHttpForbidden()
+    public function testUpdateAppMustReturnHttpNotFound()
     {
         $application = $this->applicationDump->create();
 
-        Player::setPlayer($this->userDump->create());
+        Player::setPlayer($this->userDump->create(['type' => 'P']));
 
         $response = $this->put(Application::PREFIX . "/users/apps/{$application->getSlug()}", $application->toArray());
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

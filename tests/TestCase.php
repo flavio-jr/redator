@@ -8,6 +8,7 @@ use Slim\Http\Request;
 use App\Application;
 use Symfony\Component\Yaml\Yaml;
 use Dotenv\Dotenv;
+use App\Services\Player;
 
 class TestCase extends PHPUnit
 {
@@ -45,6 +46,8 @@ class TestCase extends PHPUnit
     public function tearDown()
     {
         parent::tearDown();
+
+        Player::gameOver();
 
         if (method_exists($this, 'dropDatabase')) {
             $this->dropDatabase();
@@ -94,6 +97,11 @@ class TestCase extends PHPUnit
     protected function delete($route)
     {
         return $this->makeRequest($route, 'DELETE');
+    }
+
+    protected function patch($route, array $data)
+    {
+        return $this->makeRequest($route, 'PATCH', $data);
     }
 
     protected function assertDatabaseHave($entity)

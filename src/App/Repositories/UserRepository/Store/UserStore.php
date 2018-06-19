@@ -6,6 +6,7 @@ use App\Entities\User;
 use Doctrine\ORM\EntityManager;
 use App\Services\Persister\PersisterInterface as Persister;
 use Doctrine\ORM\EntityRepository;
+use App\Services\Player;
 
 final class UserStore implements UserStoreInterface
 {
@@ -41,6 +42,10 @@ final class UserStore implements UserStoreInterface
     public function store(array $data): User
     {
         $this->user->fromArray($data);
+        
+        if (!Player::user()) {
+            $this->user->disable();
+        }
 
         $this->persister->persist($this->user);
 

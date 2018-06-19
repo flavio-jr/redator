@@ -4,6 +4,7 @@ namespace App\Repositories\PublicationRepository\Destruction;
 
 use App\Repositories\PublicationRepository\Finder\PublicationFinderInterface as PublicationFinder;
 use App\Services\Persister\PersisterInterface as Persister;
+use App\Services\Player;
 
 final class PublicationDestruction implements PublicationDestructionInterface
 {
@@ -34,6 +35,10 @@ final class PublicationDestruction implements PublicationDestructionInterface
             ->find($publicationSlug, $applicationSlug);
 
         if (!$publication) {
+            return false;
+        }
+
+        if (Player::user()->isWritter()) {
             return false;
         }
 

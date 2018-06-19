@@ -8,6 +8,7 @@ use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\EntityInterface;
 use App\Database\Types\UserType;
 use App\Exceptions\WrongEnumTypeException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -42,6 +43,23 @@ class User implements EntityInterface
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+    /**
+     * The applications that the user can interact
+     * @ORM\ManyToMany(targetEntity="App\Entities\Application", mappedBy="team")
+     * @var ArrayCollection
+     */
+    private $applications;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = true;
+
+    public function __construct()
+    {
+        $this->applications = new ArrayCollection();
+    }
 
     public function getId(): string
     {
@@ -91,6 +109,51 @@ class User implements EntityInterface
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function isPartner(): bool
+    {
+        return $this->type === 'P';
+    }
+
+    public function isMaster(): bool
+    {
+        return $this->type === 'M';
+    }
+
+    public function isWritter(): bool
+    {
+        return $this->type === 'W';
+    }
+
+    public function getApplications()
+    {
+        return $this->applications;
+    }
+
+    public function removeApplication(Application $application)
+    {
+        $this->applications->removeElement($application);
+    }
+
+    public function addAplication(Application $app)
+    {
+        $this->applications[] = $app;
+    }
+
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
+    public function disable()
+    {
+        $this->enabled = false;
+    }
+
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
     public function toArray(): array

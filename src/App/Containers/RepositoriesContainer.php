@@ -32,6 +32,13 @@ use App\Repositories\UserRepository\Finder\UserFinder;
 use App\Repositories\UserMasterRepository\Query\UserMasterQuery;
 use App\Repositories\UserMasterRepository\Store\UserMasterStore;
 use App\Repositories\UserMasterRepository\Update\UserMasterUpdate;
+use App\Repositories\ApplicationRepository\Query\ApplicationMasterQuery;
+use App\Factorys\Application\Query\ApplicationQueryFactory;
+use App\Repositories\ApplicationTeamRepository\Store\ApplicationTeamStore;
+use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
+use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
+use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
+use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 
 class RepositoriesContainer
 {
@@ -106,18 +113,36 @@ class RepositoriesContainer
             return new ApplicationQuery($em);
         };
 
+        $container[ApplicationMasterQuery::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationMasterQuery($em);
+        };
+
+        $container[ApplicationTeamQuery::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationTeamQuery($em);
+        };
+
         $container[ApplicationUpdate::class] = function (Container $c) {
             $persister = $c->get('PersisterService');
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
 
-            return new ApplicationUpdate($persister, $applicationQuery);
+            return new ApplicationUpdate($persister, $applicationQueryFactory);
         };
 
         $container[ApplicationDestruction::class] = function (Container $c) {
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $persister = $c->get('PersisterService');
 
-            return new ApplicationDestruction($applicationQuery, $persister);
+            return new ApplicationDestruction($applicationQueryFactory, $persister);
+        };
+
+        $container[ApplicationSlugFinder::class] = function (Container $c) {
+            $em = $c->get('doctrine')->getEntityManager();
+
+            return new ApplicationSlugFinder($em);
         };
 
         $container[CategoryStore::class] = function (Container $c) {
@@ -137,23 +162,23 @@ class RepositoriesContainer
             $publication = $c->get('Publication');
             $persister = $c->get('PersisterService');
             $htmlSanitizer = $c->get('HtmlSanitizer');
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $categoryQuery = $c->get(CategoryQuery::class);
 
             return new PublicationStore(
                 $publication,
                 $persister,
                 $htmlSanitizer,
-                $applicationQuery,
+                $applicationQueryFactory,
                 $categoryQuery
             );
         };
 
         $container[PublicationSlugFinder::class] = function (Container $c) {
             $em = $c->get('doctrine')->getEntityManager();
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
 
-            return new PublicationSlugFinder($em, $applicationQuery);
+            return new PublicationSlugFinder($em, $applicationQueryFactory);
         };
 
         $container[PublicationUpdate::class] = function (Container $c) {
@@ -181,10 +206,34 @@ class RepositoriesContainer
         };
 
         $container[PublicationCollection::class] = function (Container $c) {
-            $applicationQuery = $c->get(ApplicationQuery::class);
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
             $publicationQuery = $c->get(PublicationQuery::class);
 
-            return new PublicationCollection($applicationQuery, $publicationQuery);
+            return new PublicationCollection($applicationQueryFactory, $publicationQuery);
+        };
+
+        $container[ApplicationTeamStore::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $applicationQuery = $c->get(ApplicationQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationTeamStore($userQuery, $applicationQuery, $persister);
+        };
+
+        $container[ApplicationMemberDestruction::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $applicationFinder = $c->get(ApplicationSlugFinder::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationMemberDestruction($userQuery, $applicationFinder, $persister);
+        };
+
+        $container[ApplicationOwnershipTransfer::class] = function (Container $c) {
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
+            $userQuery = $c->get(UserQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new ApplicationOwnershipTransfer($applicationQueryFactory, $userQuery, $persister);
         };
     }
 }

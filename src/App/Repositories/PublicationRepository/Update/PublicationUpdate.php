@@ -6,6 +6,7 @@ use App\Repositories\PublicationRepository\Finder\PublicationFinderInterface as 
 use App\Repositories\CategoryRepository\Query\CategoryQueryInterface as CategoryQuery;
 use App\Services\Persister\PersisterInterface as Persister;
 use App\Services\HtmlSanitizer\HtmlSanitizerInterface as HtmlSanitizer;
+use App\Services\Player;
 
 final class PublicationUpdate implements PublicationUpdateInterface
 {
@@ -50,6 +51,10 @@ final class PublicationUpdate implements PublicationUpdateInterface
      */
     public function update(string $publicationSlug, string $applicationSlug, array $data): bool
     {
+        if (Player::user()->isWritter()) {
+            return false;
+        }
+        
         $publication = $this->publicationFinder
             ->find($publicationSlug, $applicationSlug);
 

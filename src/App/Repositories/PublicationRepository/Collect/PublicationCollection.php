@@ -2,17 +2,17 @@
 
 namespace App\Repositories\PublicationRepository\Collect;
 
-use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
 use App\Querys\Publications\PublicationQueryInterface as PublicationQuery;
 use App\Entities\Publication;
+use App\Factorys\Application\Query\ApplicationQueryFactoryInterface;
 
 final class PublicationCollection implements PublicationCollectionInterface
 {
     /**
      * The application query repository
-     * @var ApplicationQuery
+     * @var ApplicationQueryFactoryInterface
      */
-    private $applicationQuery;
+    private $applicationQueryFactory;
 
     /**
      * The publication query class
@@ -21,16 +21,17 @@ final class PublicationCollection implements PublicationCollectionInterface
     private $publicationQuery;
 
     public function __construct(
-        ApplicationQuery $applicationQuery,
+        ApplicationQueryFactoryInterface $applicationQueryFactory,
         PublicationQuery $publicationQuery
     ) {
-        $this->applicationQuery = $applicationQuery;
+        $this->applicationQueryFactory = $applicationQueryFactory;
         $this->publicationQuery = $publicationQuery;
     }
 
     public function get(string $applicationIdentifier, array $filters = []): array
     {
-        $application = $this->applicationQuery
+        $application = $this->applicationQueryFactory
+            ->getApplicationQuery()
             ->getApplication($applicationIdentifier);
 
         if (!$application) {

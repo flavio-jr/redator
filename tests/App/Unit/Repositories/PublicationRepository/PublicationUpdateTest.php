@@ -7,6 +7,8 @@ use App\Dumps\PublicationDump;
 use App\Services\Player;
 use Tests\DatabaseRefreshTable;
 use App\Repositories\PublicationRepository\Update\PublicationUpdate;
+use App\Dumps\UserDump;
+use App\Dumps\ApplicationDump;
 
 class PublicationUpdateTest extends TestCase
 {
@@ -22,21 +24,36 @@ class PublicationUpdateTest extends TestCase
      */
     private $publicationDump;
 
+    /**
+     * @var UserDump
+     */
+    private $userDump;
+
+    /**
+     * @var ApplicationDump
+     */
+    private $applicationDump;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->publicationUpdate = $this->container->get(PublicationUpdate::class);
         $this->publicationDump = $this->container->get(PublicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
+        $this->applicationDump = $this->container->get(ApplicationDump::class);
     }
 
     public function testUpdatePublicationMustBeSuccessful()
     {
-        $publication = $this->publicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
+
+        $publication = $this->publicationDump->create(['application' => $application]);
 
         $data = $this->publicationDump->make();
 
-        Player::setPlayer($publication->getApplication()->getAppOwner());
+        Player::setPlayer($owner);
 
         $updateData = $data->toArray();
         $updateData['category'] = $data->getCategory()->getSlug();
@@ -51,45 +68,42 @@ class PublicationUpdateTest extends TestCase
         $this->assertTrue($publicationUpdated);
     }
 
-    public function testUpdatePublicationWithUnexistentApplicationMustReturnFalse()
+    public function testWritterUserMustNotBeCapableOfUpdatePublication()
     {
-        $publication = $this->publicationDump->create();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $writter = $this->userDump->create();
 
-        $data = $this->publicationDump->make();
+        Player::setPlayer($writter);
 
-        Player::setPlayer($publication->getApplication()->getAppOwner());
+        $application = $this->applicationDump->create(['owner' => $owner, 'team' => [$writter]]);
+        $publication = $this->publicationDump->create(['application' => $application]);
 
-        $updateData = $data->toArray();
-        $updateData['category'] = $data->getCategory()->getSlug();
+        $publicationData = $this->publicationDump->make();
 
-        $publicationUpdated = $this->publicationUpdate
-            ->update(
-                $publication->getSlug(),
-                strrev($publication->getApplication()->getSlug()),
-                $updateData
-            );
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
+
+        $publicationUpdated = $this->publicationUpdate->update($publication->getSlug(), $application->getSlug(), $data);
 
         $this->assertFalse($publicationUpdated);
     }
 
-    public function testUpdatePublicationWithUnexistentCategoryMustReturnFalse()
+    public function testMasterUserMustBeCapableOfUpdatePublicationInAnyApp()
     {
-        $publication = $this->publicationDump->create();
+        $master = $this->userDump->create(['type' => 'M']);
+        $application = $this->applicationDump->create();
 
-        $data = $this->publicationDump->make();
+        $publication = $this->publicationDump->create(['application' => $application]);
 
-        Player::setPlayer($publication->getApplication()->getAppOwner());
+        Player::setPlayer($master);
 
-        $updateData = $data->toArray();
-        $updateData['category'] = strrev($data->getCategory()->getSlug());
+        $publicationData = $this->publicationDump->make();
 
-        $publicationUpdated = $this->publicationUpdate
-            ->update(
-                $publication->getSlug(),
-                strrev($publication->getApplication()->getSlug()),
-                $updateData
-            );
+        $data = $publicationData->toArray();
+        $data['category'] = $publicationData->getCategory()->getSlug();
 
-        $this->assertFalse($publicationUpdated);
+        $publicationUpdated = $this->publicationUpdate->update($publication->getSlug(), $application->getSlug(), $data);
+
+        $this->assertTrue($publicationUpdated);
     }
 }

@@ -25,7 +25,10 @@ final class UserQuery implements UserQueryInterface
      */
     public function findByUsername(string $username): User
     {
-        $user = $this->repository->findOneBy(['username' => $username]);
+        $user = $this->repository->findOneBy([
+            'username' => $username,
+            'enabled'  => true
+        ]);
 
         if (!$user) {
             throw new EntityNotFoundException('User');

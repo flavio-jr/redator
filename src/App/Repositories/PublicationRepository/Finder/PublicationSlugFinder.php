@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use App\Entities\Publication;
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
+use App\Factorys\Application\Query\ApplicationQueryFactoryInterface;
 
 final class PublicationSlugFinder implements PublicationFinderInterface
 {
@@ -17,21 +18,22 @@ final class PublicationSlugFinder implements PublicationFinderInterface
 
     /**
      * The application query repository
-     * @var ApplicationQuery
+     * @var ApplicationQueryFactoryInterface
      */
-    private $applicationQuery;
+    private $applicationQueryFactory;
 
     public function __construct(
         EntityManager $em,
-        ApplicationQuery $applicationQuery
+        ApplicationQueryFactoryInterface $applicationQueryFactory
     ) {
         $this->repository = $em->getRepository(Publication::class);
-        $this->applicationQuery = $applicationQuery;
+        $this->applicationQueryFactory = $applicationQueryFactory;
     }
 
     public function find(string $identifier, string $applicationSlug): ?Publication
     {
-        $application = $this->applicationQuery
+        $application = $this->applicationQueryFactory
+            ->getApplicationQuery()
             ->getApplication($applicationSlug);
 
         if (!$application) {

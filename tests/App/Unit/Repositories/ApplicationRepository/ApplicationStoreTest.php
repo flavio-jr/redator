@@ -7,6 +7,7 @@ use App\Dumps\ApplicationDump;
 use App\Repositories\ApplicationRepository\Store\ApplicationStore;
 use Tests\DatabaseRefreshTable;
 use App\Services\Player;
+use App\Dumps\UserDump;
 
 class ApplicationStoreTest extends TestCase
 {
@@ -18,6 +19,11 @@ class ApplicationStoreTest extends TestCase
     private $applicationDump;
 
     /**
+     * @var UserDump
+     */
+    private $userDump;
+
+    /**
      * @var ApplicationStore
      */
     private $applicationStore;
@@ -27,12 +33,14 @@ class ApplicationStoreTest extends TestCase
         parent::setUp();
 
         $this->applicationDump = $this->container->get(ApplicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
         $this->applicationStore = $this->container->get(ApplicationStore::class);
     }
 
     public function testStoreApplication()
     {
-        $appData = $this->applicationDump->make();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $appData = $this->applicationDump->make(['owner' => $owner]);
 
         Player::setPlayer($appData->getAppOwner());
 

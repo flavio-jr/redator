@@ -7,6 +7,8 @@ use App\Dumps\PublicationDump;
 use App\Services\Player;
 use App\Application;
 use Tests\DatabaseRefreshTable;
+use App\Dumps\ApplicationDump;
+use App\Dumps\UserDump;
 
 class PublicationUpdateControllerTest extends TestCase
 {
@@ -17,19 +19,33 @@ class PublicationUpdateControllerTest extends TestCase
      */
     private $publicationDump;
 
+    /**
+     * @var ApplicationDump
+     */
+    private $applicationDump;
+
+    /**
+     * @var UserDump
+     */
+    private $userDump;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->publicationDump = $this->container->get(PublicationDump::class);
+        $this->applicationDump = $this->container->get(ApplicationDump::class);
+        $this->userDump = $this->container->get(UserDump::class);
     }
 
     public function testUpdatePublicationMustReturnHttpCreated()
     {
-        $publication = $this->publicationDump->create();
-        $application = $publication->getApplication();
+        $owner = $this->userDump->create(['type' => 'P']);
+        $application = $this->applicationDump->create(['owner' => $owner]);
 
-        Player::setPlayer($application->getAppOwner());
+        $publication = $this->publicationDump->create(['application' => $application]);
+
+        Player::setPlayer($owner);
 
         $data = $this->publicationDump
             ->make()
