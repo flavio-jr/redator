@@ -14,7 +14,7 @@ interface UserQueryInterface
      * @return User
      * @throws EntityNotFoundException
      */
-    public function findByUsername(string $username): User;
+    public function findByUsername(string $username, bool $searchOnlyActive = true): User;
 
     /**
      * Check for username availability

@@ -39,6 +39,7 @@ use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
+use App\Repositories\UserRepository\Destruction\UserDestruction;
 
 class RepositoriesContainer
 {
@@ -77,6 +78,13 @@ class RepositoriesContainer
             $em = $c->get('orm')->getEntityManager();
 
             return new UserFinder($em);
+        };
+
+        $container[UserDestruction::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new UserDestruction($userQuery, $persister);
         };
 
         $container[UserMasterQuery::class] = function (Container $c) {
