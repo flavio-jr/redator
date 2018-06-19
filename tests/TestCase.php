@@ -18,12 +18,6 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
-        if (getenv('APP_ENV') === 'DEV') {
-            (new Dotenv(realpath(__DIR__ . '/../')))->load();
-        }
-        
-        putenv('APP_ENV=TEST');
-
         $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
@@ -74,7 +68,7 @@ class TestCase extends PHPUnit
 
         $request = Request::createFromEnvironment($env)->withParsedBody($data);
 
-        $this->application->getContainer()['request'] = $request;
+        $this->container['request'] = $request;
 
         return $this->application->run(true);
     }
@@ -106,8 +100,7 @@ class TestCase extends PHPUnit
 
     protected function assertDatabaseHave($entity)
     {
-        $register = $this->application
-            ->getContainer()
+        $register = $this->container
             ->get('doctrine')
             ->getEntityManager()
             ->find(get_class($entity), $entity->getId());
@@ -117,8 +110,7 @@ class TestCase extends PHPUnit
 
     protected function assertDatabaseDoenstHave(string $id, $entity)
     {
-        $register = $this->application
-            ->getContainer()
+        $register = $this->container
             ->get('doctrine')
             ->getEntityManager()
             ->find(get_class($entity), $id);
