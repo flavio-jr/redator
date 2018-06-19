@@ -19,10 +19,10 @@ script:
 
 deploy:
   - provider: script
-    script: bash deploy.sh production
+    script: bash docker/deploy.sh production
     on:
       branch: master
   - provider: script
-    script: bash deploy.sh development
+    script: bash docker/deploy.sh development
     on:
       branch: develop

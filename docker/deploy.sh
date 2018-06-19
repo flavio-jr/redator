@@ -1,4 +1,5 @@
 APP_NAME=''
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 case "$1" in
     production)
@@ -10,5 +11,5 @@ case "$1" in
 esac
 
 echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin registry.heroku.com
-docker build -t registry.heroku.com/${APP_NAME}/web .
+docker build -t registry.heroku.com/${APP_NAME}/web $DIR/../.
 docker push registry.heroku.com/${APP_NAME}/web
