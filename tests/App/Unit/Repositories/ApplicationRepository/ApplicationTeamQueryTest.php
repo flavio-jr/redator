@@ -9,7 +9,7 @@ use App\Services\Player;
 use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 use Tests\DatabaseRefreshTable;
 use App\Entities\Application;
-use Doctrine\ORM\NoResultException;
+use App\Exceptions\EntityNotFoundException;
 
 class ApplicationTeamQueryTest extends TestCase
 {
@@ -78,7 +78,7 @@ class ApplicationTeamQueryTest extends TestCase
 
         Player::setPlayer($writter);
 
-        $this->expectException(NoResultException::class);
+        $this->expectException(EntityNotFoundException::class);
 
         $applicationFinded = $this->applicationTeamQuery
             ->getApplication($application->getSlug());

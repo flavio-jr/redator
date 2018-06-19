@@ -9,7 +9,6 @@ use App\Repositories\PublicationRepository\Store\PublicationStore;
 use App\Services\Player;
 use App\Dumps\UserDump;
 use App\Dumps\ApplicationDump;
-use Doctrine\ORM\NoResultException;
 use App\Exceptions\EntityNotFoundException;
 use App\Exceptions\UserNotAllowedToWritePublication;
 
@@ -147,7 +146,7 @@ class PublicationStoreTest extends TestCase
         $data = $publicationData->toArray();
         $data['category'] = $publicationData->getCategory()->getSlug();
 
-        $this->expectException(NoResultException::class);
+        $this->expectException(EntityNotFoundException::class);
 
         $publication = $this->publicationStore->store($application->getSlug(), $data);
     }

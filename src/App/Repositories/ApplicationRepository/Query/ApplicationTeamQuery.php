@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entities\Application;
 use App\Services\Player;
+use App\Exceptions\EntityNotFoundException;
 
 final class ApplicationTeamQuery implements ApplicationQueryInterface
 {
@@ -30,7 +31,11 @@ final class ApplicationTeamQuery implements ApplicationQueryInterface
             ->where('u.id = :user_id')
             ->setParameter('user_id', $writter->getId())
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
+
+        if (!$application) {
+            throw new EntityNotFoundException('Application');
+        }
 
         return $application;
     }
