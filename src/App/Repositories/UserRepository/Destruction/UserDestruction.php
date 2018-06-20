@@ -31,12 +31,18 @@ final class UserDestruction implements UserDestructionInterface
 
     public function destroy(string $username)
     {
-        if (!Player::user()->isMaster()) {
+        $loggedUser = Player::user();
+
+        if (!$loggedUser->isMaster()) {
             throw new UserNotAllowedToRemoveUsers();    
         }
 
         $user = $this->userQuery
             ->findByUsername($username, false);
+
+        if ($user->isMaster()) {
+            throw new UserNotAllowedToRemoveUsers();
+        }
 
         $this->persister->remove($user);
     }

@@ -71,4 +71,16 @@ class UserDestructionTest extends TestCase
         $this->userDestruction
             ->destroy($user->getUsername());
     }
+
+    public function testDestroyMasterUserMustNotBeSuccessfull()
+    {
+        $master = $this->userDump->create(['type' => 'M']);
+
+        Player::setPlayer($master);
+
+        $this->expectException(UserNotAllowedToRemoveUsers::class);
+
+        $this->userDestruction
+            ->destroy($master->getUsername());
+    }
 }
