@@ -41,6 +41,7 @@ $app->group('/app', function () {
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
+            $this->delete('/{username}', 'App\Controllers\UsersController\UserDestructionController:destroy');
         });
 
         $this->group('/categories', function () {

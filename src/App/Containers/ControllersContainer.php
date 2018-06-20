@@ -39,6 +39,8 @@ use App\Controllers\ApplicationMembershipController\MembershipDestruction;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 use App\Controllers\ApplicationsController\AppOwnershipTransferController;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
+use App\Controllers\UsersController\UserDestructionController;
+use App\Repositories\UserRepository\Destruction\UserDestruction;
 
 class ControllersContainer
 {
@@ -62,6 +64,12 @@ class ControllersContainer
             $userQueryRepository = $c->get(UserQuery::class);
 
             return new UserQueryController($userQueryRepository);
+        };
+
+        $container[UserDestructionController::class] = function (Container $c) {
+            $userDestruction = $c->get(UserDestruction::class);
+
+            return new UserDestructionController($userDestruction);
         };
 
         $container[UserAppsController::class] = function (Container $c) {
