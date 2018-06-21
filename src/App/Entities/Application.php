@@ -176,8 +176,7 @@ class Application implements EntityInterface
             'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'url'         => $this->getUrl(),
-            'type'        => $this->getType(),
-            'owner'       => $this->getAppOwner()
+            'type'        => $this->getType()
         ];
     }
 }

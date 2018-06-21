@@ -41,6 +41,8 @@ use App\Controllers\ApplicationsController\AppOwnershipTransferController;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 use App\Controllers\UsersController\UserDestructionController;
 use App\Repositories\UserRepository\Destruction\UserDestruction;
+use App\Controllers\ApplicationsController\AppGetController;
+use App\Factorys\Application\Query\ApplicationQueryFactory;
 
 class ControllersContainer
 {
@@ -76,6 +78,12 @@ class ControllersContainer
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new UserAppsController($applicationQuery);
+        };
+
+        $container[AppGetController::class] = function (Container $c) {
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
+
+            return new AppGetController($applicationQueryFactory);
         };
 
         $container[AppStoreController::class] = function (Container $c) {
