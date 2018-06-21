@@ -43,6 +43,8 @@ use App\Controllers\UsersController\UserDestructionController;
 use App\Repositories\UserRepository\Destruction\UserDestruction;
 use App\Controllers\ApplicationsController\AppGetController;
 use App\Factorys\Application\Query\ApplicationQueryFactory;
+use App\Controllers\PublicationsController\PublicationGetController;
+use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
 
 class ControllersContainer
 {
@@ -108,6 +110,12 @@ class ControllersContainer
             $categoryStore = $c->get(CategoryStore::class);
 
             return new CategoryStoreController($categoryStore);
+        };
+
+        $container[PublicationGetController::class] = function (Container $c) {
+            $publicationFinder = $c->get(PublicationSlugFinder::class);
+
+            return new PublicationGetController($publicationFinder);
         };
 
         $container[PublicationStoreController::class] = function (Container $c) {

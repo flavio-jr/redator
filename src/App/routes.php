@@ -32,6 +32,7 @@ $app->group('/app', function () {
                 $this->group('/{app}/publications', function () {
                     $this->get('', 'App\Controllers\PublicationsController\ApplicationPublicationsController:get')->add(new PublicationsInfo());
                     $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
+                    $this->get('/{publication}', 'App\Controllers\PublicationsController\PublicationGetController:get');
                     $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                     $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
                 });
