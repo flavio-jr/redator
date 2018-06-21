@@ -21,6 +21,8 @@ class DBBuilder
     {
         putenv('APP_ENV=TEST');
 
+        ini_set('memory_limit', '150M');
+
         $config = require realpath(__DIR__ . '/../config/config.php');
 
         $config['db_path'] = __DIR__ . '/test.sqlite';
