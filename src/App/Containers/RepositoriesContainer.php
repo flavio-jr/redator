@@ -41,6 +41,7 @@ use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDest
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 use App\Repositories\UserRepository\Destruction\UserDestruction;
 use App\Repositories\CategoryRepository\Update\CategoryUpdate;
+use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
 
 class RepositoriesContainer
 {
@@ -172,6 +173,13 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new CategoryUpdate($categoryQuery, $persister);
+        };
+
+        $container[CategoryDestruction::class] = function (Container $c) {
+            $categoryQuery = $c->get(CategoryQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new CategoryDestruction($categoryQuery, $persister);
         };
 
         $container[PublicationStore::class] = function (Container $c) {
