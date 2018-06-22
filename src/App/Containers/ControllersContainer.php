@@ -47,6 +47,8 @@ use App\Controllers\PublicationsController\PublicationGetController;
 use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
 use App\Controllers\CategoriesController\CategoryUpdateController;
 use App\Repositories\CategoryRepository\Update\CategoryUpdate;
+use App\Controllers\CategoriesController\CategoryDestructionController;
+use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
 
 class ControllersContainer
 {
@@ -118,6 +120,12 @@ class ControllersContainer
             $categoryUpdate = $c->get(CategoryUpdate::class);
 
             return new CategoryUpdateController($categoryUpdate);
+        };
+
+        $container[CategoryDestructionController::class] = function (Container $c) {
+            $categoryDestruction = $c->get(CategoryDestruction::class);
+
+            return new CategoryDestructionController($categoryDestruction);
         };
 
         $container[PublicationGetController::class] = function (Container $c) {
