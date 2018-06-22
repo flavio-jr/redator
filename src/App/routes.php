@@ -48,6 +48,7 @@ $app->group('/app', function () {
 
         $this->group('/categories', function () {
             $this->post('', 'App\Controllers\CategoriesController\CategoryStoreController:store')->add(new CategoryRegistration());
+            $this->put('/{category}', 'App\Controllers\CategoriesController\CategoryUpdateController:update')->add(new CategoryRegistration());
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));

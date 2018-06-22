@@ -45,6 +45,8 @@ use App\Controllers\ApplicationsController\AppGetController;
 use App\Factorys\Application\Query\ApplicationQueryFactory;
 use App\Controllers\PublicationsController\PublicationGetController;
 use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
+use App\Controllers\CategoriesController\CategoryUpdateController;
+use App\Repositories\CategoryRepository\Update\CategoryUpdate;
 
 class ControllersContainer
 {
@@ -110,6 +112,12 @@ class ControllersContainer
             $categoryStore = $c->get(CategoryStore::class);
 
             return new CategoryStoreController($categoryStore);
+        };
+
+        $container[CategoryUpdateController::class] = function (Container $c) {
+            $categoryUpdate = $c->get(CategoryUpdate::class);
+
+            return new CategoryUpdateController($categoryUpdate);
         };
 
         $container[PublicationGetController::class] = function (Container $c) {
