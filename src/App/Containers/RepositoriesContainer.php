@@ -40,6 +40,7 @@ use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
 use App\Repositories\UserRepository\Destruction\UserDestruction;
+use App\Repositories\CategoryRepository\Update\CategoryUpdate;
 
 class RepositoriesContainer
 {
@@ -164,6 +165,13 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new CategoryQuery($em);
+        };
+
+        $container[CategoryUpdate::class] = function (Container $c) {
+            $categoryQuery = $c->get(CategoryQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new CategoryUpdate($categoryQuery, $persister);
         };
 
         $container[PublicationStore::class] = function (Container $c) {
