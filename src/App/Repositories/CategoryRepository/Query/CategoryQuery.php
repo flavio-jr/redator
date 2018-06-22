@@ -5,6 +5,7 @@ namespace App\Repositories\CategoryRepository\Query;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use App\Entities\Category;
+use App\Exceptions\EntityNotFoundException;
 
 final class CategoryQuery implements CategoryQueryInterface
 {
@@ -21,6 +22,12 @@ final class CategoryQuery implements CategoryQueryInterface
 
     public function getCategoryByName(string $category): ?Category
     {
-        return $this->repository->findOneBy(['slug' => $category]);
+        $category = $this->repository->findOneBy(['slug' => $category]);
+
+        if (!$category) {
+            throw new EntityNotFoundException('Category');
+        }
+
+        return $category;
     }
 }

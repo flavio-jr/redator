@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Repositories\CategoryRepository\Query\CategoryQuery;
 use App\Dumps\CategoryDump;
 use Tests\DatabaseRefreshTable;
+use App\Exceptions\EntityNotFoundException;
 
 class CategoryQueryTest extends TestCase
 {
@@ -36,5 +37,12 @@ class CategoryQueryTest extends TestCase
         $categorySearch = $this->categoryQuery->getCategoryByName($category->getSlug());
 
         $this->assertNotNull($categorySearch);
+    }
+
+    public function testGetNonExistentCategoryMutThownException()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->categoryQuery->getCategoryByName('cookies');
     }
 }
