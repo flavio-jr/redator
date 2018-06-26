@@ -49,6 +49,8 @@ use App\Controllers\CategoriesController\CategoryUpdateController;
 use App\Repositories\CategoryRepository\Update\CategoryUpdate;
 use App\Controllers\CategoriesController\CategoryDestructionController;
 use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
+use App\Controllers\CategoriesController\CategoriesGetController;
+use App\Repositories\CategoryRepository\Collect\CategoryCollection;
 
 class ControllersContainer
 {
@@ -126,6 +128,12 @@ class ControllersContainer
             $categoryDestruction = $c->get(CategoryDestruction::class);
 
             return new CategoryDestructionController($categoryDestruction);
+        };
+
+        $container[CategoriesGetController::class] = function (Container $c) {
+            $categoryCollection = $c->get(CategoryCollection::class);
+
+            return new CategoriesGetController($categoryCollection);
         };
 
         $container[PublicationGetController::class] = function (Container $c) {

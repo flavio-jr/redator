@@ -9,6 +9,7 @@ use App\RequestValidators\CategoryRegistration;
 use App\Middlewares\Publications;
 use App\RequestValidators\PublicationsInfo;
 use App\RequestValidators\MembershipStore;
+use App\RequestValidators\CategoriesGetFilter;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -47,6 +48,7 @@ $app->group('/app', function () {
         });
 
         $this->group('/categories', function () {
+            $this->get('', 'App\Controllers\CategoriesController\CategoriesGetController:get')->add(new CategoriesGetFilter());
             $this->post('', 'App\Controllers\CategoriesController\CategoryStoreController:store')->add(new CategoryRegistration());
             $this->put('/{category}', 'App\Controllers\CategoriesController\CategoryUpdateController:update')->add(new CategoryRegistration());
             $this->delete('/{category}', 'App\Controllers\CategoriesController\CategoryDestructionController:destroy');
