@@ -31,6 +31,9 @@
             "App\\": "src/App/",
             "Api\\": "src/Api/",
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "helpers.php"
+        ]
     }
 }
