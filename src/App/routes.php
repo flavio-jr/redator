@@ -9,6 +9,7 @@ use App\RequestValidators\CategoryRegistration;
 use App\Middlewares\Publications;
 use App\RequestValidators\PublicationsInfo;
 use App\RequestValidators\MembershipStore;
+use App\RequestValidators\CategoriesGetFilter;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -24,6 +25,7 @@ $app->group('/app', function () {
             $this->group('/apps', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');
                 $this->post('', 'App\Controllers\ApplicationsController\AppStoreController:store')->add(new ApplicationRegistration());
+                $this->get('/{app}', 'App\Controllers\ApplicationsController\AppGetController:get');
                 $this->put('/{app}', 'App\Controllers\ApplicationsController\AppUpdateController:update')->add(new ApplicationRegistration());
                 $this->delete('/{app}', 'App\Controllers\ApplicationsController\AppDeleteController:delete');
                 $this->patch('/{app}', 'App\Controllers\ApplicationsController\AppOwnershipTransferController:transferOwnership');
@@ -31,6 +33,7 @@ $app->group('/app', function () {
                 $this->group('/{app}/publications', function () {
                     $this->get('', 'App\Controllers\PublicationsController\ApplicationPublicationsController:get')->add(new PublicationsInfo());
                     $this->post('', 'App\Controllers\PublicationsController\PublicationStoreController:store')->add(new PublicationRegistration());
+                    $this->get('/{publication}', 'App\Controllers\PublicationsController\PublicationGetController:get');
                     $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                     $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
                 });
@@ -41,10 +44,14 @@ $app->group('/app', function () {
                 });
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
+            $this->delete('/{username}', 'App\Controllers\UsersController\UserDestructionController:destroy');
         });
 
         $this->group('/categories', function () {
+            $this->get('', 'App\Controllers\CategoriesController\CategoriesGetController:get')->add(new CategoriesGetFilter());
             $this->post('', 'App\Controllers\CategoriesController\CategoryStoreController:store')->add(new CategoryRegistration());
+            $this->put('/{category}', 'App\Controllers\CategoriesController\CategoryUpdateController:update')->add(new CategoryRegistration());
+            $this->delete('/{category}', 'App\Controllers\CategoriesController\CategoryDestructionController:destroy');
         });
         
     })->add(new LoggedUser($this->getContainer()->get('UserSession'), $this->getContainer()->get('Player')));

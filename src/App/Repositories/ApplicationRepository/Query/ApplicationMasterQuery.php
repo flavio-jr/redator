@@ -5,6 +5,7 @@ namespace App\Repositories\ApplicationRepository\Query;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entities\Application;
+use App\Exceptions\EntityNotFoundException;
 
 final class ApplicationMasterQuery implements ApplicationQueryInterface
 {
@@ -27,10 +28,16 @@ final class ApplicationMasterQuery implements ApplicationQueryInterface
      */
     public function getApplication(string $appName): Application
     {
-        return $this->repository
+        $application = $this->repository
             ->findOneBy([
                 'slug' => $appName
             ]);
+
+        if (!$application) {
+            throw new EntityNotFoundException('Application');
+        }
+
+        return $application;
     }
 
     /**

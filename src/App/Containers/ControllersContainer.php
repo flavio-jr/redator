@@ -39,6 +39,18 @@ use App\Controllers\ApplicationMembershipController\MembershipDestruction;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 use App\Controllers\ApplicationsController\AppOwnershipTransferController;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
+use App\Controllers\UsersController\UserDestructionController;
+use App\Repositories\UserRepository\Destruction\UserDestruction;
+use App\Controllers\ApplicationsController\AppGetController;
+use App\Factorys\Application\Query\ApplicationQueryFactory;
+use App\Controllers\PublicationsController\PublicationGetController;
+use App\Repositories\PublicationRepository\Finder\PublicationSlugFinder;
+use App\Controllers\CategoriesController\CategoryUpdateController;
+use App\Repositories\CategoryRepository\Update\CategoryUpdate;
+use App\Controllers\CategoriesController\CategoryDestructionController;
+use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
+use App\Controllers\CategoriesController\CategoriesGetController;
+use App\Repositories\CategoryRepository\Collect\CategoryCollection;
 
 class ControllersContainer
 {
@@ -64,10 +76,22 @@ class ControllersContainer
             return new UserQueryController($userQueryRepository);
         };
 
+        $container[UserDestructionController::class] = function (Container $c) {
+            $userDestruction = $c->get(UserDestruction::class);
+
+            return new UserDestructionController($userDestruction);
+        };
+
         $container[UserAppsController::class] = function (Container $c) {
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new UserAppsController($applicationQuery);
+        };
+
+        $container[AppGetController::class] = function (Container $c) {
+            $applicationQueryFactory = $c->get(ApplicationQueryFactory::class);
+
+            return new AppGetController($applicationQueryFactory);
         };
 
         $container[AppStoreController::class] = function (Container $c) {
@@ -92,6 +116,30 @@ class ControllersContainer
             $categoryStore = $c->get(CategoryStore::class);
 
             return new CategoryStoreController($categoryStore);
+        };
+
+        $container[CategoryUpdateController::class] = function (Container $c) {
+            $categoryUpdate = $c->get(CategoryUpdate::class);
+
+            return new CategoryUpdateController($categoryUpdate);
+        };
+
+        $container[CategoryDestructionController::class] = function (Container $c) {
+            $categoryDestruction = $c->get(CategoryDestruction::class);
+
+            return new CategoryDestructionController($categoryDestruction);
+        };
+
+        $container[CategoriesGetController::class] = function (Container $c) {
+            $categoryCollection = $c->get(CategoryCollection::class);
+
+            return new CategoriesGetController($categoryCollection);
+        };
+
+        $container[PublicationGetController::class] = function (Container $c) {
+            $publicationFinder = $c->get(PublicationSlugFinder::class);
+
+            return new PublicationGetController($publicationFinder);
         };
 
         $container[PublicationStoreController::class] = function (Container $c) {

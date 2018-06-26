@@ -14,7 +14,7 @@ use App\Containers\FactoriesContainer;
 return [
     'app' => [
         'path'  => realpath(__DIR__ . '/../src/App/'),
-        'debug' => getenv('APP_DEBUG_MODE'), 
+        'debug' => getenv('APP_DEBUG_MODE'),
         'containers' => [
             DatabaseContainer::class,
             RepositoriesContainer::class,
@@ -28,7 +28,8 @@ return [
             FactoriesContainer::class
         ],
         'routes' => realpath(__DIR__ . '/../src/App/routes.php'),
-        'orm' => 'doctrine'
+        'orm' => 'doctrine',
+        'max_page_count' => 15
     ],
     'database' => [
         'driver'   => getenv('DB_DRIVER'),

@@ -39,6 +39,11 @@ use App\Repositories\ApplicationRepository\Query\ApplicationTeamQuery;
 use App\Repositories\ApplicationRepository\Finder\ApplicationSlugFinder;
 use App\Repositories\ApplicationTeamRepository\Destruction\ApplicationMemberDestruction;
 use App\Repositories\ApplicationRepository\OwnershipUpdate\ApplicationOwnershipTransfer;
+use App\Repositories\UserRepository\Destruction\UserDestruction;
+use App\Repositories\CategoryRepository\Update\CategoryUpdate;
+use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
+use App\Repositories\CategoryRepository\Collect\CategoryCollection;
+use App\Querys\Categories\CategoriesQuery;
 
 class RepositoriesContainer
 {
@@ -77,6 +82,13 @@ class RepositoriesContainer
             $em = $c->get('orm')->getEntityManager();
 
             return new UserFinder($em);
+        };
+
+        $container[UserDestruction::class] = function (Container $c) {
+            $userQuery = $c->get(UserQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new UserDestruction($userQuery, $persister);
         };
 
         $container[UserMasterQuery::class] = function (Container $c) {
@@ -156,6 +168,26 @@ class RepositoriesContainer
             $em = $c->get('doctrine')->getEntityManager();
 
             return new CategoryQuery($em);
+        };
+
+        $container[CategoryUpdate::class] = function (Container $c) {
+            $categoryQuery = $c->get(CategoryQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new CategoryUpdate($categoryQuery, $persister);
+        };
+
+        $container[CategoryDestruction::class] = function (Container $c) {
+            $categoryQuery = $c->get(CategoryQuery::class);
+            $persister = $c->get('PersisterService');
+
+            return new CategoryDestruction($categoryQuery, $persister);
+        };
+
+        $container[CategoryCollection::class] = function (Container $c) {
+            $categoryQuery = $c->get(CategoriesQuery::class);
+
+            return new CategoryCollection($categoryQuery);
         };
 
         $container[PublicationStore::class] = function (Container $c) {
