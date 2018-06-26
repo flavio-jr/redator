@@ -44,6 +44,7 @@ use App\Repositories\CategoryRepository\Update\CategoryUpdate;
 use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
 use App\Repositories\CategoryRepository\Collect\CategoryCollection;
 use App\Querys\Categories\CategoriesQuery;
+use App\Repositories\UserRepository\Collection\UserCollection;
 
 class RepositoriesContainer
 {
@@ -110,6 +111,12 @@ class RepositoriesContainer
             $persister = $c->get('PersisterService');
 
             return new UserMasterUpdate($userMasterQuery, $persister);
+        };
+
+        $container[UserCollection::class] = function (Container $c) {
+            $em = $c->get('orm')->getEntityManager();
+
+            return new UserCollection($em);
         };
 
         $container[ApplicationStore::class] = function (Container $c) {

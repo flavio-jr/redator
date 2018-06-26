@@ -8,9 +8,12 @@ use App\Dumps\UserDump;
 use App\Services\Player;
 use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
 use App\Exceptions\UserNotAllowedException;
+use Tests\DatabaseRefreshTable;
 
 class CategoryDestructionTest extends TestCase
 {
+    use DatabaseRefreshTable;
+
     /**
      * @var CategoryDump
      */
