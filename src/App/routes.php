@@ -21,6 +21,7 @@ $app->group('/app', function () {
         });
 
         $this->group('/users', function () {
+            $this->get('', 'App\Controllers\UsersController\GetUsersController:get');
             $this->put('', 'App\Controllers\UsersController\UserUpdateController:update')->add(new UserRegistration());
             $this->group('/apps', function () {
                 $this->get('', 'App\Controllers\ApplicationsController\UserAppsController:get');

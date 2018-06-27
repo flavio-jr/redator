@@ -51,6 +51,8 @@ use App\Controllers\CategoriesController\CategoryDestructionController;
 use App\Repositories\CategoryRepository\Destruction\CategoryDestruction;
 use App\Controllers\CategoriesController\CategoriesGetController;
 use App\Repositories\CategoryRepository\Collect\CategoryCollection;
+use App\Controllers\UsersController\GetUsersController;
+use App\Repositories\UserRepository\Collection\UserCollection;
 
 class ControllersContainer
 {
@@ -86,6 +88,12 @@ class ControllersContainer
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new UserAppsController($applicationQuery);
+        };
+
+        $container[GetUsersController::class] = function (Container $c) {
+            $userCollection = $c->get(UserCollection::class);
+
+            return new GetUsersController($userCollection);
         };
 
         $container[AppGetController::class] = function (Container $c) {
