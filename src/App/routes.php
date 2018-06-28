@@ -10,6 +10,7 @@ use App\Middlewares\Publications;
 use App\RequestValidators\PublicationsInfo;
 use App\RequestValidators\MembershipStore;
 use App\RequestValidators\CategoriesGetFilter;
+use App\RequestValidators\UserStateManagerRequest;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -46,6 +47,7 @@ $app->group('/app', function () {
             });
             $this->get('/{username}', 'App\Controllers\UsersController\UserQueryController:getByUsername');
             $this->delete('/{username}', 'App\Controllers\UsersController\UserDestructionController:destroy');
+            $this->patch('/{username}', 'App\Controllers\UsersController\UserStateController:changeStatus')->add(new UserStateManagerRequest());
         });
 
         $this->group('/categories', function () {

@@ -53,6 +53,8 @@ use App\Controllers\CategoriesController\CategoriesGetController;
 use App\Repositories\CategoryRepository\Collect\CategoryCollection;
 use App\Controllers\UsersController\GetUsersController;
 use App\Repositories\UserRepository\Collection\UserCollection;
+use App\Controllers\UsersController\UserStateController;
+use App\Repositories\UserRepository\State\UserStateManager;
 
 class ControllersContainer
 {
@@ -88,6 +90,12 @@ class ControllersContainer
             $applicationQuery = $c->get(ApplicationQuery::class);
 
             return new UserAppsController($applicationQuery);
+        };
+
+        $container[UserStateController::class] = function (Container $c) {
+            $userStateManager = $c->get(UserStateManager::class);
+
+            return new UserStateController($userStateManager);
         };
 
         $container[GetUsersController::class] = function (Container $c) {
