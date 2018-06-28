@@ -2,22 +2,17 @@
 
 namespace App\RequestValidators;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Respect\Validation\Validator as V;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-class UserRegistration
+final class UserStateManagerRequest
 {
     public function __invoke(Request $request, Response $response, $next)
     {
         try {
-            $rules = V::key('username', V::notOptional()->stringType()->length(2, 60))
-                ->key('name', V::notOptional()->length(2, 100));
-
-            if ($request->getMethod() === 'POST') {
-                $rules->key('password', V::notOptional());
-            }
+            $rules = V::key('status', V::intVal()->notOptional());
 
             $rules->assert($request->getParsedBody());
 
