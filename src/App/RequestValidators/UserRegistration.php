@@ -12,9 +12,12 @@ class UserRegistration
     public function __invoke(Request $request, Response $response, $next)
     {
         try {
-            $rules = V::key('username', V::stringType()->length(2, 60))
-                ->key('name', V::notOptional()->length(2, 100))
-                ->key('password', V::notOptional());
+            $rules = V::key('username', V::notOptional()->stringType()->length(2, 60))
+                ->key('name', V::notOptional()->length(2, 100));
+
+            if ($request->getMethod() === 'POST') {
+                $rules->key('password', V::notOptional());
+            }
 
             $rules->assert($request->getParsedBody());
 

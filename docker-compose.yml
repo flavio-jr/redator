@@ -1,0 +1,38 @@
+version: '2.1'
+services:
+  pgsql:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 30s
+      retries: 3
+
+  web:
+    container_name: redator
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    build: .
+    image: redator
+    environment:
+      PORT: 80
+      APP_ENV: ${APP_ENV}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DRIVER: ${DB_DRIVER}
+      DB_TEST_NAME: ${DB_TEST_NAME}
+      DB_TEST_DRIVER: ${DB_TEST_DRIVER}
+    ports: 
+      - 80:80
+    volumes:
+      - .:/var/www/localhost/htdocs

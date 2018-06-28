@@ -1,3 +1,5 @@
 .env
 vendor
 tests/test.sqlite
+.vscode
+docker/data

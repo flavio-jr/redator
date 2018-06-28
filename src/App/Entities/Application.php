@@ -3,12 +3,12 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use App\Database\Types\ApplicationType;
 use App\Database\EntityInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Exceptions\EntityNotFoundException;
 
 /**
  * @ORM\Entity
@@ -45,18 +45,29 @@ class Application implements EntityInterface
     private $type;
 
     /**
-     * @ManyToOne(targetEntity="App\Entities\User")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Entities\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $owner;
 
-    private static $setterMap = [
-        'name'        => 'setName',
-        'description' => 'setDescription',
-        'url'         => 'setUrl',
-        'type'        => 'setType',
-        'owner'       => 'setAppOwner'
-    ];
+    /**
+     * The users (partners and writters) that can manage the application
+     * @ORM\ManyToMany(targetEntity="App\Entities\User", inversedBy="applications")
+     * @ORM\JoinTable(name="users_applications")
+     * @var ArrayCollection
+     */
+    private $team;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
+    public function __construct()
+    {
+        $this->team = new ArrayCollection();
+    }
 
     public function getId(): string
     {
@@ -76,6 +87,11 @@ class Application implements EntityInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
     }
 
     public function setDescription(string $description): void
@@ -113,11 +129,6 @@ class Application implements EntityInterface
         return $this->type;
     }
 
-    public function getTypeDesc(string $type): string
-    {
-        return ApplicationType::$type;
-    }
-
     public function setAppOwner(User $user)
     {
         $this->owner = $user;
@@ -126,6 +137,27 @@ class Application implements EntityInterface
     public function getAppOwner(): User
     {
         return $this->owner;
+    }
+
+    public function addUserToTeam(User $user)
+    {
+        $user->addAplication($this);
+        $this->team[] = $user;
+    }
+
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    public function removeUserOfTeam(User $user)
+    {
+        if (!$this->team->contains($user)) {
+            throw new EntityNotFoundException('UserApplication');
+        }
+
+        $user->removeApplication($this);
+        $this->team->removeElement($user);
     }
 
     public function fromArray(array $data): void
@@ -141,10 +173,10 @@ class Application implements EntityInterface
     {
         return [
             'name'        => $this->getName(),
+            'slug'        => $this->getSlug(),
             'description' => $this->getDescription(),
             'url'         => $this->getUrl(),
-            'type'        => $this->getType(),
-            'owner'       => $this->getAppOwner()
+            'type'        => $this->getType()
         ];
     }
 }

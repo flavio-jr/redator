@@ -6,6 +6,7 @@ use App\Database\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
@@ -26,6 +27,12 @@ class Category implements EntityInterface
      */
     private $name;
 
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
     public function getId(): string
     {
         return $this->id;
@@ -39,6 +46,11 @@ class Category implements EntityInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     public function fromArray(array $data): void

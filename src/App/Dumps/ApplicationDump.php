@@ -3,7 +3,7 @@
 namespace App\Dumps;
 
 use App\Entities\Application;
-use App\Services\Persister;
+use App\Services\Persister\PersisterInterface as Persister;
 use Faker\Generator;
 
 class ApplicationDump implements DumpInterface
@@ -52,7 +52,18 @@ class ApplicationDump implements DumpInterface
         $application->setType($override['type'] ?? rand(0, 1) === 0 ? 'LP' : 'NL');
         $application->setAppOwner($override['owner'] ?? $this->userDump->create());
 
+        if (isset($override['team'])) {
+            $this->setApplicationTeam($override['team'], $application);
+        }
+
         return $application;
+    }
+
+    private function setApplicationTeam(array $users, Application $application)
+    {
+        foreach ($users as $user) {
+            $application->addUserToTeam($user);
+        }
     }
 
     /**

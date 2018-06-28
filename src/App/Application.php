@@ -4,6 +4,10 @@ namespace App;
 
 use Slim\App;
 use Slim\Container;
+use App\Handlers\ErrorHandler;
+use App\Handlers\NotFoundHandler;
+use App\Handlers\NotAllowedHandler;
+use App\Handlers\PhpErrorHandler;
 
 class Application
 {
@@ -33,6 +37,8 @@ class Application
 
         $container = $app->getContainer();
 
+        $this->buildHandlers($container);
+
         $this->buildContainer($container);
 
         $this->buildDatabase($container, $this->config['app']['orm']);
@@ -56,5 +62,24 @@ class Application
     private function buildDatabase(Container $container, string $orm)
     {
         $container['orm'] = $container->get($orm);
+    }
+
+    private function buildHandlers(Container $container)
+    {
+        $container['errorHandler'] = function () {
+            return new ErrorHandler();
+        };
+
+        $container['notFoundHandler'] = function () {
+            return new NotFoundHandler();
+        };
+
+        $container['notAllowedHandler'] = function () {
+            return new NotAllowedHandler();
+        };
+
+        $container['phpErrorHandler'] = function () {
+            return new PhpErrorHandler();
+        };
     }
 }

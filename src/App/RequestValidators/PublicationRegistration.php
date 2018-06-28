@@ -14,7 +14,6 @@ final class PublicationRegistration
         try {
             $rules = V::key('title', V::stringType()->notOptional()->length(1, 80))
                 ->key('description', V::stringType()->notOptional()->length(2, 120))
-                ->key('application', V::stringType()->notOptional())
                 ->key('category', V::stringType()->notOptional())
                 ->key('body', V::stringType()->notOptional());
 

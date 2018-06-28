@@ -3,10 +3,13 @@
 namespace App\Containers;
 
 use Slim\Container;
-use App\Services\UserSession;
 use App\Services\Player;
-use App\Services\Persister;
-use App\Services\HtmlSanitizer;
+use App\Services\Slugify\Slugify;
+use Cocur\Slugify\Slugify as Slugifier;
+use App\Repositories\UserRepository\Finder\UserFinder;
+use App\Services\Persister\Persister;
+use App\Services\HtmlSanitizer\HtmlSanitizer;
+use App\Services\UserSession\UserSession;
 
 class ServicesContainer
 {
@@ -17,7 +20,7 @@ class ServicesContainer
         };
 
         $container['Player'] = function ($c) {
-            return new Player($c->get('UserRepository'));
+            return new Player($c->get(UserFinder::class));
         };
 
         $container['PersisterService'] = function ($c) {
@@ -28,6 +31,12 @@ class ServicesContainer
             $htmlPurifyConfig = \HTMLPurifier_Config::createDefault();
 
             return new HtmlSanitizer(new \HTMLPurifier($htmlPurifyConfig));
+        };
+
+        $container[Slugify::class] = function (Container $c) {
+            $slugifier = new Slugifier();
+
+            return new Slugify($slugifier);
         };
     }
 }

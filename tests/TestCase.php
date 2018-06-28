@@ -8,6 +8,7 @@ use Slim\Http\Request;
 use App\Application;
 use Symfony\Component\Yaml\Yaml;
 use Dotenv\Dotenv;
+use App\Services\Player;
 
 class TestCase extends PHPUnit
 {
@@ -17,11 +18,7 @@ class TestCase extends PHPUnit
 
     public function createApplication()
     {
-        putenv('APP_ENV=TEST');
-
-        (new Dotenv(dirname(__DIR__)))->load();
-
-        $this->config = Yaml::parseFile(realpath(__DIR__ . '/../config/app.yml'));
+        $this->config = require realpath(__DIR__ . '/../config/config.php');
         $this->config['db_path'] = __DIR__ . '/test.sqlite';
         $this->config['test_driver'] = getenv('DB_TEST_DRIVER');
         
@@ -44,8 +41,19 @@ class TestCase extends PHPUnit
     {
         parent::tearDown();
 
+        Player::gameOver();
+
         if (method_exists($this, 'dropDatabase')) {
             $this->dropDatabase();
+        }
+
+        $refl = new \ReflectionObject($this);
+        
+        foreach ($refl->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
         }
     }
 
@@ -60,7 +68,7 @@ class TestCase extends PHPUnit
 
         $request = Request::createFromEnvironment($env)->withParsedBody($data);
 
-        $this->application->getContainer()['request'] = $request;
+        $this->container['request'] = $request;
 
         return $this->application->run(true);
     }
@@ -85,10 +93,14 @@ class TestCase extends PHPUnit
         return $this->makeRequest($route, 'DELETE');
     }
 
+    protected function patch($route, array $data)
+    {
+        return $this->makeRequest($route, 'PATCH', $data);
+    }
+
     protected function assertDatabaseHave($entity)
     {
-        $register = $this->application
-            ->getContainer()
+        $register = $this->container
             ->get('doctrine')
             ->getEntityManager()
             ->find(get_class($entity), $entity->getId());
@@ -98,8 +110,7 @@ class TestCase extends PHPUnit
 
     protected function assertDatabaseDoenstHave(string $id, $entity)
     {
-        $register = $this->application
-            ->getContainer()
+        $register = $this->container
             ->get('doctrine')
             ->getEntityManager()
             ->find(get_class($entity), $id);

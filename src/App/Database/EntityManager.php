@@ -6,6 +6,9 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager as DoctrineEntityManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\EventManager;
+use Gedmo\Sluggable\SluggableListener;
+use Gedmo\DoctrineExtensions;
 
 class EntityManager implements ModelManagerInterface
 {
@@ -57,8 +60,12 @@ class EntityManager implements ModelManagerInterface
             Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
         }
 
+        $this->registerCustomAnnotations();
+
+        $evm = $this->buildEventManager();
+
         $setup = Setup::createAnnotationMetadataConfiguration(
-            [$config['app']['path'] . 'Entities'],
+            [$config['app']['path'] . '/Entities'],
             $config['app']['debug'],
             null,
             null,
@@ -72,7 +79,7 @@ class EntityManager implements ModelManagerInterface
             'host'     => $config['database']['host'],
             'port'     => $config['database']['port'],
             'dbname'   => $config['database']['dbname'] 
-        ], $setup);
+        ], $setup, $evm);
     }
 
     /**
@@ -86,8 +93,12 @@ class EntityManager implements ModelManagerInterface
             Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
         }
 
+        $this->registerCustomAnnotations();
+
+        $evm = $this->buildEventManager();
+
         $setup = Setup::createAnnotationMetadataConfiguration(
-            [$config['app']['path'] . 'Entities'],
+            [$config['app']['path'] . '/Entities'],
             $config['app']['debug'],
             null,
             null,
@@ -97,6 +108,23 @@ class EntityManager implements ModelManagerInterface
         $this->entityManager = DoctrineEntityManager::create([
             'driver' => $config['test_driver'],
             'path'   => $config['db_path']
-        ], $setup);
+        ], $setup, $evm);
+    }
+
+    private function buildEventManager(): EventManager
+    {
+        $evm = new EventManager();
+        
+        // Sluggable
+        $sluggable = new SluggableListener();
+        $evm->addEventSubscriber($sluggable);
+
+        return $evm;
+    }
+
+    private function registerCustomAnnotations()
+    {
+        // Doctrine extensions
+        DoctrineExtensions::registerAnnotations();
     }
 }
