@@ -11,7 +11,9 @@ case "$1" in
 esac
 
 echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin registry.heroku.com
+
 docker build -t registry.heroku.com/${APP_NAME}/web $DIR/../.
+
 docker push registry.heroku.com/${APP_NAME}/web
 
 curl -n -X PATCH https://api.heroku.com/apps/$APP_NAME/formation \
@@ -26,3 +28,5 @@ curl -n -X PATCH https://api.heroku.com/apps/$APP_NAME/formation \
   -H "Content-Type: application/json" \
   -H "Accept: application/vnd.heroku+json; version=3.docker-releases" \
   -H "Authorization: Bearer $HEROKU_API_TOKEN"
+
+echo 'The release was completed'
