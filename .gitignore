@@ -2,4 +2,5 @@
 vendor
 tests/test.sqlite
 .vscode
-docker/data
+docker/data/**
+
