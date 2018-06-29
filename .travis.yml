@@ -10,10 +10,9 @@ services:
 before_install:
   - docker-compose up -d
 
-before_script: 
+before_script:
   - composer self-update
   - composer install --no-interaction
-
 script:
   - docker exec -it redator vendor/bin/phpunit
 
@@ -25,4 +24,4 @@ deploy:
   - provider: script
     script: bash docker/deploy.sh development
     on:
-      branch: develop
+      all_branches: true
