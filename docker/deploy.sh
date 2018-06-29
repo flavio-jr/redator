@@ -10,7 +10,7 @@ case "$1" in
         APP_NAME=$APP_DEV_NAME
 esac
 
-cp .netrc $HOME/.
+cp $DIR/.netrc $HOME/.
 
 echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin registry.heroku.com
 docker build -t registry.heroku.com/${APP_NAME}/web $DIR/../.
