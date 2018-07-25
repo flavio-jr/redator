@@ -28,7 +28,9 @@ final class UserQueryController
             $response->getBody()
                 ->write(json_encode(['user' => $user]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         } catch (EntityNotFoundException $e) {
             $response->getBody()
                 ->write('User not found');

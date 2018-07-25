@@ -31,7 +31,9 @@ final class AppGetController
                 ->getBody()
                 ->write(json_encode(['app' => $application->toArray()]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         } catch (EntityNotFoundException $e) {
             $response
                 ->getBody()

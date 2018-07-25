@@ -34,7 +34,7 @@ final class Player
     {
         $token = (new Parser())->parse($jwt);
 
-        self::$user = $this->userFinder->find($token->getHeader('jti'));
+        self::$user = $this->userFinder->find($token->getClaim('user'));
     }
 
     /**

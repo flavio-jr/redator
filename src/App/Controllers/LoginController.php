@@ -49,7 +49,9 @@ final class LoginController
             $response->getBody()
                 ->write(json_encode(['token' => $token]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         } catch (WrongCredentialsException | EntityNotFoundException $e) {
             $response->getBody()
                 ->write('ERROR: INVALID CREDENTIALS');

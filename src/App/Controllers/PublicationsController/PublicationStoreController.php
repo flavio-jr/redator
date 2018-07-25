@@ -30,7 +30,9 @@ final class PublicationStoreController
             $response->getBody()
                 ->write(json_encode(['app' => $publicationCreated->getSlug()]));
 
-            return $response->withStatus(201);
+            return $response
+                ->withStatus(201)
+                ->withHeader('Content-Type', 'application/json');
         } catch (EntityNotFoundException $e) {
             $response->getBody()
                 ->write("The given {$e->getEntityName()} was not found");

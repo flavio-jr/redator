@@ -25,7 +25,9 @@ final class AppDeleteController
         try {
             $appDeleted = $this->appDeleteRepository->destroy($args['app']);
 
-            $response->getBody()->write('The app was successfully deleted');
+            $response
+                ->getBody()
+                ->write('The app was successfully deleted');
 
             return $response
                 ->withStatus(200);

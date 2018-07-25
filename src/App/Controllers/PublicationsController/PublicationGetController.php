@@ -29,7 +29,9 @@ final class PublicationGetController
                 ->getBody()
                 ->write(json_encode(['publication' => $publication->toArray()]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         }
 
         $response
