@@ -29,7 +29,8 @@ final class MembershipStore
             $this->applicationTeamStore
                 ->store($newMemberUsername, $applicationName);
 
-            $response->getBody()
+            $response
+                ->getBody()
                 ->write('The user was successfully added as an member to the app');
 
             return $response->withStatus(200);

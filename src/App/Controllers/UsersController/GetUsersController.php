@@ -30,7 +30,9 @@ final class GetUsersController
                 ->getBody()
                 ->write(json_encode(['users' => $users]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         } catch (UserNotAllowedException $e) {
             $response
                 ->getBody()

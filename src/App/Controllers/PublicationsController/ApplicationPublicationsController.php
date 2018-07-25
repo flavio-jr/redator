@@ -30,6 +30,8 @@ final class ApplicationPublicationsController
         $response->getBody()
             ->write(json_encode(['publications' => $publications]));
 
-        return $response->withStatus(200);
+        return $response
+            ->withStatus(200)
+            ->withHeader('Content-Type', 'application/json');
     }
 }

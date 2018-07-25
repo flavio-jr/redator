@@ -18,15 +18,17 @@ class UserSession implements UserSessionInterface
         $builder = new Builder();
 
         $signer = new Sha256();
+        $secret = config()['app']['token_secret'];
 
         $token = $builder
             ->setIssuer('')
             ->setAudience('')
-            ->setId($id, true)
+            ->setId($secret, true)
             ->setIssuedAt(time())
             ->setNotBefore(time())
             ->setExpiration(time() + self::EXPIRATION_TIME)
-            ->sign($signer, $id)
+            ->set('user', $id)
+            ->sign($signer, $secret)
             ->getToken();
         
         return (string) $token;
@@ -42,12 +44,11 @@ class UserSession implements UserSessionInterface
 
         $token = $parser->parse($token);
 
-        if (!$token->verify($signer, $token->getHeader('jti'))) {
+        if (!$token->verify($signer, config()['app']['token_secret'])) {
             return false;
         }
 
         $data = new ValidationData();
-        $data->setId($token->getHeader('jti'));
 
         return $token->validate($data);
     }

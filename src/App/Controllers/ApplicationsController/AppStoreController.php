@@ -27,9 +27,13 @@ final class AppStoreController
 
             $application = $this->applicationStore->store($data);
 
-            $response->getBody()->write(json_encode(['app' => $application->toArray()]));
+            $response
+                ->getBody()
+                ->write(json_encode(['app' => $application->toArray()]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(200)
+                ->withHeader('Content-Type', 'application/json');
         } catch (UniqueConstraintViolationException $e) {
             $response->getBody()->write('The app name is already taken');
 

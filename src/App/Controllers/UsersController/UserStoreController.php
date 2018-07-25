@@ -3,8 +3,8 @@
 namespace App\Controllers\UsersController;
 
 use App\Repositories\UserRepository\Store\UserStoreInterface as UserStore;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 final class UserStoreController
@@ -27,7 +27,11 @@ final class UserStoreController
 
             $this->userStore->store($data);
 
-            return $response->write('User sucessfully created')->withStatus(200);
+            $response
+                ->getBody()
+                ->write('User sucessfully created');
+
+            return $response->withStatus(200);
         } catch (UniqueConstraintViolationException $e) {
             return $response->write('Username already taken')->withStatus(412);
         }

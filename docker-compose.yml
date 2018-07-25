@@ -24,6 +24,7 @@ services:
     environment:
       PORT: 80
       APP_ENV: ${APP_ENV}
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}

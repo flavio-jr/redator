@@ -27,6 +27,7 @@ return [
             CommandsContainer::class,
             FactoriesContainer::class
         ],
+        'token_secret' => getenv('APP_JWT_SECRET'),
         'routes' => realpath(__DIR__ . '/../src/App/routes.php'),
         'orm' => 'doctrine',
         'max_page_count' => 15
