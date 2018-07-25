@@ -3,8 +3,8 @@
 namespace App\Controllers\UsersController;
 
 use App\Repositories\UserRepository\Update\UserUpdateInterface as UserUpdate;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 final class UserUpdateController
@@ -27,12 +27,24 @@ final class UserUpdateController
             $userUpdated = $this->userUpdateRepository->update($data);
 
             if ($userUpdated) {
-                return $response->write('User successfully updated')->withStatus(200);    
+                $response
+                    ->getBody()
+                    ->write('User successfully updated');
+
+                return $response->withStatus(200);
             }
 
-            return $response->write('The user could not be updated')->withStatus(403);
+            $response
+                ->getBody()
+                ->write('The user could not be updated');
+
+            return $response->withStatus(403);
         } catch (UniqueConstraintViolationException $e) {
-            return $response->write('Username already taken')->withStatus(412);
+            $response
+                ->getBody()
+                ->write('Username already taken');
+
+            return $response->withStatus(412);
         }
     }
 }

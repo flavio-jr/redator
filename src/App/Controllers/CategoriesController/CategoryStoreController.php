@@ -31,7 +31,9 @@ final class CategoryStoreController
                     'category' => $category->toArray()
                 ]));
 
-            return $response->withStatus(200);
+            return $response
+                ->withStatus(201)
+                ->withHeader('Content-Type', 'application/json');
         } catch (UniqueConstraintViolationException $e) {
             $response->getBody()->write('The category name already exists');
 

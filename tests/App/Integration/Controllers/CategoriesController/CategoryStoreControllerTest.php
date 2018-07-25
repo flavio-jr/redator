@@ -23,13 +23,13 @@ class CategoryStoreControllerTest extends TestCase
         $this->categoryDump = $this->container->get(CategoryDump::class);
     }
 
-    public function testCategoryStoreMustReturnHttpOk()
+    public function testCategoryStoreMustReturnHttpCreated()
     {
         $data = $this->categoryDump->make()->toArray();
 
         $response = $this->post(Application::PREFIX . '/categories', $data);
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(201, $response->getStatusCode());
     }
 
     public function testCategoryStoreWithExistentNameMustReturnHttpPreConditionFailed()

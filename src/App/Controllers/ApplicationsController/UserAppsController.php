@@ -3,8 +3,8 @@
 namespace App\Controllers\ApplicationsController;
 
 use App\Repositories\ApplicationRepository\Query\ApplicationQueryInterface as ApplicationQuery;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 final class UserAppsController
 {
@@ -23,8 +23,12 @@ final class UserAppsController
     {
         $apps = $this->applicationQuery->getUserApplications();
 
+        $response
+            ->getBody()
+            ->write(json_encode(['apps' => $apps]));
+
         return $response
-            ->write(json_encode(['apps' => $apps]))
-            ->withStatus(200);
+            ->withStatus(200)
+            ->withHeader('Content-Type', 'application/json');
     }
 }

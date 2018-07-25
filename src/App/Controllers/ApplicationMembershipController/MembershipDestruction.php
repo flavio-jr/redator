@@ -26,10 +26,12 @@ final class MembershipDestruction
             $username = $args['member'];
             $applicationName = $args['app'];
 
-            $this->applicationMemberDestruction
+            $this
+                ->applicationMemberDestruction
                 ->destroy($username, $applicationName);
 
-            $response->getBody()
+            $response
+                ->getBody()
                 ->write('The member was successfully removed');
 
             return $response->withStatus(200);

@@ -28,6 +28,8 @@ final class CategoriesGetController
             ->getBody()
             ->write(json_encode(['categories' => $categories]));
 
-        return $response->withStatus(200);
+        return $response
+            ->withStatus(200)
+            ->withHeader('Content-Type', 'application/json');
     }
 }
