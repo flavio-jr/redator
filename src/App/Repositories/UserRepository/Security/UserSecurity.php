@@ -38,7 +38,7 @@ final class UserSecurity implements UserSecurityInterface
 
         if (password_verify($password, $user->getPassword())) {
             return $this->userSession
-                ->createNewToken($user->getId());
+                ->createNewToken($user->getUsername());
         }
 
         throw new WrongCredentialsException;

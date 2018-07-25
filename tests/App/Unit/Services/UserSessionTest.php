@@ -22,7 +22,7 @@ class UserSessionTest extends TestCase
     {
         $user = $this->container->get('App\Dumps\UserDump')->create();
 
-        $jwt = $this->userSession->createNewToken($user->getId());
+        $jwt = $this->userSession->createNewToken($user->getUsername());
 
         $this->assertNotNull($jwt);
     }
@@ -31,8 +31,8 @@ class UserSessionTest extends TestCase
     {
         $user = $this->container->get('App\Dumps\UserDump')->create();
 
-        $jwt = $this->userSession->createNewToken($user->getId());
-        
+        $jwt = $this->userSession->createNewToken($user->getUsername());
+
         $validToken = $this->userSession->isValidToken($jwt);
 
         $this->assertTrue($validToken);
