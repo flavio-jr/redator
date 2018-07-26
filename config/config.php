@@ -30,7 +30,8 @@ return [
         'token_secret' => getenv('APP_JWT_SECRET'),
         'routes' => realpath(__DIR__ . '/../src/App/routes.php'),
         'orm' => 'doctrine',
-        'max_page_count' => 15
+        'max_page_count' => 15,
+        'allowed_origins' => getenv('ALLOWED_ORIGINS')
     ],
     'database' => [
         'driver'   => getenv('DB_DRIVER'),

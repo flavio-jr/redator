@@ -23,7 +23,7 @@ class UserSession implements UserSessionInterface
         $token = $builder
             ->setIssuer('')
             ->setAudience('')
-            ->setId($secret, true)
+            ->setId(uniqid(), true)
             ->setIssuedAt(time())
             ->setNotBefore(time())
             ->setExpiration(time() + self::EXPIRATION_TIME)
