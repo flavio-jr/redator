@@ -33,6 +33,8 @@ services:
       DB_DRIVER: ${DB_DRIVER}
       DB_TEST_NAME: ${DB_TEST_NAME}
       DB_TEST_DRIVER: ${DB_TEST_DRIVER}
+    env_file:
+      - .env
     ports: 
       - 80:80
     volumes:
