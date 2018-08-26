@@ -46,6 +46,7 @@ use App\Repositories\CategoryRepository\Collect\CategoryCollection;
 use App\Querys\Categories\CategoriesQuery;
 use App\Repositories\UserRepository\Collection\UserCollection;
 use App\Repositories\UserRepository\State\UserStateManager;
+use App\Repositories\PublicationRepository\Modify\PublicationModifier;
 
 class RepositoriesContainer
 {
@@ -257,6 +258,13 @@ class RepositoriesContainer
             $publicationQuery = $c->get(PublicationQuery::class);
 
             return new PublicationCollection($applicationQueryFactory, $publicationQuery);
+        };
+
+        $container[PublicationModifier::class] = function (Container $c) {
+            $publicationFinder = $c->get(PublicationSlugFinder::class);
+            $persister = $c->get('PersisterService');
+
+            return new PublicationModifier($publicationFinder, $persister);
         };
 
         $container[ApplicationTeamStore::class] = function (Container $c) {

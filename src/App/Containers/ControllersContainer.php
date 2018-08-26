@@ -55,6 +55,8 @@ use App\Controllers\UsersController\GetUsersController;
 use App\Repositories\UserRepository\Collection\UserCollection;
 use App\Controllers\UsersController\UserStateController;
 use App\Repositories\UserRepository\State\UserStateManager;
+use App\Controllers\PublicationsController\PublicationModifierController;
+use App\Repositories\PublicationRepository\Modify\PublicationModifier;
 
 class ControllersContainer
 {
@@ -174,6 +176,12 @@ class ControllersContainer
             $publicationDestruction = $c->get(PublicationDestruction::class);
 
             return new PublicationDestructionController($publicationDestruction);
+        };
+
+        $container[PublicationModifierController::class] = function (Container $c) {
+            $publicationModifier = $c->get(PublicationModifier::class);
+
+            return new PublicationModifierController($publicationModifier);
         };
 
         $container[ApplicationPublicationsController::class] = function (Container $c) {

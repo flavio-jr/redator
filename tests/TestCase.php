@@ -117,4 +117,16 @@ class TestCase extends PHPUnit
 
         $this->assertNull($register);
     }
+
+    protected function assertDatabaseHaveWith(string $id, $entity, array $where)
+    {
+        $register = $this
+            ->container
+            ->get('doctrine')
+            ->getEntityManager()
+            ->getRepository(get_class($entity))
+            ->findBy(array_merge(['id' => $id], $where));
+
+        $this->assertNotNull($register);
+    }
 }

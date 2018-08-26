@@ -11,6 +11,7 @@ use App\RequestValidators\PublicationsInfo;
 use App\RequestValidators\MembershipStore;
 use App\RequestValidators\CategoriesGetFilter;
 use App\RequestValidators\UserStateManagerRequest;
+use App\RequestValidators\PublicationModifier;
 
 $app->group('/app', function () {
     $this->post('/login', 'App\Controllers\LoginController:login')->add(new Login());
@@ -38,6 +39,7 @@ $app->group('/app', function () {
                     $this->get('/{publication}', 'App\Controllers\PublicationsController\PublicationGetController:get');
                     $this->put('/{publication}', 'App\Controllers\PublicationsController\PublicationUpdateController:update')->add(new PublicationRegistration());
                     $this->delete('/{publication}', 'App\Controllers\PublicationsController\PublicationDestructionController:destroy');
+                    $this->patch('/{publication}', 'App\Controllers\PublicationsController\PublicationModifierController:modify')->add(new PublicationModifier());
                 });
 
                 $this->group('/{app}/membership', function () {

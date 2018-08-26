@@ -57,7 +57,11 @@ class PublicationDump implements DumpInterface
         $publication->setTitle($override['title'] ?? $this->faker->realText(80));
         $publication->setDescription($override['description'] ?? $this->faker->text(120));
         $publication->setBody($override['body'] ?? $this->faker->randomHtml(2, 3));
-        $publication->setApplication($override['application'] ?? $this->applicationDump->create());
+        $publication->setApplication(
+            $override['application'] ??
+            $this->applicationDump->create($override['application.override'] ?? [])
+        );
+
         $publication->setCategory($override['category'] ?? $this->categoryDump->create());
 
         return $publication;
