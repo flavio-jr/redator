@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Id\UuidGenerator as Uuid;
 use Gedmo\Mapping\Annotation as Gedmo;
+use App\Database\Types\PublicationStatus;
+use App\Exceptions\WrongEnumTypeException;
 
 /**
  * @ORM\Entity
@@ -68,12 +70,10 @@ class Publication implements EntityInterface
      */
     private $createdAt;
 
-    private static $setterMap = [
-        'title'       => 'setTitle',
-        'description' => 'setDescription',
-        'category'    => 'setCategory',
-        'body'        => 'setBody'
-    ];
+    /**
+     * @ORM\Column(type="string", length=2)
+     */
+    private $status = 'DF';
 
     public function getId(): string
     {
@@ -140,6 +140,20 @@ class Publication implements EntityInterface
         return $this->body;
     }
 
+    public function setStatus(string $status)
+    {
+        if (!PublicationStatus::isKeySet($status)) {
+            throw new WrongEnumTypeException($status, PublicationStatus::getEnum());
+        }
+
+        $this->status = $status;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     public function fromArray(array $data): void
     {
         $this->setTitle($data['title']);
@@ -157,7 +171,8 @@ class Publication implements EntityInterface
             'description' => $this->getDescription(),
             'category'    => $this->getCategory(),
             'application' => $this->getApplication(),
-            'body'        => $this->getBody()
+            'body'        => $this->getBody(),
+            'status'      => $this->getStatus()
         ];
     }
 
